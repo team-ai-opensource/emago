@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "318617371764",
+    "project_id": "ai-opensource-project-d45df",
+    "storage_bucket": "ai-opensource-project-d45df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318617371764:android:3fbba2dba3abb8cd033d21",
+        "android_client_info": {
+          "package_name": "ai.opensource.emago"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhTnBNZjVj3W-OYCoUS1MOUUA8-6qSA9o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
