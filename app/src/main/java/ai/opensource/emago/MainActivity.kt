@@ -60,8 +60,7 @@ fun ShowVectorDrawable(id: Int) {
 
 @Composable
 fun LoginPage() {
-
-    val coroutineScope = rememberCoroutineScope()
+    
 
     Column(
         modifier = Modifier.fillMaxSize(),
