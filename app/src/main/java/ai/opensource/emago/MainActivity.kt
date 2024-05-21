@@ -1,5 +1,7 @@
 package ai.opensource.emago
 
+import ai.opensource.emago.Screens.LoginScreen
+import ai.opensource.emago.Screens.SignUpScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,7 +11,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import ai.opensource.emago.ui.theme.EmagoTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -18,20 +19,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.coroutineScope
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+
+
+sealed class DestinationScreen(var route : String) {
+    object SignUp: DestinationScreen("signup")
+    object Login: DestinationScreen("login")
+    object Profile: DestinationScreen("profile")
+    object ChatList: DestinationScreen("chatList")
+    object SingleChat: DestinationScreen("singleChat/{chatId}") {
+        fun createRoute(id: String) = "singleChat/$id"
+    }
+}
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +52,24 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginPage()
+                    EmagoAppNavigation()
                 }
             }
         }
+    }
+    @Composable
+    fun EmagoAppNavigation() {
+
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = DestinationScreen.SignUp.route) {
+            composable(DestinationScreen.SignUp.route) {
+                SignUpScreen(navController)
+            }
+            composable(DestinationScreen.Login.route) {
+                LoginScreen()
+            }
+        }
+
     }
 }
 
@@ -60,7 +82,6 @@ fun ShowVectorDrawable(id: Int) {
 
 @Composable
 fun LoginPage() {
-    
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -97,10 +118,3 @@ fun LoginPage() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    EmagoTheme {
-        ShowVectorDrawable(R.drawable.chatbot1)
-    }
-}
