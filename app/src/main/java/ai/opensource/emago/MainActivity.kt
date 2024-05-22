@@ -1,6 +1,8 @@
 package ai.opensource.emago
 
+import ai.opensource.emago.Screens.ChatListScreen
 import ai.opensource.emago.Screens.LoginScreen
+import ai.opensource.emago.Screens.ProfileScreen
 import ai.opensource.emago.Screens.SignUpScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -67,6 +69,12 @@ class MainActivity : ComponentActivity() {
             }
             composable(DestinationScreen.Login.route) {
                 LoginScreen()
+            }
+            composable(DestinationScreen.Profile.route) {
+                ProfileScreen()
+            }
+            composable(DestinationScreen.ChatList.route) {
+                ChatListScreen()
             }
         }
 
