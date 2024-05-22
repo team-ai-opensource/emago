@@ -2,6 +2,7 @@ package ai.opensource.emago.Screens
 
 import ai.opensource.emago.R
 import ai.opensource.emago.ShowVectorDrawable
+import ai.opensource.emago.ShowVectorDrawable2
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,40 +20,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ShowVectorDrawable(R.drawable.chatbot1)
+        ShowVectorDrawable2(R.drawable.chatbot1)
         Spacer(modifier = Modifier.height(40.dp))
         Text(text = "Welcome to E-mago", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Row {
             Box {
-                Button(onClick = {
 
-                }) {
                     ShowVectorDrawable(R.drawable.facebook)
-                }
+
             }
             Box {
-                Button(onClick = { /*TODO*/ },
-                ) {
+
                     ShowVectorDrawable(R.drawable.google)
 
-                }
+
             }
             Box {
-                Button(onClick = { /*TODO*/ },
-                ) {
+
                     ShowVectorDrawable(R.drawable.apple)
 
 
-                }
+
             }
         }
     }
