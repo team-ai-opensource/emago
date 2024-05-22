@@ -1,9 +1,11 @@
 package ai.opensource.emago
 
+import ai.opensource.emago.Screens.BottomNavigationMenu
 import ai.opensource.emago.Screens.ChatListScreen
 import ai.opensource.emago.Screens.LoginScreen
 import ai.opensource.emago.Screens.ProfileScreen
 import ai.opensource.emago.Screens.SignUpScreen
+import ai.opensource.emago.Screens.HomeScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +21,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -26,6 +29,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -39,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 
 
 sealed class DestinationScreen(var route : String) {
+    object Home: DestinationScreen("home")
     object SignUp: DestinationScreen("signup")
     object Login: DestinationScreen("login")
     object Profile: DestinationScreen("profile")
@@ -60,7 +65,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
+
                     EmagoAppNavigation()
+
+
+                    
                 }
             }
         }
@@ -80,7 +90,26 @@ class MainActivity : ComponentActivity() {
                 LoginScreen(navController)
             }
             composable(DestinationScreen.ChatList.route) {
-                ChatListScreen(navController)
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationMenu(navController)
+                    }
+                ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)){
+                        ChatListScreen(navController)
+                    }
+                }
+            }
+            composable(DestinationScreen.Home.route) {
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationMenu(navController)
+                    }
+                ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)){
+                        HomeScreen(navController)
+                    }
+                }
             }
         }
 
@@ -106,41 +135,5 @@ fun ShowVectorDrawable2(id: Int) {
     Image(painter = image, contentDescription = "Vector Drawable", modifier = Modifier)
 }
 
-@Composable
-fun LoginPage() {
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ShowVectorDrawable(R.drawable.chatbot1)
-        Spacer(modifier = Modifier.height(40.dp))
-        Text(text = "Welcome to E-mago", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Row {
-            Box {
-                Button(onClick = {
-
-                }) {
-                    ShowVectorDrawable(R.drawable.facebook)
-                }
-            }
-            Box {
-                Button(onClick = { /*TODO*/ },
-                ) {
-                    ShowVectorDrawable(R.drawable.google)
-
-                }
-            }
-            Box {
-                Button(onClick = { /*TODO*/ },
-                ) {
-                    ShowVectorDrawable(R.drawable.apple)
-
-
-                }
-            }
-        }
-    }
-}
 
