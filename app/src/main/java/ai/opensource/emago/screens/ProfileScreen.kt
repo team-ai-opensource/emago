@@ -1,5 +1,7 @@
 package ai.opensource.emago.Screens
 
+import ai.opensource.emago.R
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -118,7 +122,14 @@ fun MyPage() {
                             .height(80.dp)
                     ) {
                         // Child views.
-                        //Image()
+                        /*Image(
+                            painter = painterResource(id = R.drawable.ellipse_1235),
+                            contentDescription = "image description",
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier
+                                .width(80.dp)
+                                .height(80.dp)
+                        )*/
                     }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(3.dp, Alignment.Top),
