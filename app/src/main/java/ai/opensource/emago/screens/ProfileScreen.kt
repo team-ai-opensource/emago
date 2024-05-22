@@ -284,4 +284,5 @@ fun MyPage() {
 @Composable
 fun MyPagePreview() {
     MyPage()
+
 }

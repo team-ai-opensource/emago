@@ -1,7 +1,11 @@
 package ai.opensource.emago
 
+import ai.opensource.emago.Screens.BottomNavigationMenu
+import ai.opensource.emago.Screens.ChatListScreen
 import ai.opensource.emago.Screens.LoginScreen
+import ai.opensource.emago.Screens.ProfileScreen
 import ai.opensource.emago.Screens.SignUpScreen
+import ai.opensource.emago.Screens.HomeScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,14 +17,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ai.opensource.emago.ui.theme.EmagoTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 
 
 sealed class DestinationScreen(var route : String) {
+    object Home: DestinationScreen("home")
     object SignUp: DestinationScreen("signup")
     object Login: DestinationScreen("login")
     object Profile: DestinationScreen("profile")
@@ -52,7 +65,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
+
                     EmagoAppNavigation()
+
+
+                    
                 }
             }
         }
@@ -66,7 +84,32 @@ class MainActivity : ComponentActivity() {
                 SignUpScreen(navController)
             }
             composable(DestinationScreen.Login.route) {
-                LoginScreen()
+                LoginScreen(navController)
+            }
+            composable(DestinationScreen.Profile.route) {
+                LoginScreen(navController)
+            }
+            composable(DestinationScreen.ChatList.route) {
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationMenu(navController)
+                    }
+                ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)){
+                        ChatListScreen(navController)
+                    }
+                }
+            }
+            composable(DestinationScreen.Home.route) {
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationMenu(navController)
+                    }
+                ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)){
+                        HomeScreen(navController)
+                    }
+                }
             }
         }
 
@@ -77,44 +120,20 @@ class MainActivity : ComponentActivity() {
 fun ShowVectorDrawable(id: Int) {
     // 'your_vector_drawable'는 res/drawable 폴더에 있는 XML 파일의 이름입니다.
     val image = painterResource(id = id)
-    Image(painter = image, contentDescription = "Vector Drawable")
+    Image(painter = image, contentDescription = "Vector Drawable", modifier = Modifier
+        .padding(8.dp)
+        .width(48.dp)
+        .height(48.dp)
+        .clip(CircleShape)
+        .background(color = Color(0xFFD0E8F2)))
 }
 
 @Composable
-fun LoginPage() {
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ShowVectorDrawable(R.drawable.chatbot1)
-        Spacer(modifier = Modifier.height(40.dp))
-        Text(text = "Welcome to E-mago", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Row {
-            Box {
-                Button(onClick = {
-
-                }) {
-                    ShowVectorDrawable(R.drawable.facebook)
-                }
-            }
-            Box {
-                Button(onClick = { /*TODO*/ },
-                ) {
-                    ShowVectorDrawable(R.drawable.google)
-
-                }
-            }
-            Box {
-                Button(onClick = { /*TODO*/ },
-                ) {
-                    ShowVectorDrawable(R.drawable.apple)
-
-
-                }
-            }
-        }
-    }
+fun ShowVectorDrawable2(id: Int) {
+    // 'your_vector_drawable'는 res/drawable 폴더에 있는 XML 파일의 이름입니다.
+    val image = painterResource(id = id)
+    Image(painter = image, contentDescription = "Vector Drawable", modifier = Modifier)
 }
+
+
 
