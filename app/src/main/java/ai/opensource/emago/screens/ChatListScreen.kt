@@ -1,8 +1,10 @@
 package ai.opensource.emago.Screens
 
+import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,9 +26,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun ChatListScreen() {
+fun ChatListScreen(navController: NavController) {
     Column(
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -94,4 +97,16 @@ fun ChatListScreen() {
             .background(color = Color(0xFFFFFFFF))
             .padding(start = 50.dp, top = 10.dp, end = 50.dp, bottom = 10.dp)
     }
+    Text(text = "계정이 있나요 ? 로그인 하러 가기 - >",
+        color = Color.Blue,
+        modifier = Modifier.padding(8.dp).clickable {
+            navController.navigate(DestinationScreen.Login.route)
+        }
+    )
+    Text(text = "채팅 리스트로 가기",
+        color = Color.Blue,
+        modifier = Modifier.padding(8.dp).clickable {
+            navController.navigate(DestinationScreen.ChatList.route)
+        }
+    )
 }

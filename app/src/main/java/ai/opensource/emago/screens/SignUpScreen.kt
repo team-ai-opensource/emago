@@ -107,6 +107,12 @@ fun SignUpScreen( navController: NavController) {
                     navController.navigate(DestinationScreen.Login.route)
                 }
             )
+            Text(text = "채팅 리스트로 가기",
+                color = Color.Blue,
+                modifier = Modifier.padding(8.dp).clickable {
+                    navController.navigate(DestinationScreen.ChatList.route)
+                }
+            )
         }
     }
 

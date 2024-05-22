@@ -82,12 +82,6 @@ class MainActivity : ComponentActivity() {
             composable(DestinationScreen.ChatList.route) {
                 ChatListScreen(navController)
             }
-            composable(DestinationScreen.Profile.route) {
-                ProfileScreen()
-            }
-            composable(DestinationScreen.ChatList.route) {
-                ChatListScreen()
-            }
         }
 
     }

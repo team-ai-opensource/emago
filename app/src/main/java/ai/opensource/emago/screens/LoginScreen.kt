@@ -1,9 +1,11 @@
 package ai.opensource.emago.Screens
 
+import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.R
 import ai.opensource.emago.ShowVectorDrawable
 import ai.opensource.emago.ShowVectorDrawable2
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,5 +56,11 @@ fun LoginScreen(navController: NavController) {
 
             }
         }
+        Text(text = "회원가입 하러가기",
+            color = Color.Blue,
+            modifier = Modifier.padding(8.dp).clickable {
+                navController.navigate(DestinationScreen.SignUp.route)
+            }
+        )
     }
 }
