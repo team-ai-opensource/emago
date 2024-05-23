@@ -33,8 +33,6 @@ import androidx.navigation.NavController
 @Composable
 fun ChatListScreen(navController: NavController) {
 
-
-
         Column(
             modifier = Modifier.fillMaxSize().padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -97,10 +95,10 @@ fun ChatListScreen(navController: NavController) {
                     navController.navigate(DestinationScreen.Login.route)
                 }
             )
-            Text(text = "채팅 리스트로 가기",
+            Text(text = "채팅방 만들기",
                 color = Color.Blue,
                 modifier = Modifier.padding(8.dp).clickable {
-                    navController.navigate(DestinationScreen.ChatList.route)
+                    navController.navigate(DestinationScreen.ChatCreate.route)
                 }
             )
         }

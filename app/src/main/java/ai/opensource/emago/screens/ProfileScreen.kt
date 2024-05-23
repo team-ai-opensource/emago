@@ -30,9 +30,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun MyPage() {
+fun ProfileScreen(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -278,11 +279,4 @@ fun MyPage() {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MyPagePreview() {
-    MyPage()
-
 }

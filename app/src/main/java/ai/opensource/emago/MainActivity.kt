@@ -6,6 +6,7 @@ import ai.opensource.emago.Screens.LoginScreen
 import ai.opensource.emago.Screens.ProfileScreen
 import ai.opensource.emago.Screens.SignUpScreen
 import ai.opensource.emago.Screens.HomeScreen
+import ai.opensource.emago.Screens.ChatCreateScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -48,6 +49,7 @@ sealed class DestinationScreen(var route : String) {
     object Login: DestinationScreen("login")
     object Profile: DestinationScreen("profile")
     object ChatList: DestinationScreen("chatList")
+    object ChatCreate: DestinationScreen("chatCreate")
     object SingleChat: DestinationScreen("singleChat/{chatId}") {
         fun createRoute(id: String) = "singleChat/$id"
     }
@@ -87,7 +89,27 @@ class MainActivity : ComponentActivity() {
                 LoginScreen(navController)
             }
             composable(DestinationScreen.Profile.route) {
-                LoginScreen(navController)
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationMenu(navController)
+                    }
+                ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)){
+                        ProfileScreen(navController)
+                    }
+                }
+            }
+            composable(DestinationScreen.ChatCreate.route) {
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationMenu(navController)
+                    }
+                ) {
+                    innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)){
+                        ChatCreateScreen(navController)
+                    }
+                }
             }
             composable(DestinationScreen.ChatList.route) {
                 Scaffold(
