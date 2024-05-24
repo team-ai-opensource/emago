@@ -29,10 +29,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ai.opensource.emago.R
+import androidx.compose.foundation.background
 
 @Composable
 fun SignUpScreen( navController: NavController) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().background(color = Color(0xFFFCF8EC))) {
         Column(modifier = Modifier
             .fillMaxSize()
             .wrapContentHeight()

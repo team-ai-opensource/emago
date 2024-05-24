@@ -123,14 +123,14 @@ fun ProfileScreen(navController: NavController) {
                             .height(80.dp)
                     ) {
                         // Child views.
-                        /*Image(
-                            painter = painterResource(id = R.drawable.ellipse_1235),
-                            contentDescription = "image description",
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier
-                                .width(80.dp)
-                                .height(80.dp)
-                        )*/
+//                        Image(
+//                            painter = painterResource(id = R.drawable.dog_square),
+//                            contentDescription = "image description",
+//                            contentScale = ContentScale.FillBounds,
+//                            modifier = Modifier
+//                                .width(80.dp)
+//                                .height(80.dp))
+
                     }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(3.dp, Alignment.Top),
