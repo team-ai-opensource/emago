@@ -79,7 +79,6 @@ class MainActivity : ComponentActivity() {
     }
     @Composable
     fun EmagoAppNavigation() {
-
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = DestinationScreen.SignUp.route) {
             composable(DestinationScreen.SignUp.route) {
@@ -89,52 +88,35 @@ class MainActivity : ComponentActivity() {
                 LoginScreen(navController)
             }
             composable(DestinationScreen.Profile.route) {
-                Scaffold(
-                    bottomBar = {
-                        BottomNavigationMenu(navController)
-                    }
-                ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)){
+                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)) {
                         ProfileScreen(navController)
                     }
                 }
             }
             composable(DestinationScreen.ChatCreate.route) {
-                Scaffold(
-                    bottomBar = {
-                        BottomNavigationMenu(navController)
-                    }
-                ) {
-                    innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)){
+                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)) {
                         ChatCreateScreen(navController)
                     }
                 }
             }
             composable(DestinationScreen.ChatList.route) {
-                Scaffold(
-                    bottomBar = {
-                        BottomNavigationMenu(navController)
-                    }
-                ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)){
+                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)) {
                         ChatListScreen(navController)
                     }
                 }
             }
             composable(DestinationScreen.Home.route) {
-                Scaffold(
-                    bottomBar = {
-                        BottomNavigationMenu(navController)
-                    }
-                ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)){
+                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)) {
+//                        HomeScreen()
                         HomeScreen(navController)
                     }
                 }
             }
         }
-
     }
 }
 
