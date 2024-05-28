@@ -6,13 +6,14 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,13 +26,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -62,13 +61,16 @@ import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.yearMonth
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 
 @Composable
+//fun HomeScreen() {
 fun HomeScreen(navController: NavController) {
     var showExtraItems by remember{ mutableStateOf(false)} // 빌드 할때는 false로 바꾸기
     var startReview by remember{ mutableStateOf(false)}
@@ -77,13 +79,7 @@ fun HomeScreen(navController: NavController) {
     val currentMonth = remember(currentDate) { currentDate.yearMonth }
     val startMonth = remember(currentDate) { currentMonth.minusMonths(12) }
     val endMonth = remember(currentDate) { currentMonth.plusMonths(12) }
-    val selections = remember { mutableStateListOf<LocalDate>() }
     val daysOfWeek = remember { daysOfWeek() }
-
-    var isWeekMode by remember { mutableStateOf(false) }
-    var isAnimating by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-
 
     // User views
     Column(
@@ -203,117 +199,14 @@ fun HomeScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Date Box
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = Color(0x8079A3B1),
-                            shape = RoundedCornerShape(
-                                topStart = 10.dp,
-                                topEnd = 10.dp,
-                                bottomStart = 0.dp,
-                                bottomEnd = 0.dp
-                            )
-                        )
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Bottom),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = Color(0x8079A3B1),
-                                shape = RoundedCornerShape(
-                                    topStart = 10.dp,
-                                    topEnd = 10.dp,
-                                    bottomStart = 0.dp,
-                                    bottomEnd = 0.dp
-                                )
-                            )
-                    ) {
-                        // Date
-                        AnimatedVisibility(visible = startReview) {
-                            // Calendar
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                            ) {
-                                val monthState = rememberCalendarState(
-                                    startMonth = startMonth,
-                                    endMonth = endMonth,
-                                    firstVisibleMonth = currentMonth,
-                                    firstDayOfWeek = daysOfWeek.first(),
-                                )
-                                val weekState = rememberWeekCalendarState(
-                                    startDate = startMonth.atStartOfMonth(),
-                                    endDate = endMonth.atEndOfMonth(),
-                                    firstVisibleWeekDate = currentDate,
-                                    firstDayOfWeek = daysOfWeek.first(),
-                                )
-                                CalendarHeader(daysOfWeek = daysOfWeek)
-                                AnimatedVisibility(visible = !isWeekMode) {
-                                    HorizontalCalendar(
-                                        state = monthState,
-                                        dayContent = { day ->
-                                            val isSelectable = day.position == DayPosition.MonthDate
-                                            Day(
-                                                day.date,
-                                                isSelected = isSelectable && selections.contains(day.date),
-                                                isSelectable = isSelectable,
-                                            ) { clicked ->
-                                                if (selections.contains(clicked)) {
-                                                    selections.remove(clicked)
-                                                } else {
-                                                    selections.add(clicked)
-                                                }
-                                            }
-                                        },
-                                    )
-                                }
-                                AnimatedVisibility(visible = isWeekMode) {
-                                    WeekCalendar(
-                                        state = weekState,
-                                        dayContent = { day ->
-                                            val isSelectable = day.position == WeekDayPosition.RangeDate
-                                            Day(
-                                                day.date,
-                                                isSelected = isSelectable && selections.contains(day.date),
-                                                isSelectable = isSelectable,
-                                            ) { clicked ->
-                                                if (selections.contains(clicked)) {
-                                                    selections.remove(clicked)
-                                                } else {
-                                                    selections.add(clicked)
-                                                }
-                                            }
-                                        },
-                                    )
-                                }
-                                Spacer(modifier = Modifier.weight(1f))
-                                WeekModeToggle(
-                                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                                    isWeekMode = isWeekMode,
-                                ) { weekMode ->
-                                    isAnimating = true
-                                    isWeekMode = weekMode
-                                    coroutineScope.launch {
-                                        if (weekMode) {
-                                            val targetDate = monthState.firstVisibleMonth.weekDays.last().last().date
-                                            weekState.scrollToWeek(targetDate)
-                                            weekState.animateScrollToWeek(targetDate) // Trigger a layout pass for title update
-                                        } else {
-                                            val targetMonth = weekState.firstVisibleWeek.days.first().date.yearMonth
-                                            monthState.scrollToMonth(targetMonth)
-                                            monthState.animateScrollToMonth(targetMonth) // Trigger a layout pass for title update
-                                        }
-                                        isAnimating = false
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                CalendarScreen(
+                    startMonth = startMonth,
+                    endMonth = endMonth,
+                    currentMonth = currentMonth,
+                    currentDate = currentDate,
+                    daysOfWeek = daysOfWeek,
+                    startReview = startReview
+                )
                 // Review Box
                 Box(modifier = Modifier
                     .shadow(
@@ -587,13 +480,164 @@ fun ItemRow(text : String, progress : String){
     }
 }
 
-//private val dateFormatter = DateTimeFormatter.ofPattern("dd")
+@Composable
+fun CalendarScreen(
+    startMonth: YearMonth,
+    endMonth: YearMonth,
+    currentMonth: YearMonth,
+    currentDate: LocalDate,
+    daysOfWeek: List<DayOfWeek>,
+    startReview: Boolean
+) {
+    val coroutineScope = rememberCoroutineScope()
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    var isWeekMode by remember { mutableStateOf(true) }
+    var isAnimating by remember { mutableStateOf(false) }
+
+    // Initialize the selectedDate to currentDate in a LaunchedEffect
+
+
+    val monthState = rememberCalendarState(
+        startMonth = startMonth,
+        endMonth = endMonth,
+        firstVisibleMonth = currentMonth,
+        firstDayOfWeek = daysOfWeek.first(),
+    )
+    val weekState = rememberWeekCalendarState(
+        startDate = startMonth.atStartOfMonth(),
+        endDate = endMonth.atEndOfMonth(),
+        firstVisibleWeekDate = currentDate,
+        firstDayOfWeek = daysOfWeek.first(),
+    )
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectVerticalDragGestures { change, dragAmount ->
+                    change.consume()
+                    if (dragAmount < -10 && !isAnimating && !isWeekMode) {
+                        // Swipe up to switch to week mode
+                        isAnimating = true
+                        coroutineScope.launch {
+                            selectedDate?.let {
+                                weekState.scrollToWeek(it)
+                                weekState.animateScrollToWeek(it) // Trigger a layout pass for title update
+                            }
+                            isWeekMode = true
+                            delay(300)
+                            isAnimating = false
+                        }
+                    } else if (dragAmount > 10 && !isAnimating && isWeekMode) {
+                        // Swipe down to switch to month mode
+                        isAnimating = true
+                        coroutineScope.launch {
+                            selectedDate?.let {
+                                monthState.scrollToMonth(it.yearMonth)
+                                monthState.animateScrollToMonth(it.yearMonth) // Trigger a layout pass for title update
+                            }
+                            isWeekMode = false
+                            delay(300)
+                            isAnimating = false
+                        }
+                    }
+                }
+            }
+    ) {
+        // Date Box
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = Color(0x8079A3B1),
+                    shape = RoundedCornerShape(
+                        topStart = 10.dp,
+                        topEnd = 10.dp,
+                        bottomStart = 0.dp,
+                        bottomEnd = 0.dp
+                    )
+                )
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Bottom),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = Color(0x8079A3B1),
+                        shape = RoundedCornerShape(
+                            topStart = 10.dp,
+                            topEnd = 10.dp,
+                            bottomStart = 0.dp,
+                            bottomEnd = 0.dp
+                        )
+                    )
+            ) {
+                // Selected Date Display
+                selectedDate?.let {
+                    Text(
+                        text = if(startReview) "${it.year}년 ${it.monthValue}월" else "${it.year}년 ${it.monthValue}월 ${it.dayOfMonth}일",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+
+                // Date
+                AnimatedVisibility(visible = startReview) {
+                    // Calendar
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        CalendarHeader(daysOfWeek = daysOfWeek)
+
+                        AnimatedVisibility(visible = !isWeekMode) {
+                            HorizontalCalendar(
+                                state = monthState,
+                                dayContent = { day ->
+                                    val isSelectable = day.position == DayPosition.MonthDate
+                                    Day(
+                                        day.date,
+                                        isSelected = selectedDate == day.date,
+                                        isSelectable = isSelectable,
+                                        isToday = day.date == currentDate,
+                                    ) { clicked ->
+                                        selectedDate = clicked
+                                    }
+                                },
+                            )
+                        }
+                        AnimatedVisibility(visible = isWeekMode) {
+                            WeekCalendar(
+                                state = weekState,
+                                dayContent = { day ->
+                                    val isSelectable = day.position == WeekDayPosition.RangeDate
+                                    Day(
+                                        day.date,
+                                        isSelected = selectedDate == day.date,
+                                        isSelectable = isSelectable,
+                                        isToday = day.date == currentDate,
+                                    ) { clicked ->
+                                        selectedDate = clicked
+                                    }
+                                },
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun Day(
     day: LocalDate,
     isSelected: Boolean,
     isSelectable: Boolean,
+    isToday: Boolean,
     onClick: (LocalDate) -> Unit,
 ) {
     Box(
@@ -601,7 +645,19 @@ fun Day(
             .aspectRatio(1f) // This is important for square-sizing!
             .padding(6.dp)
             .clip(CircleShape)
-            .background(color = if (isSelected) Color(0xFF456268) else Color.Transparent)
+            .background(
+                color = when {
+                    isSelected -> Color(0xFF456268)
+                    isToday -> Color.Transparent
+                    else -> Color.Transparent
+                },
+                shape = CircleShape,
+            )
+            .border(
+                width = if (isToday) 2.dp else 0.dp,
+                color = if (isToday) Color(0xFF456268) else Color.Transparent,
+                shape = CircleShape,
+            )
             .clickable(
                 enabled = isSelectable,
                 onClick = { onClick(day) },
@@ -610,6 +666,7 @@ fun Day(
     ) {
         val textColor = when {
             isSelected -> Color.White
+            isToday -> Color(0xFF456268)
             isSelectable -> Color.Unspecified
             else -> Color(0xFF456268)
         }
@@ -618,31 +675,6 @@ fun Day(
             color = textColor,
             fontSize = 14.sp,
         )
-    }
-}
-
-@Composable
-fun WeekModeToggle(
-    modifier: Modifier,
-    isWeekMode: Boolean,
-    weekModeToggled: (isWeekMode: Boolean) -> Unit,
-) {
-    // We want the entire content to be clickable, not just the checkbox.
-    Row(
-        modifier = modifier
-            .padding(10.dp)
-            .clip(MaterialTheme.shapes.small)
-            .clickable { weekModeToggled(!isWeekMode) }
-            .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
-    ) {
-        Checkbox(
-            checked = isWeekMode,
-            onCheckedChange = null, // Check is handled by parent.
-            colors = CheckboxDefaults.colors(checkedColor = Color(0xFF456268)),
-        )
-        Text(text = "주간 모드", color = Color(0xFF456268))
     }
 }
 
