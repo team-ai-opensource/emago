@@ -38,9 +38,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 
 
 sealed class DestinationScreen(var route : String) {
@@ -55,7 +57,7 @@ sealed class DestinationScreen(var route : String) {
     }
 }
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,11 +70,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-
                     EmagoAppNavigation()
 
-
-                    
                 }
             }
         }
@@ -80,9 +79,11 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun EmagoAppNavigation() {
         val navController = rememberNavController()
+        var vm = hiltViewModel<EMAGOViewModel>()
+
         NavHost(navController = navController, startDestination = DestinationScreen.SignUp.route) {
             composable(DestinationScreen.SignUp.route) {
-                SignUpScreen(navController)
+                SignUpScreen(navController, vm)
             }
             composable(DestinationScreen.Login.route) {
                 LoginScreen(navController)
