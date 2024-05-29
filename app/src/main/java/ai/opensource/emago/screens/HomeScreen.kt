@@ -1,8 +1,6 @@
 package ai.opensource.emago.screens
 
 import ai.opensource.emago.R
-import ai.opensource.emago.screens.Calendar
-import ai.opensource.emago.screens.ItemRow
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -242,7 +240,7 @@ fun HomeScreen(navController: NavController) {
                                 end = 8.dp,
                                 bottom = 16.dp
                             )
-                            .clickable { /*Todo : Go to Review*/ }
+                            .clickable { navController.navigate("review") }
                     ) { 
                         Text(
                             text = "복습 시작",
