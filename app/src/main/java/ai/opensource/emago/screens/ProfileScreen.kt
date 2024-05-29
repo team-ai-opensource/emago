@@ -56,7 +56,7 @@ fun ProfileScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .width(375.dp)
-                    .height(24.dp)
+                    .height(25.dp)
                     .padding(start = 10.dp, end = 10.dp)
             ) {
                 // Child views.
