@@ -366,10 +366,3 @@ fun CalendarHeader(daysOfWeek: List<DayOfWeek>) {
         }
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewReviewContent(){
-    Calendar()
-}

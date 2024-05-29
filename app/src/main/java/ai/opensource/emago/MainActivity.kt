@@ -1,12 +1,12 @@
 package ai.opensource.emago
 
-import ai.opensource.emago.Screens.BottomNavigationMenu
-import ai.opensource.emago.Screens.ChatListScreen
-import ai.opensource.emago.Screens.LoginScreen
-import ai.opensource.emago.Screens.ProfileScreen
-import ai.opensource.emago.Screens.SignUpScreen
-import ai.opensource.emago.Screens.HomeScreen
-import ai.opensource.emago.Screens.ChatCreateScreen
+import ai.opensource.emago.screens.BottomNavigationMenu
+import ai.opensource.emago.screens.ChatListScreen
+import ai.opensource.emago.screens.LoginScreen
+import ai.opensource.emago.screens.ProfileScreen
+import ai.opensource.emago.screens.SignUpScreen
+import ai.opensource.emago.screens.HomeScreen
+import ai.opensource.emago.screens.ChatCreateScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
