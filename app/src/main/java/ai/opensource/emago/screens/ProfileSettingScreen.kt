@@ -139,16 +139,20 @@ fun ProfileSettingScreen() {
                             )*/
                         }
                         Row {
-                        Button(onClick = { /*TODO*/ }, shape = RoundedCornerShape(5.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF79A3B1)),
-                            modifier = Modifier
-                                .width(99.dp)
-                                .height(22.dp))
-                            {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier
+                                    .width(99.dp)
+                                    .height(22.dp)
+                                    .background(color = Color(0xFF79A3B1), shape = RoundedCornerShape(size = 5.dp))
+                                    .padding(start = 11.dp, top = 3.dp, end = 8.dp, bottom = 4.dp)
+                            ) {
+                                // Child views.
                                 Text(
                                     text = "프로필 사진 변경",
                                     style = TextStyle(
-                                        fontSize = 5.sp,
+                                        fontSize = 11.sp,
                                         //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
                                         fontWeight = FontWeight(700),
                                         color = Color(0xFFFFFFFF),
