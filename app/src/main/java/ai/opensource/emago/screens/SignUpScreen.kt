@@ -38,21 +38,25 @@ import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.navigateTo
 import ai.opensource.emago.R
 import ai.opensource.emago.DestinationScreen
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
+
 fun SignUpScreen( navController: NavController, vm: EMAGOViewModel) {
 
     CheckSignedIn(vm, navController)
 
-
-    Box(modifier = Modifier.fillMaxSize().background(color = Color(0xFFFCF8EC))) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color(0xFFFCF8EC))
+    ) {
         Column(modifier = Modifier
             .fillMaxSize()
             .wrapContentHeight()
-            .verticalScroll(
-                rememberScrollState()
+            .verticalScroll(rememberScrollState()
             ),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             val nameState = remember {
                 mutableStateOf(TextFieldValue())
             }
