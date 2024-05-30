@@ -98,14 +98,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-            composable(DestinationScreen.Home.route) {
-                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-//                        HomeScreen()
-                        HomeScreen(navController)
-                    }
-                }
-            }
+            composable("home"){ HomeScreen(navController)}
             composable("review") { ReviewScreen() }
             composable("first") { FirstScreen(navController, vm ) }
             composable("signUp") { SignUpScreen(navController, vm) }

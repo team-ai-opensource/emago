@@ -21,6 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,99 +39,101 @@ import androidx.navigation.NavController
 
 @Composable
 fun ChatListScreen(navController: NavController) {
-    //user View
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFFFCF8EC))
-            .verticalScroll(rememberScrollState())
-    ) {
+    Scaffold { innerPadding ->
+        //user View
         Column(
-            verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .background(color = Color(0xFFFCF8EC))
+                .verticalScroll(rememberScrollState())
+                .padding(innerPadding)
         ) {
-            // My Chat Room
             Column(
-                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
+                verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
             ) {
-                Text(
-                    text = "내 채팅방",
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        lineHeight = 20.sp,
-                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                        color = Color(0xFF000000),
-                        letterSpacing = 0.15.sp,
-                    )
-                )
+                // My Chat Room
                 Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    ChatroomList(false, "영어공부방", R.drawable.dog_square)
-                    ChatroomList(false, "성공의채팅방", R.drawable.handsom_guy)
-                    ChatroomList(false, "33333", R.drawable.woman)
-                    ChatroomList(false, "여친구함", R.drawable.soldier)
-                }
-            }
-            // Recommended Chat Room
-            Column(
-                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
-            ) {
-                Text(
-                    text = "추천 채팅방",
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        lineHeight = 20.sp,
-                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                        color = Color(0xFF000000),
-                        letterSpacing = 0.15.sp,
-                    )
-                )
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    ChatroomList(false, "영어공부방", R.drawable.dog_square)
-                    ChatroomList(false, "성공의채팅방", R.drawable.handsom_guy)
-                    ChatroomList(false, "33333", R.drawable.woman)
-                    ChatroomList(false, "여친구함", R.drawable.soldier)
-                }
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically) {
-            Button(onClick = { navController.navigate(DestinationScreen.ChatCreate.route) }) {
-                Text(text = "채팅방 만들기",
+                    verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start,
                     modifier = Modifier
-                        .padding(8.dp)
-                        .clickable {
-                            navController.navigate(DestinationScreen.ChatCreate.route)
-                        }
-                )
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
+                ) {
+                    Text(
+                        text = "내 채팅방",
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            lineHeight = 20.sp,
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                            color = Color(0xFF000000),
+                            letterSpacing = 0.15.sp,
+                        )
+                    )
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        ChatroomList(false, "영어공부방", R.drawable.dog_square)
+                        ChatroomList(false, "성공의채팅방", R.drawable.handsom_guy)
+                        ChatroomList(false, "33333", R.drawable.woman)
+                        ChatroomList(false, "여친구함", R.drawable.soldier)
+                    }
+                }
+                // Recommended Chat Room
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
+                ) {
+                    Text(
+                        text = "추천 채팅방",
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            lineHeight = 20.sp,
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                            color = Color(0xFF000000),
+                            letterSpacing = 0.15.sp,
+                        )
+                    )
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        ChatroomList(false, "영어공부방", R.drawable.dog_square)
+                        ChatroomList(false, "성공의채팅방", R.drawable.handsom_guy)
+                        ChatroomList(false, "33333", R.drawable.woman)
+                        ChatroomList(false, "여친구함", R.drawable.soldier)
+                    }
+                }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = { navController.navigate(DestinationScreen.ChatCreate.route) }) {
+                    Text(text = "채팅방 만들기",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable {
+                                navController.navigate(DestinationScreen.ChatCreate.route)
+                            }
+                    )
+                }
+            }
+
+
         }
-
-
-
     }
 }
-
 @Composable
-fun ChatroomList(isSearch : Boolean, roomName : String, id: Int){
+fun ChatroomList(isSearch : Boolean, roomName : String, id: Int) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
         verticalAlignment = Alignment.Top,
@@ -144,7 +147,7 @@ fun ChatroomList(isSearch : Boolean, roomName : String, id: Int){
             modifier = Modifier
                 .width(52.dp)
                 .height(64.dp)
-        ){
+        ) {
             Image(
                 painter = painterResource(id = id),
                 contentDescription = "Profile Picture",
@@ -188,7 +191,7 @@ fun ChatroomList(isSearch : Boolean, roomName : String, id: Int){
         ) {
             // Child views.
             Text(
-                text = if(isSearch)"3분전" else "2/40",
+                text = if (isSearch) "3분전" else "2/40",
                 style = TextStyle(
                     fontSize = 12.sp,
                     lineHeight = 12.sp,
@@ -200,7 +203,6 @@ fun ChatroomList(isSearch : Boolean, roomName : String, id: Int){
         }
     }
 }
-
 //@Preview
 //@Composable
 //fun ChatListScreenPreview() {
