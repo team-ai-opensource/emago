@@ -299,7 +299,7 @@ class EMAGOViewModel @Inject constructor(
             Log.d("test", "onSendReply: $jsonBody")
 
             // POST 요청을 보낼 URL
-            val url = "http://10.0.2.2:8000/api/emago"
+            val url = "http://huseong.iptime.org:8000/api/emago"
 
             // 네트워크 요청을 비동기적으로 수행
             GlobalScope.launch(Dispatchers.IO) {
