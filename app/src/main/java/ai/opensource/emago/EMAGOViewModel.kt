@@ -24,6 +24,9 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.UUID
 import javax.inject.Inject
@@ -285,7 +288,27 @@ class EMAGOViewModel @Inject constructor(
         )
         val msg: Message = Message(chatId, chatUser, time, message)
 
-        db.collection(MESSAGES).document().set(msg)
+        // Firestore에 문서를 추가하고 문서 ID를 가져옴
+        db.collection(MESSAGES).add(msg).addOnSuccessListener { documentReference ->
+            val documentId = documentReference.id
+
+            // 문서 ID를 포함한 JSON 본문 생성
+            val jsonBody = """{"messageId": "$documentId", "message": "$message"}"""
+
+
+            Log.d("test", "onSendReply: $jsonBody")
+
+            // POST 요청을 보낼 URL
+            val url = "http://10.0.2.2:8000/api/emago"
+
+            // 네트워크 요청을 비동기적으로 수행
+            GlobalScope.launch(Dispatchers.IO) {
+                val response = sendPostRequest(url, jsonBody)
+                println(response)
+            }
+        }.addOnFailureListener { e ->
+            e.printStackTrace()
+        }
     }
 
 
