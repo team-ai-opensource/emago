@@ -76,7 +76,11 @@ fun ProfileScreen(navController: NavController, vm: EMAGOViewModel) {
                 },
                 onLogout = {
                     vm.logout()
-                    navigateTo(navController, DestinationScreen.Login.route)
+                    navController.navigate("first"){
+                        popUpTo("first"){
+                            inclusive = true
+                        }
+                    }
                 },
             )
             Spacer(modifier = Modifier.weight(1f)) // 남은 공간을 채워 BottomNavigationMenu를 아래로 밀어냅니다.
