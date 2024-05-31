@@ -38,104 +38,235 @@ import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.navigateTo
 import ai.opensource.emago.R
 import ai.opensource.emago.DestinationScreen
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun SignUpScreen( navController: NavController, vm: EMAGOViewModel) {
 
-    CheckSignedIn(vm, navController)
+fun SignUpScreen(navController: NavController, vm : EMAGOViewModel) {
+    Scaffold { innerPadding ->
+        CheckSignedIn(vm, navController)
+        //User View
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color(0xFFFCF8EC))
+                .verticalScroll(rememberScrollState())
+                .padding(innerPadding)
+        ) {
+            // Body
+            Column(
+                verticalArrangement = Arrangement.spacedBy(29.dp, Alignment.Top),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(start = 30.dp, top = 16.dp, end = 30.dp, bottom = 16.dp)
+                    .fillMaxSize()
+            ) {
+                // Text
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        Alignment.CenterHorizontally
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+                ) {
+                    Text(
+                        text = "Welcome to E-mago",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            lineHeight = 20.sp,
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundeb)),
+                            color = Color(0xFF456268),
+                            textAlign = TextAlign.Center,
+                        )
+                    )
 
-
-    Box(modifier = Modifier.fillMaxSize().background(color = Color(0xFFFCF8EC))) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .wrapContentHeight()
-            .verticalScroll(
-                rememberScrollState()
-            ),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            val nameState = remember {
-                mutableStateOf(TextFieldValue())
-            }
-            val numberState = remember {
-                mutableStateOf(TextFieldValue())
-            }
-            val emailState = remember {
-                mutableStateOf(TextFieldValue()) // 괄호넣기
-            }
-            val passwordState = remember {
-                mutableStateOf(TextFieldValue())
-            }
-            val focus = LocalFocusManager.current
-
-            Image(painter = painterResource(id = R.drawable.chatbot1), contentDescription = null, modifier = Modifier
-                .width(200.dp)
-                .padding(top = 16.dp)
-                .padding(8.dp))
-            Text(text = "Sign Up",
-                fontSize = 30.sp,
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(8.dp)
-            )
-            OutlinedTextField(
-                value = nameState.value,
-                onValueChange = {
-                    nameState.value=it
-                },
-                label= {Text(text = "Name")},
-                modifier = Modifier.padding(8.dp)
-            )
-            OutlinedTextField(
-                value = numberState.value,
-                onValueChange = {
-                    numberState.value=it
-                },
-                label= {Text(text = "Number")},
-                modifier = Modifier.padding(8.dp)
-            )
-            OutlinedTextField(
-                value = emailState.value,
-                onValueChange = {
-                    emailState.value=it
-                },
-                label= {Text(text = "Email")},
-                modifier = Modifier.padding(8.dp)
-            )
-            OutlinedTextField(
-                value = passwordState.value,
-                onValueChange = {
-                    passwordState.value=it
-                },
-                label= {Text(text = "Password")},
-                modifier = Modifier.padding(8.dp)
-            )
-            Button(onClick = { vm.signUp(
-                nameState.value.text,
-                numberState.value.text,
-                emailState.value.text,
-                passwordState.value.text,
-            )},
-                modifier =  Modifier.padding(8.dp)) {
-                Text(text = "SIGN UP")
-            }
-
-
-
-            Text(text = "계정이 있나요 ? 로그인 하러 가기 - >",
-                color = Color.Blue,
-                modifier = Modifier.padding(8.dp).clickable {
-                    navController.navigate(DestinationScreen.Login.route)
                 }
-            )
-            Text(text = "채팅 리스트로 가기",
-                color = Color.Blue,
-                modifier = Modifier.padding(8.dp).clickable {
-                    navController.navigate(DestinationScreen.ChatList.route)
+                // Input Field
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(30.dp, Alignment.Bottom),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(top = 16.dp, bottom = 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    var emailState by remember { mutableStateOf("") }
+                    var nameState by remember { mutableStateOf("") }
+                    var phoneState by remember { mutableStateOf("") }
+                    var pwState by remember { mutableStateOf("") }
+                    var pwckState by remember { mutableStateOf("") }
+
+                    val focus = LocalFocusManager.current
+
+                    // Text
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(
+                            10.dp,
+                            Alignment.CenterHorizontally
+                        ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+                    ) {
+                        Text(
+                            text = "회원가입",
+                            style = TextStyle(
+                                fontSize = 24.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundeb)),
+                                color = Color(0xFF456268),
+                                textAlign = TextAlign.Center,
+                            )
+                        )
+                    }
+                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
+                        OutlinedTextField(
+                            label = { Text("Email") },
+                            value = emailState,
+                            onValueChange = { emailState = it },
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF456268),
+                            ),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
+                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
+                        OutlinedTextField(
+                            label = { Text("이름") },
+                            value = nameState,
+                            onValueChange = { nameState = it },
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF456268),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
+                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
+                        OutlinedTextField(
+                            label = { Text("전화번호") },
+                            value = phoneState,
+                            onValueChange = { phoneState = it },
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF456268),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
+
+                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
+                        OutlinedTextField(
+                            label = { Text("Password") },
+                            value = pwState,
+                            onValueChange = { pwState = it },
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF456268),
+                            ),
+                            visualTransformation = PasswordVisualTransformation(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
+                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
+                        OutlinedTextField(
+                            label = { Text("Password") },
+                            value = pwckState,
+                            onValueChange = { pwckState = it },
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF456268),
+                            ),
+                            visualTransformation = PasswordVisualTransformation(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
+                    // Sign Up Button
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClick = {
+                            vm.signUp(
+                                email = emailState,
+                                name = nameState,
+                                number = phoneState,
+                                password = pwState
+                            )
+                        },
+                        shape = RoundedCornerShape(size = 5.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF79A3B1),
+                        )
+                    ) {
+                        Text(
+                            text = "회원가입",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFFFFFFFF)
+                            ),
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+
+                    // Back to Sign In
+                    TextButton(onClick = { navController.navigate("first"){
+                        popUpTo("first"){
+                            inclusive = true
+                        }
+                    } }) {
+                        Text(
+                            text = "계정이 있나요? 로그인 하러 가기",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF456268),
+                            )
+                        )
+                    }
+
                 }
-            )
+            }
         }
-    }
-    if (vm.inProcess.value){
-        CommonProgressBar()
+        if (vm.inProcess.value) {
+            CommonProgressBar()
+        }
     }
 }

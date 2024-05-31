@@ -3,6 +3,7 @@ package ai.opensource.emago
 import ai.opensource.emago.screens.BottomNavigationMenu
 import ai.opensource.emago.screens.ChatCreateScreen
 import ai.opensource.emago.screens.ChatListScreen
+import ai.opensource.emago.screens.FirstScreen
 import ai.opensource.emago.screens.HomeScreen
 import ai.opensource.emago.screens.LoginScreen
 import ai.opensource.emago.screens.ProfileScreen
@@ -72,10 +73,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         var vm = hiltViewModel<EMAGOViewModel>()
 
-        NavHost(navController = navController, startDestination = DestinationScreen.SignUp.route) {
-            composable(DestinationScreen.SignUp.route) {
-                SignUpScreen(navController, vm)
-            }
+        NavHost(navController = navController, startDestination = "first") {
             composable(DestinationScreen.Login.route) {
                 LoginScreen(navController)
             }
@@ -100,16 +98,10 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-            composable(DestinationScreen.Home.route) {
-                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-//                        HomeScreen()
-                        HomeScreen(navController)
-                    }
-                }
-            }
-            composable("home") { HomeScreen(navController) }
+            composable("home"){ HomeScreen(navController)}
             composable("review") { ReviewScreen() }
+            composable("first") { FirstScreen(navController, vm ) }
+            composable("signUp") { SignUpScreen(navController, vm) }
         }
     }
 }

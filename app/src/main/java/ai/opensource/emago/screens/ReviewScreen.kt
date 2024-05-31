@@ -142,6 +142,80 @@ fun ReviewScreen() { // TODO : 선택한 날짜 받아오기
     }
 }
 
+@Composable
+fun ReviewCard(){
+    // Review Card
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = Color(0xFFFCF8EC),
+                shape = RoundedCornerShape(size = 8.dp)
+            )
+            .padding(
+                start = 8.dp,
+                top = 16.dp,
+                end = 8.dp,
+                bottom = 16.dp
+            )
+            .clickable { }
+    ) {
+        Text(
+            text = "원문",
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                fontSize = 18.sp,
+                color = Color(0xFF79A3B1)
+            )
+        )
+        Text(
+            text = "수정된 내용",
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                fontSize = 18.sp,
+                color = Color(0xFF79A3B1)
+            )
+        )
+        Text(
+            text = "이유",
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                fontSize = 18.sp,
+                color = Color(0xFF79A3B1)
+            )
+        )
+        // Review Button
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = Color(0xFF79A3B1),
+                    shape = RoundedCornerShape(size = 8.dp)
+                )
+                .padding(
+                    start = 8.dp,
+                    top = 16.dp,
+                    end = 8.dp,
+                    bottom = 16.dp
+                )
+                .clickable { }
+        ) {
+            Text(
+                text = "다음으로",
+                style = TextStyle(
+                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                    fontSize = 18.sp,
+                    color = Color(0xFFFCF8EC)
+                )
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun ReviewScreenPreview() {
