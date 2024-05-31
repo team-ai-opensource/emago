@@ -1,5 +1,6 @@
 package ai.opensource.emago
 
+
 import ai.opensource.emago.screens.BottomNavigationMenu
 import ai.opensource.emago.screens.ChatCreateScreen
 import ai.opensource.emago.screens.ChatListScreen
@@ -37,14 +38,14 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 
-sealed class DestinationScreen(var route : String) {
-    object Home: DestinationScreen("home")
-    object SignUp: DestinationScreen("signup")
-    object Login: DestinationScreen("login")
-    object Profile: DestinationScreen("profile")
-    object ChatList: DestinationScreen("chatList")
-    object ChatCreate: DestinationScreen("chatCreate")
-    object SingleChat: DestinationScreen("singleChat/{chatId}") {
+sealed class DestinationScreen(var route: String) {
+    object Home : DestinationScreen("home")
+    object SignUp : DestinationScreen("signup")
+    object Login : DestinationScreen("login")
+    object Profile : DestinationScreen("profile")
+    object ChatList : DestinationScreen("chatList")
+    object ChatCreate : DestinationScreen("chatCreate")
+    object SingleChat : DestinationScreen("singleChat/{chatId}") {
         fun createRoute(id: String) = "singleChat/$id"
     }
 }
@@ -68,6 +69,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     @Composable
     fun EmagoAppNavigation() {
         val navController = rememberNavController()
@@ -75,47 +77,56 @@ class MainActivity : ComponentActivity() {
 
         NavHost(navController = navController, startDestination = "first") {
             composable(DestinationScreen.Login.route) {
-                LoginScreen(navController)
+                LoginScreen(navController, vm)
             }
             composable(DestinationScreen.Profile.route) {
-                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        ProfileScreen(navController)
-                    }
-                }
+
+                ProfileScreen(navController, vm)
+
             }
             composable(DestinationScreen.ChatCreate.route) {
-                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        ChatCreateScreen(navController)
-                    }
-                }
+
+                ChatCreateScreen(navController)
+
+
             }
             composable(DestinationScreen.ChatList.route) {
-                Scaffold(bottomBar = { BottomNavigationMenu(navController) }) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        ChatListScreen(navController)
-                    }
+
+
+                ChatListScreen(navController, vm)
+
+
+            }
+
+            composable(DestinationScreen.SingleChat.route) {
+                val chatId = it.arguments?.getString("chatId")
+                chatId?.let {
+                    SingleChatScreen(navController, vm, chatId)
                 }
             }
+
             composable("home"){ HomeScreen(navController)}
             composable("review") { ReviewScreen() }
             composable("first") { FirstScreen(navController, vm ) }
             composable("signUp") { SignUpScreen(navController, vm) }
+
         }
     }
 }
+
 
 @Composable
 fun ShowVectorDrawable(id: Int) {
     // 'your_vector_drawable'는 res/drawable 폴더에 있는 XML 파일의 이름입니다.
     val image = painterResource(id = id)
-    Image(painter = image, contentDescription = "Vector Drawable", modifier = Modifier
-        .padding(8.dp)
-        .width(48.dp)
-        .height(48.dp)
-        .clip(CircleShape)
-        .background(color = Color(0xFFD0E8F2)))
+    Image(
+        painter = image, contentDescription = "Vector Drawable", modifier = Modifier
+            .padding(8.dp)
+            .width(48.dp)
+            .height(48.dp)
+            .clip(CircleShape)
+            .background(color = Color(0xFFD0E8F2))
+    )
 }
 
 @Composable
