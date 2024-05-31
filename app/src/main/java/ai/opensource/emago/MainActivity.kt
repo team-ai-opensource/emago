@@ -6,7 +6,6 @@ import ai.opensource.emago.screens.ChatCreateScreen
 import ai.opensource.emago.screens.ChatListScreen
 import ai.opensource.emago.screens.FirstScreen
 import ai.opensource.emago.screens.HomeScreen
-import ai.opensource.emago.screens.LoginScreen
 import ai.opensource.emago.screens.ProfileScreen
 import ai.opensource.emago.screens.ReviewScreen
 import ai.opensource.emago.screens.SignUpScreen
@@ -77,9 +76,6 @@ class MainActivity : ComponentActivity() {
         var vm = hiltViewModel<EMAGOViewModel>()
 
         NavHost(navController = navController, startDestination = "first") {
-            composable(DestinationScreen.Login.route) {
-                LoginScreen(navController, vm)
-            }
             composable(DestinationScreen.Profile.route) {
 
                 ProfileScreen(navController, vm)

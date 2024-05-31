@@ -1,6 +1,7 @@
 package ai.opensource.emago.screens
 
 import ai.opensource.emago.CheckSignedIn
+import ai.opensource.emago.CommonProgressBar
 import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
@@ -59,6 +60,8 @@ fun FirstScreen(
                 .background(color = Color(0xFFFCF8EC))
                 .padding(innerPadding)
         ) {
+            var inEm by remember { mutableStateOf("") }
+            var inPW by remember { mutableStateOf("") }
             // Body
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
@@ -114,8 +117,6 @@ fun FirstScreen(
                         .padding(top = 30.dp, bottom = 30.dp)
                 ) {
                     AnimatedVisibility(visible = isSignInState) {
-                        var value by remember { mutableStateOf("") }
-                        var pw by remember { mutableStateOf("") }
                         Column(
                             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -125,8 +126,8 @@ fun FirstScreen(
                             OutlinedTextFieldBackground(color = Color(0x33000000)) {
                                 OutlinedTextField(
                                     label = { Text("Email") },
-                                    value = value,
-                                    onValueChange = { value = it },
+                                    value = inEm,
+                                    onValueChange = { inEm = it },
                                     singleLine = true,
                                     textStyle = TextStyle(
                                         fontSize = 15.sp,
@@ -141,8 +142,8 @@ fun FirstScreen(
                             OutlinedTextFieldBackground(color = Color(0x33000000)) {
                                 OutlinedTextField(
                                     label = { Text("Password") },
-                                    value = pw,
-                                    onValueChange = { pw = it },
+                                    value = inPW,
+                                    onValueChange = { inPW = it },
                                     singleLine = true,
                                     textStyle = TextStyle(
                                         fontSize = 15.sp,
@@ -162,7 +163,7 @@ fun FirstScreen(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            onClick = { navController.navigate("home")/*TODO : Sign in */ },
+                            onClick = { vm.loginIn(inEm, inPW)/*TODO : Sign in */ },
                             shape = RoundedCornerShape(size = 5.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF79A3B1),
@@ -200,7 +201,7 @@ fun FirstScreen(
                         }
                     }
                     AnimatedVisibility(visible = isSignInState) {
-                        TextButton(onClick = { /*TODO*/ }) {
+                        TextButton(onClick = { navController.navigate("home") }) {
                             Text(
                                 text = "비밀번호 찾기",
                                 style = TextStyle(
@@ -234,5 +235,8 @@ fun FirstScreen(
                 }
             }
         }
+    }
+    if (vm.inProcess.value) {
+        CommonProgressBar()
     }
 }
