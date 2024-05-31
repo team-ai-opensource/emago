@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,8 +32,8 @@ import androidx.compose.ui.unit.sp
 import java.time.LocalDate
 
 @Composable
-fun ReviewScreen() { // TODO : 선택한 날짜 받아오기
-    val currentDate = remember { LocalDate.now() }
+fun ReviewScreen(selectedDate : LocalDate) {
+    val currentDate by remember { mutableStateOf(selectedDate) }
     // Review Column
     Column(
         horizontalAlignment = Alignment.Start,
@@ -214,11 +216,5 @@ fun ReviewCard(){
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun ReviewScreenPreview() {
-    ReviewScreen()
 }
 

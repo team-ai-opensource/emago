@@ -12,15 +12,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,128 +50,159 @@ fun LogInScreen(
     navController: NavController,
     avm: AuthViewModel = hiltViewModel()
 ) {
-    Scaffold{ innerPadding ->
-        //CheckSignedIn(vm, navController)
+    var isLogInState by remember { mutableStateOf(false) } // Start Login when TRUE
 
-        var isSignInState by remember { mutableStateOf(false) }
-        // User View
+    val inProcess by avm.inProcess.collectAsState() // For Circle Progress Indicator when in process
+
+    var inEm by remember { mutableStateOf("") } // Login Email var
+    var inPW by remember { mutableStateOf("") } // Login Password var
+
+    // Check if user is logged in
+    val isLoggedIn by avm.isLoggedIn.collectAsState()
+    if (isLoggedIn) {
+        LaunchedEffect(Unit) {
+            navController.navigate("Main") {
+                popUpTo("logIn") { inclusive = true }
+            }
+        }
+    }
+
+    // User View
+    Column(
+        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFFFCF8EC))
+    ) {
+        // Body
         Column(
-            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(0xFFFCF8EC))
-                .padding(innerPadding)
+                .padding(start = 30.dp, top = 130.dp, end = 30.dp, bottom = 40.dp)
         ) {
-            var inEm by remember { mutableStateOf("") }
-            var inPW by remember { mutableStateOf("") }
-            // Body
+            // Welcome contents
             Column(
-                verticalArrangement = Arrangement.SpaceBetween,
+                verticalArrangement = Arrangement.spacedBy(29.dp, Alignment.Top),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                // Emago Image
+                Image(
+                    painter = painterResource(id = R.drawable.ic_profile),
+                    contentDescription = "image description",
+                    contentScale = ContentScale.None
+                )
+                // Welcome Text
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        Alignment.CenterHorizontally
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(
+                        start = 10.dp,
+                        top = 10.dp,
+                        end = 10.dp,
+                        bottom = 10.dp
+                    )
+                ) {
+                    // Text
+                    Text(
+                        text = "Welcome to E-mago",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            lineHeight = 20.sp,
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundeb)),
+                            color = Color(0xFF456268),
+                            textAlign = TextAlign.Center,
+                        )
+                    )
+                }
+            }
+            // Buttons
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 30.dp, top = 130.dp, end = 30.dp, bottom = 40.dp)
+                    .fillMaxWidth()
+                    .padding(top = 30.dp, bottom = 30.dp)
             ) {
-                // Welcome contents
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(29.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    // Emago Image
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_profile),
-                        contentDescription = "image description",
-                        contentScale = ContentScale.None
-                    )
-                    // Welcome Text
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(
-                            10.dp,
-                            Alignment.CenterHorizontally
-                        ),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(
-                            start = 10.dp,
-                            top = 10.dp,
-                            end = 10.dp,
-                            bottom = 10.dp
-                        )
+
+                // When user is in login state
+                AnimatedVisibility(visible = isLogInState) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
                     ) {
-                        // Text
+                        // Email Feild
+                        OutlinedTextFieldBackground(color = Color(0x33000000)) {
+                            OutlinedTextField(
+                                label = { Text("Email") },
+                                value = inEm,
+                                onValueChange = { inEm = it },
+                                singleLine = true,
+                                textStyle = TextStyle(
+                                    fontSize = 15.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                    color = Color(0xFF456268),
+                                ),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
+
+                        // Password Field
+                        OutlinedTextFieldBackground(color = Color(0x33000000)) {
+                            OutlinedTextField(
+                                label = { Text("Password") },
+                                value = inPW,
+                                onValueChange = { inPW = it },
+                                singleLine = true,
+                                textStyle = TextStyle(
+                                    fontSize = 15.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                    color = Color(0xFF456268),
+                                ),
+                                visualTransformation = PasswordVisualTransformation(),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+                // Forgot Password(visible when user is in login state)
+                AnimatedVisibility(visible = isLogInState) {
+                    TextButton(onClick = { navController.navigate("homeMain") }) {
                         Text(
-                            text = "Welcome to E-mago",
+                            text = "비밀번호 찾기",
                             style = TextStyle(
-                                fontSize = 24.sp,
-                                lineHeight = 20.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundeb)),
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
                                 color = Color(0xFF456268),
-                                textAlign = TextAlign.Center,
                             )
                         )
                     }
                 }
-                // Buttons
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 30.dp, bottom = 30.dp)
-                ) {
-                    AnimatedVisibility(visible = isSignInState) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                                OutlinedTextField(
-                                    label = { Text("Email") },
-                                    value = inEm,
-                                    onValueChange = { inEm = it },
-                                    singleLine = true,
-                                    textStyle = TextStyle(
-                                        fontSize = 15.sp,
-                                        fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                        color = Color(0xFF456268),
-                                    ),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                )
-                            }
-                            OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                                OutlinedTextField(
-                                    label = { Text("Password") },
-                                    value = inPW,
-                                    onValueChange = { inPW = it },
-                                    singleLine = true,
-                                    textStyle = TextStyle(
-                                        fontSize = 15.sp,
-                                        fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                        color = Color(0xFF456268),
-                                    ),
-                                    visualTransformation = PasswordVisualTransformation(),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                )
-                            }
-                        }
-                    }
-                    // Sign in
-                    if (isSignInState) {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            onClick = { avm.login(inEm, inPW)/*TODO : Sign in */ },
-                            shape = RoundedCornerShape(size = 5.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF79A3B1),
-                            )
-                        ) {
+                // Login Button
+                if (isLogInState) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClick = { avm.login(inEm, inPW)}, // When Login is Success, LaunchedEffect will navigate to MainNav
+                        shape = RoundedCornerShape(size = 5.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF79A3B1),
+                        )
+                    ) {
+                        if (inProcess) {
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                        } else {
                             Text(
                                 text = "로그인",
                                 style = TextStyle(
@@ -178,51 +213,20 @@ fun LogInScreen(
                                 modifier = Modifier.padding(8.dp)
                             )
                         }
-                    } else {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            onClick = { isSignInState = true },
-                            shape = RoundedCornerShape(size = 5.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF79A3B1),
-                            )
-                        ) {
-                            Text(
-                                text = "로그인",
-                                style = TextStyle(
-                                    fontSize = 15.sp,
-                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                    color = Color(0xFFFFFFFF),
-                                ),
-                                modifier = Modifier.padding(8.dp)
-                            )
-                        }
                     }
-                    AnimatedVisibility(visible = isSignInState) {
-                        TextButton(onClick = { navController.navigate("homeMain") }) {
-                            Text(
-                                text = "비밀번호 찾기",
-                                style = TextStyle(
-                                    fontSize = 15.sp,
-                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                    color = Color(0xFF456268),
-                                )
-                            )
-                        }
-                    }
-                    // Sign up
+                    // Start to Login State
+                } else {
                     Button(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        onClick = { navController.navigate("signUp") },
+                        onClick = { isLogInState = true },
                         shape = RoundedCornerShape(size = 5.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF456268),
+                            containerColor = Color(0xFF79A3B1),
                         )
                     ) {
                         Text(
-                            text = "회원가입",
+                            text = "로그인",
                             style = TextStyle(
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
@@ -231,6 +235,26 @@ fun LogInScreen(
                             modifier = Modifier.padding(8.dp)
                         )
                     }
+                }
+                // Sign up Button, go to Sign up screen(Sign - Sign up)
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = { navController.navigate("signUp") },
+                    shape = RoundedCornerShape(size = 5.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF456268),
+                    )
+                ) {
+                    Text(
+                        text = "회원가입",
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                            color = Color(0xFFFFFFFF),
+                        ),
+                        modifier = Modifier.padding(8.dp)
+                    )
                 }
             }
         }

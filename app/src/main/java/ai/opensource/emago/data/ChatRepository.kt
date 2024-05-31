@@ -1,11 +1,14 @@
 package ai.opensource.emago.data
 
+import ai.opensource.emago.utils.sendPostRequest
 import android.icu.util.Calendar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.toObject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class ChatRepository(
@@ -38,7 +41,7 @@ class ChatRepository(
         }
     }
 
-    suspend fun sendReply(chatId: String, message: String): Result<Boolean> {
+    suspend fun sendReply(chatId: String, message: String, userData: UserData?): Result<Boolean> {
         return try {
             val time = Calendar.getInstance().time.toString()
             val chatUser = ChatUser(
@@ -48,7 +51,20 @@ class ChatRepository(
                 number = "User Number"
             )
             val msg = Message(chatId, chatUser, time, message)
-            db.collection(MESSAGES).add(msg).await()
+
+            val documentReference = db.collection(MESSAGES).add(msg).await()
+            val documentId = documentReference.id
+
+            val jsonBody = """{
+                "messageId" : "$documentId",
+                "message" : "$message",
+                }"""
+            val url = "http://huseong.iptime.org:8000/api/emago"
+
+            withContext(Dispatchers.IO){
+                val response = sendPostRequest(url, jsonBody)
+                println(response)
+            }
             Result.success(true)
         } catch (e: Exception) {
             Result.failure(e)

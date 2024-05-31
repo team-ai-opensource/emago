@@ -26,6 +26,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -49,6 +51,16 @@ import java.time.LocalDate
 fun HomeScreen(navController: NavController) {
     var showExtraItems by remember { mutableStateOf(false) } // 빌드 할때는 false로 바꾸기
     val currentDate = remember { LocalDate.now() }
+
+    val goalOfToday by remember{ mutableFloatStateOf(50f)}
+    val progress1 by remember{ mutableFloatStateOf(50f)}
+    val progress2 by remember{ mutableFloatStateOf(50f)}
+    val progress3 by remember{ mutableFloatStateOf(50f)}
+
+    // Have to manage in class
+    val selectedDate by remember { mutableStateOf(currentDate) }
+    val remainingReview by remember { mutableIntStateOf(0) }
+
         // User views
     Column(
     horizontalAlignment = Alignment.Start,
@@ -99,7 +111,7 @@ fun HomeScreen(navController: NavController) {
                                 .padding(start = 12.dp, top = 12.dp, end = 12.dp)
                         ) {
                             // Progress
-                            ItemRow("오늘의 목표", "50%")
+                            ItemRow("오늘의 목표", goalOfToday)
                             // Child Progress
                             AnimatedVisibility(visible = showExtraItems) {
                                 Column(
@@ -109,11 +121,11 @@ fun HomeScreen(navController: NavController) {
                                         .padding(start = 12.dp, top = 12.dp, end = 12.dp)
                                 ) {
                                     // Progress 1
-                                    ItemRow("영어로 보낸 메시지 수", "50%")
+                                    ItemRow("영어로 보낸 메시지 수", progress1)
                                     // Progress 2
-                                    ItemRow("채팅에 참가한 시간", "50%")
+                                    ItemRow("채팅에 참가한 시간", progress2)
                                     // Progress 3
-                                    ItemRow("복습한 채팅 수", "50%")
+                                    ItemRow("복습한 채팅 수", progress3)
                                     // Go to Daily Statistics
                                     Row(
                                         horizontalArrangement = Arrangement.spacedBy(
@@ -125,7 +137,7 @@ fun HomeScreen(navController: NavController) {
                                     ) {
                                         // Child views.
                                         Button(
-                                            onClick = { /*TODO*/ },
+                                            onClick = { /*TODO : Go to Statistc Screen*/ },
                                             colors = ButtonDefaults.buttonColors(
                                                 containerColor = Color(
                                                     0xFFFCF8EC
@@ -236,7 +248,7 @@ fun HomeScreen(navController: NavController) {
                                     end = 8.dp,
                                     bottom = 16.dp
                                 )
-                                .clickable { navController.navigate("review") }
+                                .clickable { navController.navigate("review/$selectedDate") }
                         ) {
                             Text(
                                 text = "복습 시작",
@@ -248,7 +260,7 @@ fun HomeScreen(navController: NavController) {
                                 )
                             )
                             Text(
-                                text = "남은 복습 : ",
+                                text = "남은 복습 : $remainingReview",
                                 style = TextStyle(
                                     fontSize = 13.sp,
                                     lineHeight = 20.sp,

@@ -58,6 +58,7 @@ dependencies {
 
     implementation(libs.androidx.navigation.testing)
     implementation(libs.generativeai)
+    implementation(libs.androidx.constraintlayout.compose)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -42,12 +42,12 @@ fun SingleChatScreen(navController: NavController, chatId: String, cvm: ChatView
         mutableStateOf("")
     }
 
+    val myUser = dvm.userData
+
     val onSendReply = {
-        cvm.sendReply(chatId, reply)
+        cvm.sendReply(chatId, reply, myUser.value)
         reply = ""
     }
-
-    val myUser = dvm.userData
 
     val chatMessages = cvm.chatMessages
 
