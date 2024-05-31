@@ -1,4 +1,4 @@
-package ai.opensource.emago.Screens
+package ai.opensource.emago.screens
 
 import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.navigateTo

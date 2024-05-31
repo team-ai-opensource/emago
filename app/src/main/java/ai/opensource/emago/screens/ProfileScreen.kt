@@ -1,4 +1,4 @@
-package ai.opensource.emago.Screens
+package ai.opensource.emago.screens
 
 import ai.opensource.emago.CommonDivider
 import ai.opensource.emago.CommonImage
@@ -20,11 +20,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -40,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
+
 fun ProfileScreen(navController: NavController, vm: EMAGOViewModel) {
     val inProgress = vm.inProcess.value
     if (inProgress) {
@@ -197,6 +200,7 @@ fun ProfileImage(imageUrl: String?, vm: EMAGOViewModel) {
             ) {
                 CommonImage(data = imageUrl)
 
+                }
             }
             Text(text = "Change Profile Picture")
         }

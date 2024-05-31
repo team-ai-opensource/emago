@@ -1,4 +1,4 @@
-package ai.opensource.emago.Screens
+package ai.opensource.emago.screens
 
 
 import ai.opensource.emago.CommonProgressBar
@@ -36,19 +36,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+
 
 @Composable
 fun ChatListScreen(navController: NavController, vm: EMAGOViewModel) {
@@ -109,12 +97,13 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel) {
             }
         )
 
+        }
     }
 
 
 }
-
 @Composable
+
 fun FAB(
     showDialog: Boolean, onFabClick: () -> Unit, onDismiss: () -> Unit, onAddChat: (String, String) -> Unit
 ) {
@@ -127,6 +116,7 @@ fun FAB(
 
     if (showDialog) {
         AlertDialog(
+
 
             onDismissRequest = {
                 onDismiss.invoke()
@@ -175,6 +165,7 @@ fun FAB(
         modifier = Modifier.padding(bottom = 40.dp)
     ) {
         Icon(imageVector = Icons.Rounded.Add, contentDescription = null, tint = Color.White)
+
 
     }
 }
