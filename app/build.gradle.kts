@@ -55,6 +55,7 @@ android {
 }
 
 dependencies {
+
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -67,7 +68,7 @@ dependencies {
 
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
-
+    implementation(libs.firebase.storage)
 
 
     testImplementation(libs.junit)
@@ -96,4 +97,8 @@ dependencies {
     implementation("com.kizitonwose.calendar:compose:2.5.1") // Compose
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
