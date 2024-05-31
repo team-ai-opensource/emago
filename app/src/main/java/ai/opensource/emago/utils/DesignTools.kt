@@ -1,4 +1,4 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

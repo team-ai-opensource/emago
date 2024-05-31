@@ -1,6 +1,7 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.home
 
 import ai.opensource.emago.R
+import ai.opensource.emago.utils.PreviewNavController
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -22,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +39,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,23 +47,16 @@ import java.time.LocalDate
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Scaffold() { innerPadding ->
-        var showExtraItems by remember { mutableStateOf(false) } // 빌드 할때는 false로 바꾸기
-        val currentDate = remember { LocalDate.now() }
+    var showExtraItems by remember { mutableStateOf(false) } // 빌드 할때는 false로 바꾸기
+    val currentDate = remember { LocalDate.now() }
         // User views
-        Column(
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color(0xFFD0E8F2))
-                .verticalScroll(rememberScrollState())
-                .padding(innerPadding)
-        ) {
-            // header
-
-            //HeaderContents() Todo : Add header contents
-
-            // body
+    Column(
+    horizontalAlignment = Alignment.Start,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFFD0E8F2))
+            .verticalScroll(rememberScrollState())
+    ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(64.dp, Alignment.Top),
                 horizontalAlignment = Alignment.Start,
@@ -267,7 +261,12 @@ fun HomeScreen(navController: NavController) {
                 }
             }
         }
-    }
+}
 
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    val navController = PreviewNavController()
+    HomeScreen(navController = navController)
 }
 

@@ -1,4 +1,4 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.chat
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

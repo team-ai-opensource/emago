@@ -1,10 +1,8 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.sign
 
-import ai.opensource.emago.CheckSignedIn
-import ai.opensource.emago.CommonProgressBar
-import ai.opensource.emago.DestinationScreen
-import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
+import ai.opensource.emago.utils.OutlinedTextFieldBackground
+import ai.opensource.emago.viewmodels.AuthViewModel
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,15 +38,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @Composable
-fun FirstScreen(
+fun LogInScreen(
     navController: NavController,
-    vm: EMAGOViewModel
+    avm: AuthViewModel = hiltViewModel()
 ) {
     Scaffold{ innerPadding ->
-        CheckSignedIn(vm, navController)
+        //CheckSignedIn(vm, navController)
 
         var isSignInState by remember { mutableStateOf(false) }
         // User View
@@ -163,7 +162,7 @@ fun FirstScreen(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            onClick = { vm.loginIn(inEm, inPW)/*TODO : Sign in */ },
+                            onClick = { avm.login(inEm, inPW)/*TODO : Sign in */ },
                             shape = RoundedCornerShape(size = 5.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF79A3B1),
@@ -201,7 +200,7 @@ fun FirstScreen(
                         }
                     }
                     AnimatedVisibility(visible = isSignInState) {
-                        TextButton(onClick = { navController.navigate("home") }) {
+                        TextButton(onClick = { navController.navigate("homeMain") }) {
                             Text(
                                 text = "비밀번호 찾기",
                                 style = TextStyle(
@@ -235,8 +234,5 @@ fun FirstScreen(
                 }
             }
         }
-    }
-    if (vm.inProcess.value) {
-        CommonProgressBar()
     }
 }

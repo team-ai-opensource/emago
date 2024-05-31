@@ -1,7 +1,8 @@
 @file:JvmName("ProfileScreen2Kt")
 
-package ai.opensource.emago.Screens
+package ai.opensource.emago.screens.profile
 
+import ai.opensource.emago.viewmodels.AuthViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -27,10 +28,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(navController: NavController, avm : AuthViewModel = hiltViewModel()) {
     Column(
         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -205,10 +207,14 @@ fun ProfileScreen(navController: NavController) {
                         }
                     }
                 }
-                Button(onClick = { /*TODO*/ }, shape = RoundedCornerShape(5.dp),
+                Button(onClick = { avm.logout() }, shape = RoundedCornerShape(5.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF79A3B1)),
                     modifier = Modifier
-                        .shadow(elevation = 4.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
+                        .shadow(
+                            elevation = 4.dp,
+                            spotColor = Color(0x40000000),
+                            ambientColor = Color(0x40000000)
+                        )
                         .width(256.dp)
                         .height(37.dp)) {
                     Text(
@@ -272,7 +278,6 @@ fun ProfileScreen(navController: NavController) {
                         )
                     )
                 }
-
             }
         }
     }

@@ -1,8 +1,9 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.chat
 
-import ai.opensource.emago.CommonDivider
-import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.data.Message
+import ai.opensource.emago.utils.CommonDivider
+import ai.opensource.emago.viewmodel.DBViewModel
+import ai.opensource.emago.viewmodels.ChatViewModel
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,33 +14,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @Composable
-fun SingleChatScreen(navController: NavController, vm: EMAGOViewModel, chatId: String) {
+fun SingleChatScreen(navController: NavController, chatId: String, cvm: ChatViewModel = hiltViewModel(), dvm: DBViewModel = hiltViewModel()) {
 //    val currentChat = vm.chats.value.first { it.chatId == chatId }
 
     var reply by rememberSaveable {
@@ -47,13 +43,13 @@ fun SingleChatScreen(navController: NavController, vm: EMAGOViewModel, chatId: S
     }
 
     val onSendReply = {
-        vm.onSendReply(chatId, reply)
+        cvm.sendReply(chatId, reply)
         reply = ""
     }
 
-    val myUser = vm.userData.value
+    val myUser = dvm.userData
 
-    val chatMessages = vm.chatMessages
+    val chatMessages = cvm.chatMessages
 
     val showDialog = remember {
         mutableStateOf(false)
@@ -88,10 +84,10 @@ fun SingleChatScreen(navController: NavController, vm: EMAGOViewModel, chatId: S
 
 
     LaunchedEffect(key1 = Unit) {
-        vm.populateMessages(chatId)
+        cvm.populateMessages(chatId)
     }
     BackHandler {
-        vm.depopulateMessage()
+        cvm.depopulateMessages()
     }
     FeedbackDialog(showDialog.value, onDismiss, comment.value, advanced_sentence.value, error_sentence.value, correct_sentence.value)
 

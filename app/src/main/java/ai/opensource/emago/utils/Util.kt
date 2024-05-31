@@ -1,4 +1,4 @@
-package ai.opensource.emago
+package ai.opensource.emago.utils
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,17 +12,17 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.testing.TestNavHostController
 import coil.compose.rememberImagePainter
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -65,16 +65,16 @@ fun CommonDivider() {
     )
 }
 
-@Composable
-fun CheckSignedIn(vm: EMAGOViewModel, navController: NavController) {
-    val alreadySignIn = remember { mutableStateOf(false) }
-
-    val signIn = vm.signIn.value
-    if (signIn && !alreadySignIn.value) {
-        alreadySignIn.value = true
-        navController.navigate(DestinationScreen.ChatList.route)
-    }
-}
+//@Composable
+//fun CheckSignedIn(vm: EMAGOViewModel, navController: NavController) {
+//    val alreadySignIn = remember { mutableStateOf(false) }
+//
+//    val signIn = vm._isLoggedIn
+//    if (signIn && !alreadySignIn.value) {
+//        alreadySignIn.value = true
+//        navController.navigate(DestinationScreen.ChatList.route)
+//    }
+//}
 
 @Composable
 fun CommonImage(
@@ -122,4 +122,10 @@ fun sendPostRequest(url: String, jsonBody: String): String? {
         e.printStackTrace()
         null
     }
+}
+
+@Composable
+fun PreviewNavController(): NavController {
+    val context = LocalContext.current
+    return TestNavHostController(context)
 }
