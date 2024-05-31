@@ -209,4 +209,3 @@ fun ProfileImage(imageUrl: String?, vm: EMAGOViewModel) {
             CommonProgressBar()
         }
     }
-}

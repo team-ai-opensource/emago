@@ -10,6 +10,7 @@ import ai.opensource.emago.screens.LoginScreen
 import ai.opensource.emago.screens.ProfileScreen
 import ai.opensource.emago.screens.ReviewScreen
 import ai.opensource.emago.screens.SignUpScreen
+import ai.opensource.emago.screens.SingleChatScreen
 import ai.opensource.emago.ui.theme.EmagoTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
