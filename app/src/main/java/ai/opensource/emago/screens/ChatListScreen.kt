@@ -1,208 +1,187 @@
-package ai.opensource.emago.Screens
+package ai.opensource.emago.screens
 
 
+import ai.opensource.emago.CommonProgressBar
 import ai.opensource.emago.DestinationScreen
-import ai.opensource.emago.R
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import ai.opensource.emago.EMAGOViewModel
+import ai.opensource.emago.TitleText
+import ai.opensource.emago.data.ChatData
+import ai.opensource.emago.navigateTo
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
+
 @Composable
-fun ChatListScreen(navController: NavController) {
-    //user View
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFFFCF8EC))
-            .verticalScroll(rememberScrollState())
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            // My Chat Room
-            Column(
-                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
-            ) {
-                Text(
-                    text = "내 채팅방",
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        lineHeight = 20.sp,
-                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                        color = Color(0xFF000000),
-                        letterSpacing = 0.15.sp,
-                    )
-                )
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    ChatroomList(false, "영어공부방", R.drawable.dog_square)
-                    ChatroomList(false, "성공의채팅방", R.drawable.handsom_guy)
-                    ChatroomList(false, "33333", R.drawable.woman)
-                    ChatroomList(false, "여친구함", R.drawable.soldier)
-                }
-            }
-            // Recommended Chat Room
-            Column(
-                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
-            ) {
-                Text(
-                    text = "추천 채팅방",
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        lineHeight = 20.sp,
-                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                        color = Color(0xFF000000),
-                        letterSpacing = 0.15.sp,
-                    )
-                )
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    ChatroomList(false, "영어공부방", R.drawable.dog_square)
-                    ChatroomList(false, "성공의채팅방", R.drawable.handsom_guy)
-                    ChatroomList(false, "33333", R.drawable.woman)
-                    ChatroomList(false, "여친구함", R.drawable.soldier)
-                }
-            }
+fun ChatListScreen(navController: NavController, vm: EMAGOViewModel) {
+
+    LaunchedEffect(key1 = Unit) {
+        vm.getAllChatData()
+    }
+
+    val inProgress = vm.inProcessChats
+    if (inProgress.value) {
+        CommonProgressBar()
+    } else {
+        val chats = vm.chats.value
+        val userData = vm.userData.value
+        val showDialog = remember {
+            mutableStateOf(false)
         }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically) {
-            Button(onClick = { navController.navigate(DestinationScreen.ChatCreate.route) }) {
-                Text(text = "채팅방 만들기",
+        val onFabClick: () -> Unit={showDialog.value=true}
+        val onDismiss: () -> Unit={showDialog.value=false}
+        val onAddChat = fun (title: String, description: String) {
+            vm.onAddChat(title, description)
+            showDialog.value=false
+        }
+
+        Scaffold (
+            floatingActionButton = {FAB(
+                showDialog = showDialog.value,
+                onFabClick = onFabClick,
+                onDismiss = onDismiss,
+                onAddChat = onAddChat,
+            )},
+            content = {
+                Column (
                     modifier = Modifier
-                        .padding(8.dp)
-                        .clickable {
-                            navController.navigate(DestinationScreen.ChatCreate.route)
-                        }
-                )
-            }
-        }
+                        .fillMaxSize()
+                        .padding(it)
+                ) {
+                    TitleText(text = "Chats")
 
+                    if (chats!!.isEmpty()) {
+                        Column(modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center) {
+                            Text(text = "채팅방이 존재하지 않습니다.")
+                        }
+                    } else {
+                        ChatListBox(navController, modifier = Modifier.fillMaxWidth(), chatList = chats)
+                    }
+
+
+                    Spacer(modifier = Modifier.weight(1f)) // 남은 공간을 채워 BottomNavigationMenu를 아래로 밀어냅니다.
+                    BottomNavigationMenu(
+                        selectedItem = BottomNavigationItem.CHATLIST, navController = navController
+                    )
+                }
+            }
+        )
+
+        }
+    }
+
+@Composable
+
+fun FAB(
+    showDialog: Boolean, onFabClick: () -> Unit, onDismiss: () -> Unit, onAddChat: (String, String) -> Unit
+) {
+    val addChatTitle = remember {
+        mutableStateOf("")
+    }
+    val addChatDescription = remember {
+        mutableStateOf("")
+    }
+
+    if (showDialog) {
+        AlertDialog(
+
+
+            onDismissRequest = {
+                onDismiss.invoke()
+                addChatTitle.value = ""
+                addChatDescription.value = ""
+            },
+            confirmButton = {
+
+                Button(onClick = { onAddChat(addChatTitle.value, addChatDescription.value) }) {
+                    Text(text = "Add Chat")
+                }
+
+            }, title = {
+                Text(text = "Add Chat")
+            },
+            text = {
+                Column {
+                    Row {
+                        Text(text = "제목")
+                        OutlinedTextField(
+                            value = addChatTitle.value,
+                            onValueChange = { addChatTitle.value = it },
+                        )
+                    }
+                    Row {
+                        Text(text ="내용")
+                        OutlinedTextField(
+                            value = addChatDescription.value,
+                            onValueChange = { addChatDescription.value = it },
+                        )
+                    }
+                    
+
+                }
+
+            }
+
+        )
+
+
+    }
+    FloatingActionButton(
+        onClick = { onFabClick() },
+        containerColor = MaterialTheme.colorScheme.secondary,
+        shape = CircleShape,
+        modifier = Modifier.padding(bottom = 40.dp)
+    ) {
+        Icon(imageVector = Icons.Rounded.Add, contentDescription = null, tint = Color.White)
 
 
     }
 }
 
 @Composable
-fun ChatroomList(isSearch : Boolean, roomName : String, id: Int){
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-        verticalAlignment = Alignment.Top,
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        // Child views.
+fun ChatListBox(navController: NavController, modifier: Modifier, chatList: List<ChatData> ){
 
-
-        Row(
-            modifier = Modifier
-                .width(52.dp)
-                .height(64.dp)
-        ){
-            Image(
-                painter = painterResource(id = id),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-
-                    .clip(CircleShape)
-            )
-
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            // Child views.
-            Text(
-                text = roomName,
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    lineHeight = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                    color = Color(0xFF000E08),
-                )
-            )
-            Text(
-                text = "최근 채팅 내역",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    lineHeight = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                    color = Color(0xFF797C7B),
-                )
-            )
+    LazyColumn(modifier = modifier) {
+        items(chatList) {
+            item ->
+            Column {
+                Text(text = item.id, modifier = Modifier.clickable {
+                    val route = DestinationScreen.SingleChat.createRoute(item.id)
+                    navigateTo(navController, route)
+                })
+            }
         }
 
-
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-            horizontalAlignment = Alignment.Start,
-        ) {
-            // Child views.
-            Text(
-                text = if(isSearch)"3분전" else "2/40",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    lineHeight = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                    color = Color(0xFF000000),
-                )
-
-            )
-        }
     }
 }
-
-//@Preview
-//@Composable
-//fun ChatListScreenPreview() {
-//    ChatListScreen()
-//}
