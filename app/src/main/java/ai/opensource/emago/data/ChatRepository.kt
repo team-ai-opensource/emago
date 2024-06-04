@@ -7,9 +7,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class ChatRepository(
     private val auth: FirebaseAuth,
@@ -41,7 +41,7 @@ class ChatRepository(
         }
     }
 
-    suspend fun sendReply(chatId: String, message: String, userData: UserData?): Result<Boolean> {
+    suspend fun sendChat(chatId: String, message: String, userData: UserData?): Result<Boolean> {
         return try {
             val time = Calendar.getInstance().time.toString()
             val chatUser = ChatUser(
@@ -61,7 +61,7 @@ class ChatRepository(
                 }"""
             val url = "http://huseong.iptime.org:8000/api/emago"
 
-            withContext(Dispatchers.IO){
+            GlobalScope.launch(Dispatchers.IO){
                 val response = sendPostRequest(url, jsonBody)
                 println(response)
             }

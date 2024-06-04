@@ -4,6 +4,7 @@ import ai.opensource.emago.data.ChatData
 import ai.opensource.emago.data.ChatRepository
 import ai.opensource.emago.data.Message
 import ai.opensource.emago.data.UserData
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,8 +54,9 @@ class ChatViewModel @Inject constructor(
     fun sendReply(chatId: String, message: String, userData : UserData?) {
         inProcess.value = true
         viewModelScope.launch {
-            val result = repository.sendReply(chatId, message, userData)
+            val result = repository.sendChat(chatId, message, userData)
             inProcess.value = false
+            Log.d("test", "onSendReply: $result")
             if (result.isFailure) {
                 errorMessage.value = result.exceptionOrNull()?.message
             }
