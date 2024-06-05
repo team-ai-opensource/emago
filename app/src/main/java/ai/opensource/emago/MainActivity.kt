@@ -1,29 +1,26 @@
 package ai.opensource.emago
 
 
-import ai.opensource.emago.screens.BottomNavigationMenu
-import ai.opensource.emago.screens.ChatCreateScreen
-import ai.opensource.emago.screens.ChatListScreen
-import ai.opensource.emago.screens.FirstScreen
-import ai.opensource.emago.screens.HomeScreen
-import ai.opensource.emago.screens.ProfileScreen
-import ai.opensource.emago.screens.ReviewScreen
-import ai.opensource.emago.screens.SignUpScreen
-import ai.opensource.emago.screens.SingleChatScreen
+import ai.opensource.emago.screens.chat.ChatCreateScreen
+import ai.opensource.emago.screens.chat.ChatListScreen
+import ai.opensource.emago.screens.sign.FirstScreen
+import ai.opensource.emago.screens.home.HomeScreen
+import ai.opensource.emago.screens.profile.ProfileScreen
+import ai.opensource.emago.screens.home.ReviewScreen
+import ai.opensource.emago.screens.sign.SignUpScreen
+import ai.opensource.emago.screens.chat.SingleChatScreen
 import ai.opensource.emago.ui.theme.EmagoTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -102,7 +99,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            composable("home"){ HomeScreen(navController)}
+            composable("home"){ HomeScreen(navController) }
             composable("review") { ReviewScreen() }
             composable("first") { FirstScreen(navController, vm ) }
             composable("signUp") { SignUpScreen(navController, vm) }

@@ -1,12 +1,14 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.chat
 
 
-import ai.opensource.emago.CommonProgressBar
+import ai.opensource.emago.util.CommonProgressBar
 import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.EMAGOViewModel
-import ai.opensource.emago.TitleText
+import ai.opensource.emago.util.TitleText
 import ai.opensource.emago.data.ChatData
-import ai.opensource.emago.navigateTo
+import ai.opensource.emago.util.navigateTo
+import ai.opensource.emago.screens.BottomNavigationItem
+import ai.opensource.emago.screens.BottomNavigationMenu
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -63,12 +65,14 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel) {
         }
 
         Scaffold (
-            floatingActionButton = {FAB(
+            floatingActionButton = {
+                FAB(
                 showDialog = showDialog.value,
                 onFabClick = onFabClick,
                 onDismiss = onDismiss,
                 onAddChat = onAddChat,
-            )},
+            )
+            },
             content = {
                 Column (
                     modifier = Modifier

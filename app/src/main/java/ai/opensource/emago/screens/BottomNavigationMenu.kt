@@ -1,7 +1,7 @@
 package ai.opensource.emago.screens
 
 import ai.opensource.emago.DestinationScreen
-import ai.opensource.emago.navigateTo
+import ai.opensource.emago.util.navigateTo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,5 +1,7 @@
-package ai.opensource.emago
+package ai.opensource.emago.util
 
+import ai.opensource.emago.DestinationScreen
+import ai.opensource.emago.EMAGOViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

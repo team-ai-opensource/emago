@@ -1,11 +1,13 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.profile
 
-import ai.opensource.emago.CommonDivider
-import ai.opensource.emago.CommonImage
-import ai.opensource.emago.CommonProgressBar
+import ai.opensource.emago.util.CommonDivider
+import ai.opensource.emago.util.CommonImage
+import ai.opensource.emago.util.CommonProgressBar
 import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.EMAGOViewModel
-import ai.opensource.emago.navigateTo
+import ai.opensource.emago.util.navigateTo
+import ai.opensource.emago.screens.BottomNavigationItem
+import ai.opensource.emago.screens.BottomNavigationMenu
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
