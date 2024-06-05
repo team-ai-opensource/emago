@@ -166,10 +166,17 @@ fun NicknameSettingScreen() {
                     verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .shadow(elevation = 4.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
+                        .shadow(
+                            elevation = 4.dp,
+                            spotColor = Color(0x40000000),
+                            ambientColor = Color(0x40000000)
+                        )
                         .width(359.dp)
                         .height(43.dp)
-                        .background(color = Color(0xFF79A3B1), shape = RoundedCornerShape(size = 5.dp))
+                        .background(
+                            color = Color(0xFF79A3B1),
+                            shape = RoundedCornerShape(size = 5.dp)
+                        )
                         .padding(start = 80.dp, top = 13.dp, end = 80.dp, bottom = 13.dp)
                 ) {
                     // Child views.
