@@ -51,7 +51,6 @@ fun CommonProgressBar() {
         horizontalArrangement = Arrangement.Center
     ) {
         CircularProgressIndicator()
-
     }
 }
 

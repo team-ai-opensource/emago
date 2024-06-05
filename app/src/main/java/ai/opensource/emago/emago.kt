@@ -30,6 +30,8 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun Emago() {
     val navController = rememberNavController()
+    val vm = hiltViewModel<EMAGOViewModel>()
+
     NavHost(
         navController = navController,
         startDestination = "login"
@@ -44,7 +46,7 @@ fun Emago() {
         }
         composable("chatList") {
             Layout(navController) {
-                ChatListScreen(navController)
+                ChatListScreen(navController, vm)
             }
         }
         composable("profile") {
@@ -78,7 +80,7 @@ fun MainBottomBar(navController: NavController) {
             icon = { Icon(Icons.Default.List, contentDescription = "Chat") },
             label = { Text("Chat") },
             selected = navController.currentBackStackEntry?.destination?.route == "chat",
-            onClick = { navController.navigate("chat") }
+            onClick = { navController.navigate("chatList") }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
