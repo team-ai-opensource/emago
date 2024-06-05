@@ -6,7 +6,9 @@ import ai.opensource.emago.screens.ChatCreateScreen
 import ai.opensource.emago.screens.ChatListScreen
 import ai.opensource.emago.screens.FirstScreen
 import ai.opensource.emago.screens.HomeScreen
+import ai.opensource.emago.screens.NicknameSettingScreen
 import ai.opensource.emago.screens.ProfileScreen
+import ai.opensource.emago.screens.ProfileSettingScreen
 import ai.opensource.emago.screens.ReviewScreen
 import ai.opensource.emago.screens.SignUpScreen
 import ai.opensource.emago.screens.SingleChatScreen
@@ -106,6 +108,7 @@ class MainActivity : ComponentActivity() {
             composable("review") { ReviewScreen() }
             composable("first") { FirstScreen(navController, vm ) }
             composable("signUp") { SignUpScreen(navController, vm) }
+            composable("modify") { ProfileSettingScreen(navController, vm) }
 
         }
     }

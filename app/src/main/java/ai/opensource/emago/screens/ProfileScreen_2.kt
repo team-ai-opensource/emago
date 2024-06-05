@@ -173,7 +173,7 @@ fun ProfileScreen(navController: NavController) {
                                 .fillMaxWidth()
                                 .fillMaxHeight()
                         ) {
-                            // Child views.
+                            // 프로필 표시
                             Text(
                                 text = "동에번쩍서에번쩍레드로드라이트",
                                 style = TextStyle(
@@ -205,7 +205,7 @@ fun ProfileScreen(navController: NavController) {
                         }
                     }
                 }
-                Button(onClick = { /*TODO*/ }, shape = RoundedCornerShape(5.dp),
+                Button(onClick = { navController.navigate("modify") }, shape = RoundedCornerShape(5.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF79A3B1)),
                     modifier = Modifier
                         .shadow(elevation = 4.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
@@ -231,7 +231,7 @@ fun ProfileScreen(navController: NavController) {
                     .background(color = Color(0xFFFCF8EC))
                     .padding(start = 43.dp, top = 42.dp, end = 102.dp, bottom = 31.dp)
             ) {
-                // Child views.
+                // 통계 표시
                 Text(
                     text = "간략한 통계",
                     style = TextStyle(
