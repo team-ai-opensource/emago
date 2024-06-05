@@ -40,7 +40,7 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel()) {
+fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()) {
 
     LaunchedEffect(key1 = Unit) {
         vm.getAllChatData()
