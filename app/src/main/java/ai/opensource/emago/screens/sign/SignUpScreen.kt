@@ -237,8 +237,8 @@ fun SignUpScreen(navController: NavController, vm : EMAGOViewModel = hiltViewMod
                     }
 
                     // Back to Sign In
-                    TextButton(onClick = { navController.navigate("first"){
-                        popUpTo("first"){
+                    TextButton(onClick = { navController.navigate("login"){
+                        popUpTo("login"){
                             inclusive = true
                         }
                     } }) {

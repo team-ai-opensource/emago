@@ -205,7 +205,7 @@ fun ProfileScreen(navController: NavController) {
                         }
                     }
                 }
-                Button(onClick = { navController.navigate("modify") }, shape = RoundedCornerShape(5.dp),
+                Button(onClick = { navController.navigate("profileSet") }, shape = RoundedCornerShape(5.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF79A3B1)),
                     modifier = Modifier
                         .shadow(elevation = 4.dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))

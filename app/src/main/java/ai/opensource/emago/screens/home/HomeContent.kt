@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -126,7 +128,8 @@ fun ReviewContent(isChecked : Boolean = false){
 }
 
 @Composable
-fun ItemRow(text : String, progress : String){
+fun ItemRow(text : String, progress : Float){
+    var percentage by remember { mutableFloatStateOf(progress) }
     Box(
         modifier = Modifier
             .background(
@@ -168,7 +171,7 @@ fun ItemRow(text : String, progress : String){
                 )
                 // Percentage
                 Text(
-                    text = progress,
+                    text = "${(percentage/100*100).toInt()}%",
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.sp,
@@ -179,28 +182,14 @@ fun ItemRow(text : String, progress : String){
                 )
             }
             // Progress Bar
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(
-                    10.dp,
-                    Alignment.Start
-                ),
-                verticalAlignment = Alignment.CenterVertically,
+            LinearProgressIndicator(progress = percentage/100,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(10.dp)
-                    .background(
-                        color = Color(0xFFFCF8EC),
-                        shape = RoundedCornerShape(size = 10.dp)
-                    )
-                    .padding(
-                        start = 10.dp,
-                        top = 10.dp,
-                        end = 10.dp,
-                        bottom = 10.dp
-                    )
-            ) {
-                // Child views. todo : progress bar, sync with data
-            }
+                    .height(8.dp),
+                color = Color(0xFF79A3B1),
+                trackColor = Color(0xFFFCF8EC)
+            )
+
         }
     }
 }
