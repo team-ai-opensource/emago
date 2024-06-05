@@ -13,21 +13,12 @@ import ai.opensource.emago.ui.theme.EmagoTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -74,22 +65,13 @@ class MainActivity : ComponentActivity() {
 
         NavHost(navController = navController, startDestination = "first") {
             composable(DestinationScreen.Profile.route) {
-
-                ProfileScreen(navController, vm)
-
+                    ProfileScreen(navController, vm)
             }
             composable(DestinationScreen.ChatCreate.route) {
-
                 ChatCreateScreen(navController)
-
-
             }
             composable(DestinationScreen.ChatList.route) {
-
-
                 ChatListScreen(navController, vm)
-
-
             }
 
             composable(DestinationScreen.SingleChat.route) {
@@ -107,28 +89,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-@Composable
-fun ShowVectorDrawable(id: Int) {
-    // 'your_vector_drawable'는 res/drawable 폴더에 있는 XML 파일의 이름입니다.
-    val image = painterResource(id = id)
-    Image(
-        painter = image, contentDescription = "Vector Drawable", modifier = Modifier
-            .padding(8.dp)
-            .width(48.dp)
-            .height(48.dp)
-            .clip(CircleShape)
-            .background(color = Color(0xFFD0E8F2))
-    )
-}
-
-@Composable
-fun ShowVectorDrawable2(id: Int) {
-    // 'your_vector_drawable'는 res/drawable 폴더에 있는 XML 파일의 이름입니다.
-    val image = painterResource(id = id)
-    Image(painter = image, contentDescription = "Vector Drawable", modifier = Modifier)
-}
-
-
 
