@@ -3,20 +3,31 @@ package ai.opensource.emago.screens.chat
 import ai.opensource.emago.util.CommonDivider
 import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.data.Message
+import ai.opensource.emago.data.UserData
+import ai.opensource.emago.util.CommonImage
+import ai.opensource.emago.util.CommonProgressBar
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -34,7 +45,6 @@ import androidx.navigation.NavController
 
 @Composable
 fun SingleChatScreen(navController: NavController, vm: EMAGOViewModel, chatId: String) {
-//    val currentChat = vm.chats.value.first { it.chatId == chatId }
 
     var reply by rememberSaveable {
         mutableStateOf("")
@@ -96,7 +106,8 @@ fun SingleChatScreen(navController: NavController, vm: EMAGOViewModel, chatId: S
         MessageBox(
             modifier = Modifier.weight(1f),
             chatMessages = chatMessages.value ?: listOf(),
-            onMessageClick
+            onMessageClick,
+            myUser!!
         )
         ReplyBox(reply = reply, onReplyChange = { reply = it }, onSendReply = onSendReply)
     }
@@ -125,24 +136,54 @@ fun ReplyBox(reply: String, onReplyChange: (String) -> Unit, onSendReply: () -> 
 fun MessageBox(
     modifier: Modifier,
     chatMessages: List<Message>,
-    onMessageClick: (String?, String?, String?, String?) -> Unit
+    onMessageClick: (String?, String?, String?, String?) -> Unit,
+    myUser: UserData,
 ) {
-
     LazyColumn(modifier = modifier) {
         items(chatMessages) { msg ->
-            Column {
-                Text(text = msg.message ?: "", modifier = Modifier.clickable {
-                    onMessageClick(
-                        msg.feedback?.comment,
-                        msg.feedback?.advanced_sentence,
-                        msg.feedback?.error_sentence,
-                        msg.feedback?.correct_sentence
-                    )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                verticalAlignment = Alignment.Top,
+            ) {
+                Column {
+                    ProfileImage( myUser.imageUrl )
+                    Text(text = msg.message ?: "", modifier = Modifier.clickable {
+                        onMessageClick(
+                            msg.feedback?.comment,
+                            msg.feedback?.advanced_sentence,
+                            msg.feedback?.error_sentence,
+                            msg.feedback?.correct_sentence
+                        )
+                    })
                 }
-                )
             }
+
         }
 
+    }
+}
+
+@Composable
+fun ProfileImage(imageUrl: String?) {
+
+
+    Box(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min))
+    {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Card(
+                shape = CircleShape,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(27.dp)
+            ) {
+                CommonImage(data = imageUrl)
+            }
+        }
     }
 }
 

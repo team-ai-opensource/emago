@@ -43,7 +43,7 @@ import androidx.navigation.NavController
 
 @Composable
 
-fun ProfileScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel()) {
+fun ProfileScreen(navController: NavController, vm: EMAGOViewModel) {
     val inProgress = vm.inProcess.value
     if (inProgress) {
         CommonProgressBar()

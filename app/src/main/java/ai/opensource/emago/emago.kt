@@ -46,7 +46,7 @@ fun Emago() {
         }
         composable("chatList") {
             Layout(navController) {
-                ChatListScreen(navController)
+                ChatListScreen(navController, vm)
             }
         }
         composable("profile") {
