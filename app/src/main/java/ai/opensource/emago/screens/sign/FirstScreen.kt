@@ -1,10 +1,10 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.sign
 
-import ai.opensource.emago.CheckSignedIn
-import ai.opensource.emago.CommonProgressBar
-import ai.opensource.emago.DestinationScreen
+import ai.opensource.emago.util.CheckSignedIn
+import ai.opensource.emago.util.CommonProgressBar
 import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
+import ai.opensource.emago.util.OutlinedTextFieldBackground
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

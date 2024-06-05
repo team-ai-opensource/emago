@@ -1,4 +1,4 @@
-package ai.opensource.emago
+package ai.opensource.emago.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
