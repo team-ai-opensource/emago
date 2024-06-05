@@ -5,7 +5,6 @@ import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.data.ChatData
 import ai.opensource.emago.util.CommonProgressBar
 import ai.opensource.emago.util.TitleText
-import ai.opensource.emago.util.navigateTo
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -56,7 +56,7 @@ fun Emago() {
         }
 
         composable("review") { ReviewScreen() }
-        composable("profileSet") { ProfileSettingScreen() }
+        composable("profileSet") { ProfileSettingScreen(navController) }
         composable("chatCreate") { ChatCreateScreen(navController) }
 
     }
