@@ -1,12 +1,11 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.chat
 
 
-import ai.opensource.emago.CommonProgressBar
-import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.EMAGOViewModel
-import ai.opensource.emago.TitleText
 import ai.opensource.emago.data.ChatData
-import ai.opensource.emago.navigateTo
+import ai.opensource.emago.util.CommonProgressBar
+import ai.opensource.emago.util.TitleText
+import ai.opensource.emago.util.navigateTo
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,11 +35,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 
 @Composable
-fun ChatListScreen(navController: NavController, vm: EMAGOViewModel) {
+fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel()) {
 
     LaunchedEffect(key1 = Unit) {
         vm.getAllChatData()
@@ -63,12 +63,14 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel) {
         }
 
         Scaffold (
-            floatingActionButton = {FAB(
+            floatingActionButton = {
+                FAB(
                 showDialog = showDialog.value,
                 onFabClick = onFabClick,
                 onDismiss = onDismiss,
                 onAddChat = onAddChat,
-            )},
+            )
+            },
             content = {
                 Column (
                     modifier = Modifier
@@ -91,9 +93,6 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel) {
 
 
                     Spacer(modifier = Modifier.weight(1f)) // 남은 공간을 채워 BottomNavigationMenu를 아래로 밀어냅니다.
-                    BottomNavigationMenu(
-                        selectedItem = BottomNavigationItem.CHATLIST, navController = navController
-                    )
                 }
             }
         )
@@ -177,8 +176,8 @@ fun ChatListBox(navController: NavController, modifier: Modifier, chatList: List
             item ->
             Column {
                 Text(text = item.id, modifier = Modifier.clickable {
-                    val route = DestinationScreen.SingleChat.createRoute(item.id)
-                    navigateTo(navController, route)
+                    //val route = DestinationScreen.SingleChat.createRoute(item.id)
+                    //navigateTo(navController, route)
                 })
             }
         }

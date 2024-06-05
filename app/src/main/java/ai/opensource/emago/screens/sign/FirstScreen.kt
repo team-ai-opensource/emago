@@ -1,10 +1,10 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.sign
 
-import ai.opensource.emago.CheckSignedIn
-import ai.opensource.emago.CommonProgressBar
-import ai.opensource.emago.DestinationScreen
+import ai.opensource.emago.util.CheckSignedIn
+import ai.opensource.emago.util.CommonProgressBar
 import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
+import ai.opensource.emago.util.OutlinedTextFieldBackground
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,12 +40,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @Composable
 fun FirstScreen(
     navController: NavController,
-    vm: EMAGOViewModel
+    vm: EMAGOViewModel = hiltViewModel()
 ) {
     Scaffold{ innerPadding ->
         CheckSignedIn(vm, navController)
@@ -183,7 +184,7 @@ fun FirstScreen(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            onClick = { isSignInState = true },
+                            onClick = { isSignInState = true},
                             shape = RoundedCornerShape(size = 5.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF79A3B1),
@@ -200,18 +201,18 @@ fun FirstScreen(
                             )
                         }
                     }
-                    AnimatedVisibility(visible = isSignInState) {
-                        TextButton(onClick = { navController.navigate("home") }) {
-                            Text(
-                                text = "비밀번호 찾기",
-                                style = TextStyle(
-                                    fontSize = 15.sp,
-                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                    color = Color(0xFF456268),
-                                )
-                            )
-                        }
-                    }
+//                    AnimatedVisibility(visible = isSignInState) {
+//                        TextButton(onClick = { navController.navigate("home") }) {
+//                            Text(
+//                                text = "비밀번호 찾기",
+//                                style = TextStyle(
+//                                    fontSize = 15.sp,
+//                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+//                                    color = Color(0xFF456268),
+//                                )
+//                            )
+//                        }
+//                    }
                     // Sign up
                     Button(
                         modifier = Modifier

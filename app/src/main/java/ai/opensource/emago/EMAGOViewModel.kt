@@ -4,10 +4,8 @@ import ai.opensource.emago.data.CHATS
 import ai.opensource.emago.data.ChatData
 import ai.opensource.emago.data.ChatUser
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -16,12 +14,10 @@ import ai.opensource.emago.data.MESSAGES
 import ai.opensource.emago.data.Message
 import ai.opensource.emago.data.USER_NODE
 import ai.opensource.emago.data.UserData
+import ai.opensource.emago.util.sendPostRequest
 import android.icu.util.Calendar
 import android.net.Uri
-import androidx.core.text.isDigitsOnly
-import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +61,6 @@ class EMAGOViewModel @Inject constructor(
                 .addSnapshotListener { value, error ->
                     if (error != null) {
                         handleException(error)
-
                     }
                     if (value != null) {
                         chatMessages.value = value.documents.mapNotNull {

@@ -1,10 +1,5 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.profile
 
-import ai.opensource.emago.CommonImage
-import ai.opensource.emago.CommonProgressBar
-import ai.opensource.emago.EMAGOViewModel
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,16 +26,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun ProfileSettingScreen(
-    navController: NavController,
-    vm: EMAGOViewModel
-) {
-
+fun ProfileSettingScreen() {
     Column(
         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -242,7 +233,7 @@ fun ProfileSettingScreen(
                                     .width(308.dp)
                                     .height(17.dp)
                                     .padding(start = 8.dp, end = 8.dp)
-                                    .clickable { navController.navigate("") }
+                                    .clickable { navController.navigate("ProfileSet") }
                             ) {
                                 // Child views.
                                 Text(
@@ -372,7 +363,7 @@ fun ProfileSettingScreen(
                                     .width(308.dp)
                                     .height(17.dp)
                                     .padding(start = 8.dp, end = 8.dp)
-                                    .clickable { navController.navigate("") }
+                                   // .clickable { navController.navigate("") }
                             ) {
                                 // Child views.
                                 Text(

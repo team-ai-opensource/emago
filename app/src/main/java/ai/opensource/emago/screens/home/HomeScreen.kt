@@ -1,4 +1,4 @@
-package ai.opensource.emago.screens
+package ai.opensource.emago.screens.home
 
 import ai.opensource.emago.R
 import androidx.compose.animation.AnimatedVisibility

@@ -1,6 +1,6 @@
 @file:JvmName("ProfileScreen2Kt")
 
-package ai.opensource.emago.Screens
+package ai.opensource.emago.screens.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
