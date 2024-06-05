@@ -184,7 +184,7 @@ fun FirstScreen(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            onClick = { isSignInState = true },
+                            onClick = { isSignInState = true},
                             shape = RoundedCornerShape(size = 5.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF79A3B1),
@@ -201,18 +201,18 @@ fun FirstScreen(
                             )
                         }
                     }
-                    AnimatedVisibility(visible = isSignInState) {
-                        TextButton(onClick = { navController.navigate("home") }) {
-                            Text(
-                                text = "비밀번호 찾기",
-                                style = TextStyle(
-                                    fontSize = 15.sp,
-                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                    color = Color(0xFF456268),
-                                )
-                            )
-                        }
-                    }
+//                    AnimatedVisibility(visible = isSignInState) {
+//                        TextButton(onClick = { navController.navigate("home") }) {
+//                            Text(
+//                                text = "비밀번호 찾기",
+//                                style = TextStyle(
+//                                    fontSize = 15.sp,
+//                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+//                                    color = Color(0xFF456268),
+//                                )
+//                            )
+//                        }
+//                    }
                     // Sign up
                     Button(
                         modifier = Modifier

@@ -61,7 +61,6 @@ class EMAGOViewModel @Inject constructor(
                 .addSnapshotListener { value, error ->
                     if (error != null) {
                         handleException(error)
-
                     }
                     if (value != null) {
                         chatMessages.value = value.documents.mapNotNull {
