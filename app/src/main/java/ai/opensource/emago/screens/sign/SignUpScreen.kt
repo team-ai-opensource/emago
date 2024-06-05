@@ -43,10 +43,11 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 
-fun SignUpScreen(navController: NavController, vm : EMAGOViewModel) {
+fun SignUpScreen(navController: NavController, vm : EMAGOViewModel = hiltViewModel()) {
     Scaffold { innerPadding ->
         CheckSignedIn(vm, navController)
         //User View
@@ -250,7 +251,6 @@ fun SignUpScreen(navController: NavController, vm : EMAGOViewModel) {
                             )
                         )
                     }
-
                 }
             }
         }

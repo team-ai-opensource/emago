@@ -1,6 +1,5 @@
 package ai.opensource.emago.util
 
-import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.EMAGOViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -74,7 +73,7 @@ fun CheckSignedIn(vm: EMAGOViewModel, navController: NavController) {
     val signIn = vm.signIn.value
     if (signIn && !alreadySignIn.value) {
         alreadySignIn.value = true
-        navController.navigate(DestinationScreen.ChatList.route)
+        navController.navigate("home")
     }
 }
 

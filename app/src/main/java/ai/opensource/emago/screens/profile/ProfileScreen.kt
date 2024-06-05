@@ -3,11 +3,8 @@ package ai.opensource.emago.screens.profile
 import ai.opensource.emago.util.CommonDivider
 import ai.opensource.emago.util.CommonImage
 import ai.opensource.emago.util.CommonProgressBar
-import ai.opensource.emago.DestinationScreen
 import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.util.navigateTo
-import ai.opensource.emago.screens.BottomNavigationItem
-import ai.opensource.emago.screens.BottomNavigationMenu
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -41,11 +38,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @Composable
 
-fun ProfileScreen(navController: NavController, vm: EMAGOViewModel) {
+fun ProfileScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel()) {
     val inProgress = vm.inProcess.value
     if (inProgress) {
         CommonProgressBar()
@@ -74,7 +72,7 @@ fun ProfileScreen(navController: NavController, vm: EMAGOViewModel) {
                     )
                 },
                 onBack = {
-                    navigateTo(navController, DestinationScreen.ChatList.route)
+                    // navigateTo(navController, DestinationScreen.ChatList.route)
                 },
                 onLogout = {
                     vm.logout()
@@ -86,10 +84,6 @@ fun ProfileScreen(navController: NavController, vm: EMAGOViewModel) {
                 },
             )
             Spacer(modifier = Modifier.weight(1f)) // 남은 공간을 채워 BottomNavigationMenu를 아래로 밀어냅니다.
-            BottomNavigationMenu(
-                selectedItem = BottomNavigationItem.PROFILE,
-                navController = navController
-            )
         }
     }
 }

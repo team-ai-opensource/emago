@@ -138,7 +138,8 @@ fun MessageBox(
                         msg.feedback?.error_sentence,
                         msg.feedback?.correct_sentence
                     )
-                })
+                }
+                )
             }
         }
 
@@ -218,14 +219,8 @@ fun FeedbackDialog(
                         Text(text = correct_sentence)
 
                     }
-
-
                 }
-
             }
-
         )
-
-
     }
 }
