@@ -2,18 +2,22 @@ package ai.opensource.emago.screens.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
 fun ProfileSettingScreen() {
@@ -36,7 +41,7 @@ fun ProfileSettingScreen() {
             .height(812.dp)
             .background(color = Color(0xFFFCF8EC))
     ) {
-        // Child views.
+        // Header
         Row(
             horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
@@ -48,7 +53,10 @@ fun ProfileSettingScreen() {
             // Child views.
             Column {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        0.dp,
+                        Alignment.CenterHorizontally
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .width(24.dp)
@@ -60,7 +68,10 @@ fun ProfileSettingScreen() {
             }
             Column {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        Alignment.CenterHorizontally
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .width(293.dp)
@@ -82,7 +93,10 @@ fun ProfileSettingScreen() {
             }
             Column {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        0.dp,
+                        Alignment.CenterHorizontally
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .width(24.dp)
@@ -93,6 +107,7 @@ fun ProfileSettingScreen() {
                 }
             }
         }
+        // Body
         Row {
             Column(
                 verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
@@ -114,30 +129,70 @@ fun ProfileSettingScreen() {
                     ) {
                         // Child views.
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                0.dp,
+                                Alignment.CenterHorizontally
+                            ),
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .width(80.dp)
                                 .height(80.dp)
                         ) {
                             // Child views.
-                            /*Image(
-                                painter = painterResource(id = R.drawable.Ellipse1235),
-                                contentDescription = "image description",
-                                contentScale = ContentScale.FillBounds
-                            )*/
+                            @Composable
+                            fun ProfileImage(imageUrl: String?, vm: EMAGOViewModel) {
+                                Box(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min))
+                                {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .fillMaxWidth(),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Card(
+                                            shape = CircleShape,
+                                            modifier = Modifier
+                                                .padding(8.dp)
+                                                .size(80.dp)
+                                        ) {
+                                            CommonImage(data = imageUrl)
+
+                                        }
+                                    }
+                                }
+                                if (vm.inProcess.value) {
+                                    CommonProgressBar()
+                                }
+                            }
                         }
                         Row {
-                        Button(onClick = { /*TODO*/ }, shape = RoundedCornerShape(5.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF79A3B1)),
-                            modifier = Modifier
-                                .width(99.dp)
-                                .height(22.dp))
-                            {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier
+                                    .width(99.dp)
+                                    .height(22.dp)
+                                    .background(
+                                        color = Color(0xFF79A3B1),
+                                        shape = RoundedCornerShape(size = 5.dp)
+                                    )
+                                    .padding(start = 11.dp, top = 3.dp, end = 8.dp, bottom = 4.dp)
+                            ) {
+                                // Child views.
+                                val launcher =
+                                    rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
+                                        uri?.let {
+                                            vm.uploadProfileImage(uri)
+                                        }
+                                    }
                                 Text(
                                     text = "프로필 사진 변경",
+                                    modifier = Modifier
+                                        .clickable {
+                                            launcher.launch("image/*")
+                                        },
                                     style = TextStyle(
-                                        fontSize = 5.sp,
+                                        fontSize = 11.sp,
                                         //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
                                         fontWeight = FontWeight(700),
                                         color = Color(0xFFFFFFFF),
@@ -145,8 +200,8 @@ fun ProfileSettingScreen() {
                                 )
                             }
                         }
-                        }
                     }
+                }
                 Row {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
@@ -178,6 +233,7 @@ fun ProfileSettingScreen() {
                                     .width(308.dp)
                                     .height(17.dp)
                                     .padding(start = 8.dp, end = 8.dp)
+                                    .clickable { navController.navigate("ProfileSet") }
                             ) {
                                 // Child views.
                                 Text(
@@ -200,7 +256,7 @@ fun ProfileSettingScreen() {
                                 )
                             }
                         }
-                        Divider (
+                        Divider(
                             color = Color(0x4D000000)
                         )
                         Row(
@@ -241,7 +297,7 @@ fun ProfileSettingScreen() {
                                 )
                             }
                         }
-                        Divider (
+                        Divider(
                             color = Color(0x4D000000)
                         )
                         Row(
@@ -254,7 +310,10 @@ fun ProfileSettingScreen() {
                         ) {
                             // Child views.
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(139.dp, Alignment.Start),
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    139.dp,
+                                    Alignment.Start
+                                ),
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .width(308.dp)
@@ -262,15 +321,15 @@ fun ProfileSettingScreen() {
                                     .padding(start = 8.dp, end = 8.dp)
                             ) {
                                 // Child views.
-                                    Text(
-                                        text = "이메일",
-                                        style = TextStyle(
-                                            fontSize = 13.sp,
-                                            //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                                            fontWeight = FontWeight(700),
-                                            color = Color(0xFF000000),
-                                        )
+                                Text(
+                                    text = "이메일",
+                                    style = TextStyle(
+                                        fontSize = 13.sp,
+                                        //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                                        fontWeight = FontWeight(700),
+                                        color = Color(0xFF000000),
                                     )
+                                )
                                 Text(
                                     text = "RRR@chungbuk.ac.kr",
                                     style = TextStyle(
@@ -282,7 +341,7 @@ fun ProfileSettingScreen() {
                                 )
                             }
                         }
-                        Divider (
+                        Divider(
                             color = Color(0x4D000000)
                         )
                         Row(
@@ -295,12 +354,16 @@ fun ProfileSettingScreen() {
                         ) {
                             // Child views.
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(185.dp, Alignment.Start),
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    185.dp,
+                                    Alignment.Start
+                                ),
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .width(308.dp)
                                     .height(17.dp)
                                     .padding(start = 8.dp, end = 8.dp)
+                                   // .clickable { navController.navigate("") }
                             ) {
                                 // Child views.
                                 Text(
@@ -332,6 +395,9 @@ fun ProfileSettingScreen() {
                     // Child views.
                     Text(
                         text = "로그아웃",
+                        modifier = Modifier.clickable {
+                            vm.logout()
+                        },
                         style = TextStyle(
                             fontSize = 13.sp,
                             //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
@@ -359,13 +425,13 @@ fun ProfileSettingScreen() {
                         )
                     )
                 }
-                }
             }
         }
     }
-
-@Preview(showBackground = true)
-@Composable
-fun ProfileSettingScreenPreview() {
-    ProfileSettingScreen()
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun ProfileSettingScreenPreview() {
+//    ProfileSettingScreen()
+//}
