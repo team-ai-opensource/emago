@@ -8,10 +8,9 @@ import ai.opensource.emago.screens.profile.ProfileScreen
 import ai.opensource.emago.screens.profile.ProfileSettingScreen
 import ai.opensource.emago.screens.sign.FirstScreen
 import ai.opensource.emago.screens.sign.SignUpScreen
-import androidx.compose.foundation.layout.Arrangement
+import ai.opensource.emago.util.toLocalDate
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,7 +27,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -45,10 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 
 @Composable
 fun Emago() {
@@ -78,7 +78,15 @@ fun Emago() {
             }
         }
 
-        composable("review") { ReviewScreen() }
+        composable(
+            route = "review/{selectedDate}",
+            arguments = listOf(navArgument("selectedDate") { type = NavType.StringType })
+        ) {backStackEntry ->
+            val selectedDateString =
+                backStackEntry.arguments?.getString("selectedDate")
+            val selectedDate = selectedDateString?.toLocalDate()
+            ReviewScreen(selectedDate)
+        }
         composable("profileSet") { ProfileSettingScreen(navController) }
         composable("chatCreate") { ChatCreateScreen(navController) }
 

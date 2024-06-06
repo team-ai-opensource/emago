@@ -16,7 +16,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -30,8 +33,8 @@ import androidx.compose.ui.unit.sp
 import java.time.LocalDate
 
 @Composable
-fun ReviewScreen() { // TODO : 선택한 날짜 받아오기
-    val currentDate = remember { LocalDate.now() }
+fun ReviewScreen(selectedDate: LocalDate?) { // TODO : 선택한 날짜 받아오기
+    var currentDate by remember{ mutableStateOf<LocalDate>(selectedDate ?: LocalDate.now()) }
     // Review Column
     Column(
         horizontalAlignment = Alignment.Start,
@@ -39,11 +42,6 @@ fun ReviewScreen() { // TODO : 선택한 날짜 받아오기
             .fillMaxSize()
             .background(color = Color(0xFFD0E8F2))
     ) {
-        // header
-
-        //HeaderContents() Todo : Add header contents
-
-        // body
         Column(
             verticalArrangement = Arrangement.spacedBy(64.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start,
@@ -70,7 +68,12 @@ fun ReviewScreen() { // TODO : 선택한 날짜 받아오기
                             )
                         )
                 ) {
-                    Calendar(currentDate) // TODO : 함수 파라미터로 선택한 날짜 넘겨 받고 그 날짜에 해당하는 달력을 보여줌
+                    Calendar(
+                        currentDate,
+                        onDateSelected = {newDate->
+                            currentDate = newDate
+                        }
+                    )
                 }
                 // Review Box
                 Column(
@@ -219,6 +222,5 @@ fun ReviewCard(){
 @Preview
 @Composable
 fun ReviewScreenPreview() {
-    ReviewScreen()
+    ReviewScreen(null)
 }
-

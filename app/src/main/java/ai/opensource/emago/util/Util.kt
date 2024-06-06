@@ -34,6 +34,8 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun CommonProgressBar() {
@@ -118,7 +120,15 @@ fun sendPostRequest(url: String, jsonBody: String): String? {
 }
 
 @Composable
-fun PreviewNavController(): NavController {
+fun previewNavController(): NavController {
     val context = LocalContext.current
     return TestNavHostController(context)
+}
+
+fun LocalDate.toFormattedString():String{
+    return this.format(DateTimeFormatter.ISO_LOCAL_DATE)
+}
+
+fun String.toLocalDate():LocalDate{
+    return LocalDate.parse(this, DateTimeFormatter.ISO_LOCAL_DATE)
 }
