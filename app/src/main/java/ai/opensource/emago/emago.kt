@@ -2,6 +2,7 @@ package ai.opensource.emago
 
 import ai.opensource.emago.screens.chat.ChatCreateScreen
 import ai.opensource.emago.screens.chat.ChatListScreen
+import ai.opensource.emago.screens.chat.ChatScreen
 import ai.opensource.emago.screens.home.HomeScreen
 import ai.opensource.emago.screens.home.ReviewContentScreen
 import ai.opensource.emago.screens.home.ReviewScreen
@@ -94,6 +95,15 @@ fun Emago() {
             composable("profileSet") { ProfileSettingScreen(navController) }
             composable("chatCreate") { ChatCreateScreen(navController) }
             composable("reviewContentCard"){ ReviewContentScreen()}
+            composable(
+                route = "chat/{chatID}",
+                arguments = listOf(navArgument("chatID") { type = NavType.StringType })
+            ){
+                val chatID = it.arguments?.getString("chatID")
+                if (chatID != null) {
+                    ChatScreen(navController = navController, chatID = chatID )
+                }
+            }
 
         }
     }
