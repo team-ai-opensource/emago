@@ -3,6 +3,7 @@ package ai.opensource.emago
 import ai.opensource.emago.screens.chat.ChatCreateScreen
 import ai.opensource.emago.screens.chat.ChatListScreen
 import ai.opensource.emago.screens.home.HomeScreen
+import ai.opensource.emago.screens.home.ReviewContentScreen
 import ai.opensource.emago.screens.home.ReviewScreen
 import ai.opensource.emago.screens.profile.ProfileScreen
 import ai.opensource.emago.screens.profile.ProfileSettingScreen
@@ -50,53 +51,58 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 
+
 @Composable
 fun Emago() {
     val navController = rememberNavController()
     val vm = hiltViewModel<EMAGOViewModel>()
-
-    NavHost(
-        navController = navController,
-        startDestination = "login"
-    ) {
-        composable("login") { FirstScreen(navController) }
-        composable("signUp") { SignUpScreen(navController) }
-
-        composable("home") {
-            Layout(navController) {
-                HomeScreen(navController)
+    Scaffold(
+        topBar = { MainTopBar(navController) },
+    ) {innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "login",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("login") { FirstScreen(navController) }
+            composable("signUp") { SignUpScreen(navController) }
+            composable("home") {
+                Layout(navController) {
+                    HomeScreen(navController)
+                }
             }
-        }
-        composable("chatList") {
-            Layout(navController) {
-                ChatListScreen(navController, vm)
+            composable("chatList") {
+                Layout(navController) {
+                    ChatListScreen(navController, vm)
+                }
             }
-        }
-        composable("profile") {
-            Layout(navController) {
-                ProfileScreen(navController)
+            composable("profile") {
+                Layout(navController) {
+                    ProfileScreen(navController)
+                }
             }
-        }
 
-        composable(
-            route = "review/{selectedDate}",
-            arguments = listOf(navArgument("selectedDate") { type = NavType.StringType })
-        ) {backStackEntry ->
-            val selectedDateString =
-                backStackEntry.arguments?.getString("selectedDate")
-            val selectedDate = selectedDateString?.toLocalDate()
-            ReviewScreen(selectedDate)
-        }
-        composable("profileSet") { ProfileSettingScreen(navController) }
-        composable("chatCreate") { ChatCreateScreen(navController) }
+            composable(
+                route = "review/{selectedDate}",
+                arguments = listOf(navArgument("selectedDate") { type = NavType.StringType })
+            ) {backStackEntry ->
+                val selectedDateString =
+                    backStackEntry.arguments?.getString("selectedDate")
+                val selectedDate = selectedDateString?.toLocalDate()
+                ReviewScreen(selectedDate, navController)
+            }
+            composable("profileSet") { ProfileSettingScreen(navController) }
+            composable("chatCreate") { ChatCreateScreen(navController) }
+            composable("reviewContentCard"){ ReviewContentScreen()}
 
+        }
     }
+
 }
 
 @Composable
 fun Layout(navController: NavController, screen: @Composable () -> Unit) {
     Scaffold(
-        topBar = { MainTopBar(navController) },
         bottomBar = { MainBottomBar(navController) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
@@ -112,19 +118,25 @@ fun MainBottomBar(navController: NavController) {
             icon = { Icon(Icons.Default.List, contentDescription = "Chat") },
             label = { Text("Chat") },
             selected = navController.currentBackStackEntry?.destination?.route == "chat",
-            onClick = { navController.navigate("chatList") }
+            onClick = { navController.navigate("chatList"){
+                launchSingleTop = true
+            } }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = navController.currentBackStackEntry?.destination?.route == "home",
-            onClick = { navController.navigate("home") }
+            onClick = { navController.navigate("home"){
+                launchSingleTop = true
+            } }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
             label = { Text("Profile") },
             selected = navController.currentBackStackEntry?.destination?.route == "profile",
-            onClick = { navController.navigate("profile") }
+            onClick = { navController.navigate("profile"){
+                launchSingleTop = true
+            } }
         )
     }
 }

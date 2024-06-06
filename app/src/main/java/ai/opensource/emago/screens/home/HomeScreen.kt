@@ -65,7 +65,6 @@ fun HomeScreen(navController: NavController) {
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFFD0E8F2))
             .verticalScroll(rememberScrollState())
     ) {
         Column(
@@ -282,7 +281,7 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     val navController = previewNavController()
