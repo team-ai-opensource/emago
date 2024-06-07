@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -24,26 +28,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import java.time.LocalDate
 
 @Composable
-fun ReviewScreen() { // TODO : 선택한 날짜 받아오기
-    val currentDate = remember { LocalDate.now() }
+fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
+    var currentDate by remember { mutableStateOf<LocalDate>(selectedDate ?: LocalDate.now()) }
     // Review Column
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFFD0E8F2))
     ) {
-        // header
-
-        //HeaderContents() Todo : Add header contents
-
-        // body
         Column(
             verticalArrangement = Arrangement.spacedBy(64.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start,
@@ -70,7 +68,12 @@ fun ReviewScreen() { // TODO : 선택한 날짜 받아오기
                             )
                         )
                 ) {
-                    Calendar(currentDate) // TODO : 함수 파라미터로 선택한 날짜 넘겨 받고 그 날짜에 해당하는 달력을 보여줌
+                    Calendar(
+                        currentDate,
+                        onDateSelected = { newDate ->
+                            currentDate = newDate
+                        }
+                    )
                 }
                 // Review Box
                 Column(
@@ -129,96 +132,80 @@ fun ReviewScreen() { // TODO : 선택한 날짜 받아오기
                                 .defaultMinSize(minHeight = 400.dp)
                         ) {
                             ReviewContent()
-                            ReviewContent(true)
-                            ReviewContent()
-                            ReviewContent()
-                            ReviewContent()
-                            ReviewContent()
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { navController.navigate("reviewContentCard") }
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.Top,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    // Child views.
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(
+                                            8.dp,
+                                            Alignment.Start
+                                        ),
+                                        verticalAlignment = Alignment.Top,
+                                    ) {
+                                        // Child views.
+                                        Text(
+                                            text = "#index",
+                                            style = TextStyle(
+                                                fontSize = 13.sp,
+                                                lineHeight = 20.sp,
+                                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                                color = Color(0xFF707070),
+                                            )
+                                        )
+                                        Text(
+                                            text = "#채팅방 이름",
+                                            style = TextStyle(
+                                                fontSize = 13.sp,
+                                                lineHeight = 20.sp,
+                                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                                color = Color(0xFF707070),
+                                            )
+                                        )
+                                    }
+                                    Text(
+                                        text = "#시간 정보",
+                                        style = TextStyle(
+                                            fontSize = 13.sp,
+                                            lineHeight = 20.sp,
+                                            fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                            color = Color(0xFF707070),
+                                        )
+                                    )
+                                }
+                                Row(
+                                    verticalAlignment = Alignment.Top,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    // Child views.
+
+                                    Text(
+                                        text = "원문 내용",
+                                        style = TextStyle(
+                                            fontSize = 15.sp,
+                                            lineHeight = 20.sp,
+                                            fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                            color = Color(0xFF000000),
+                                        )
+                                    )
+
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun ReviewCard(){
-    // Review Card
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = Color(0xFFFCF8EC),
-                shape = RoundedCornerShape(size = 8.dp)
-            )
-            .padding(
-                start = 8.dp,
-                top = 16.dp,
-                end = 8.dp,
-                bottom = 16.dp
-            )
-            .clickable { }
-    ) {
-        Text(
-            text = "원문",
-            style = TextStyle(
-                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                fontSize = 18.sp,
-                color = Color(0xFF79A3B1)
-            )
-        )
-        Text(
-            text = "수정된 내용",
-            style = TextStyle(
-                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                fontSize = 18.sp,
-                color = Color(0xFF79A3B1)
-            )
-        )
-        Text(
-            text = "이유",
-            style = TextStyle(
-                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                fontSize = 18.sp,
-                color = Color(0xFF79A3B1)
-            )
-        )
-        // Review Button
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = Color(0xFF79A3B1),
-                    shape = RoundedCornerShape(size = 8.dp)
-                )
-                .padding(
-                    start = 8.dp,
-                    top = 16.dp,
-                    end = 8.dp,
-                    bottom = 16.dp
-                )
-                .clickable { }
-        ) {
-            Text(
-                text = "다음으로",
-                style = TextStyle(
-                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                    fontSize = 18.sp,
-                    color = Color(0xFFFCF8EC)
-                )
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun ReviewScreenPreview() {
-    ReviewScreen()
 }
 
