@@ -165,8 +165,6 @@ fun MessageBox(
 
 @Composable
 fun ProfileImage(imageUrl: String?) {
-
-
     Box(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min))
     {
         Column(

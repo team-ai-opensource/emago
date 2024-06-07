@@ -178,7 +178,8 @@ fun ChatListBox(navController: NavController, modifier: Modifier, chatList: List
             Column {
                 Text(text = item.id, modifier = Modifier.clickable {
                     //val route = DestinationScreen.SingleChat.createRoute(item.id)
-                    //navigateTo(navController, route)
+                    val route = item.id
+                    navController.navigate("chat/$route")
                 })
             }
         }
