@@ -2,13 +2,9 @@ package ai.opensource.emago.screens.chat
 
 
 import ai.opensource.emago.EMAGOViewModel
-import ai.opensource.emago.R
 import ai.opensource.emago.data.ChatData
 import ai.opensource.emago.util.CommonProgressBar
 import ai.opensource.emago.util.TitleText
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,13 +12,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.AlertDialog
@@ -39,15 +32,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
@@ -78,7 +64,14 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewMo
         }
 
         Scaffold (
-
+            floatingActionButton = {
+                FAB(
+                showDialog = showDialog.value,
+                onFabClick = onFabClick,
+                onDismiss = onDismiss,
+                onAddChat = onAddChat,
+            )
+            },
             content = {
                 Column (
                     modifier = Modifier
@@ -98,6 +91,9 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewMo
                     } else {
                         ChatListBox(navController, modifier = Modifier.fillMaxWidth(), chatList = chats)
                     }
+
+
+                    Spacer(modifier = Modifier.weight(1f)) // 남은 공간을 채워 BottomNavigationMenu를 아래로 밀어냅니다.
                 }
             }
         )
@@ -105,60 +101,85 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewMo
         }
     }
 
+@Composable
+
+fun FAB(
+    showDialog: Boolean, onFabClick: () -> Unit, onDismiss: () -> Unit, onAddChat: (String, String) -> Unit
+) {
+    val addChatTitle = remember {
+        mutableStateOf("")
+    }
+    val addChatDescription = remember {
+        mutableStateOf("")
+    }
+
+    if (showDialog) {
+        AlertDialog(
+
+
+            onDismissRequest = {
+                onDismiss.invoke()
+                addChatTitle.value = ""
+                addChatDescription.value = ""
+            },
+            confirmButton = {
+
+                Button(onClick = { onAddChat(addChatTitle.value, addChatDescription.value) }) {
+                    Text(text = "Add Chat")
+                }
+
+            }, title = {
+                Text(text = "Add Chat")
+            },
+            text = {
+                Column {
+                    Row {
+                        Text(text = "제목")
+                        OutlinedTextField(
+                            value = addChatTitle.value,
+                            onValueChange = { addChatTitle.value = it },
+                        )
+                    }
+                    Row {
+                        Text(text ="내용")
+                        OutlinedTextField(
+                            value = addChatDescription.value,
+                            onValueChange = { addChatDescription.value = it },
+                        )
+                    }
+                    
+
+                }
+
+            }
+
+        )
+
+
+    }
+    FloatingActionButton(
+        onClick = { onFabClick() },
+        containerColor = MaterialTheme.colorScheme.secondary,
+        shape = CircleShape,
+        modifier = Modifier.padding(bottom = 40.dp)
+    ) {
+        Icon(imageVector = Icons.Rounded.Add, contentDescription = null, tint = Color.White)
+
+
+    }
+}
 
 @Composable
 fun ChatListBox(navController: NavController, modifier: Modifier, chatList: List<ChatData> ){
 
     LazyColumn(modifier = modifier) {
-        items(chatList) { item ->
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-                    verticalAlignment = Alignment.Top,
-                    modifier = Modifier
-                        .width(355.dp)
-                        .height(52.dp)
-                        .clickable {
-                            val route = item.id
-                            navController.navigate("chat/$route")
-                        }
-                ) {
-                    // Child views.
-                    Image(
-                        painter = painterResource(id = R.drawable.dog),
-                        contentDescription = "image description",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .width(52.dp)
-                            .height(52.dp)
-                            .clip(CircleShape)
-                    )
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        // Child views.
-                        Text(
-                            text = item.title!!,
-                            style = TextStyle(
-                                fontSize = 20.sp,
-                                lineHeight = 20.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                                color = Color(0xFF000E08),
-                            ),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Text(
-                            text = item.description!!,
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 12.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFF797C7B),
-                            )
-                        )
-                }
+        items(chatList) {
+            item ->
+            Column {
+                Text(text = item.id, modifier = Modifier.clickable {
+                    //val route = DestinationScreen.SingleChat.createRoute(item.id)
+                    //navigateTo(navController, route)
+                })
             }
         }
 
