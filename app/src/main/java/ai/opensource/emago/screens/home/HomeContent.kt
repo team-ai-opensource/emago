@@ -129,7 +129,7 @@ fun ReviewContent(isChecked : Boolean = false){
 
 @Composable
 fun ItemRow(text : String, progress : Float){
-    val percentage by remember { mutableFloatStateOf(progress) }
+    var percentage by remember { mutableFloatStateOf(progress) }
     Box(
         modifier = Modifier
             .background(
@@ -195,11 +195,9 @@ fun ItemRow(text : String, progress : Float){
 }
 
 @Composable
-fun Calendar(
-    selectedDate : LocalDate,
-    onDateSelected: (LocalDate) -> Unit,
-    firstDate : LocalDate = LocalDate.now()){
-    val currentDate = remember { firstDate }
+fun Calendar(FirstDate : LocalDate = LocalDate.now()){
+    val currentDate = remember { LocalDate.now() }
+    var selectedDate by remember { mutableStateOf(FirstDate) }
     var isWeekMode by remember { mutableStateOf(true) }
 
     val currentMonth = remember(selectedDate) { selectedDate.yearMonth }
@@ -224,7 +222,7 @@ fun Calendar(
     Column(
         modifier = Modifier
     ) {
-        CalendarTitle(currentMonth = currentMonth) {
+        CalendarTitle(currentMonth = currentMonth, isWeekMode = isWeekMode) {
             isWeekMode = !isWeekMode
         }
         CalendarHeader(daysOfWeek = daysOfWeek)
@@ -238,7 +236,7 @@ fun Calendar(
                         isSelected = selectedDate == day.date,
                         isSelectable = isSelectable,
                         isToday = day.date == currentDate,
-                    ) { clicked -> onDateSelected(clicked) }
+                    ) { clicked -> selectedDate = clicked }
                 }
             )
         }
@@ -252,7 +250,7 @@ fun Calendar(
                         isSelected = selectedDate == day.date,
                         isSelectable = isSelectable,
                         isToday = day.date == currentDate,
-                    ) { clicked -> onDateSelected(clicked)}
+                    ) { clicked -> selectedDate = clicked }
                 }
             )
         }
@@ -308,7 +306,7 @@ fun Day(
 }
 
 @Composable
-fun CalendarTitle(currentMonth: YearMonth, onTitleClick: () -> Unit) {
+fun CalendarTitle(currentMonth: YearMonth, isWeekMode: Boolean, onTitleClick: () -> Unit) {
     val formattedMonth = remember(currentMonth) {
         "${currentMonth.year}년 ${currentMonth.monthValue}월"
     }

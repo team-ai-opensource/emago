@@ -1,7 +1,7 @@
 package ai.opensource.emago.screens.profile
 
 import ai.opensource.emago.EMAGOViewModel
-import ai.opensource.emago.util.previewNavController
+import ai.opensource.emago.util.PreviewNavController
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -293,6 +293,6 @@ fun ProfileSettingScreen(
 @Preview
 @Composable
 fun ProfileSetPreview(){
-    val navController = previewNavController() // TODO : 이거로 다른 화면에서도 프리뷰 쓸 수 있습니다..안되면 쩔수 없음..
+    val navController = PreviewNavController() // TODO : 이거로 다른 화면에서도 프리뷰 쓸 수 있습니다..안되면 쩔수 없음..
     ProfileSettingScreen(navController)
 }

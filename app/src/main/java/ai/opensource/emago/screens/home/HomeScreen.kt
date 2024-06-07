@@ -1,8 +1,7 @@
 package ai.opensource.emago.screens.home
 
 import ai.opensource.emago.R
-import ai.opensource.emago.util.previewNavController
-import ai.opensource.emago.util.toFormattedString
+import ai.opensource.emago.util.PreviewNavController
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -50,21 +49,24 @@ import java.time.LocalDate
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    val currentDate = remember { LocalDate.now() }
-    var selectedDate by remember { mutableStateOf(currentDate) }
-    val remainReview by remember { mutableIntStateOf(0) }
-
     var showExtraItems by remember { mutableStateOf(false) } // 빌드 할때는 false로 바꾸기
+    val currentDate = remember { LocalDate.now() }
+
     val goalOfToday by remember{ mutableFloatStateOf(50f)}
     val progress1 by remember{ mutableFloatStateOf(50f)}
     val progress2 by remember{ mutableFloatStateOf(50f)}
     val progress3 by remember{ mutableFloatStateOf(50f)}
+
+    // Have to manage in class
+    val selectedDate by remember { mutableStateOf(currentDate) }
+    val remainingReview by remember { mutableIntStateOf(0) }
 
     // User views
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .fillMaxSize()
+            .background(color = Color(0xFFD0E8F2))
             .verticalScroll(rememberScrollState())
     ) {
         Column(
@@ -206,12 +208,7 @@ fun HomeScreen(navController: NavController) {
                         )
                 ) {
                     // Todo : Calendar
-                    Calendar(
-                        selectedDate = selectedDate,
-                        onDateSelected = {newDate ->
-                            selectedDate = newDate
-                        }
-                    )
+                    Calendar(currentDate)
                 }
                 // Review Box
                 Column(
@@ -251,10 +248,7 @@ fun HomeScreen(navController: NavController) {
                                 end = 8.dp,
                                 bottom = 16.dp
                             )
-                            .clickable {
-                                val selectedDateString = selectedDate.toFormattedString()
-                                navController.navigate("review/$selectedDateString")
-                            }
+                            .clickable { navController.navigate("review") }
                     ) {
                         Text(
                             text = "복습 시작",
@@ -266,7 +260,7 @@ fun HomeScreen(navController: NavController) {
                             )
                         )
                         Text(
-                            text = "남은 복습 : $remainReview",
+                            text = "남은 복습 : $remainingReview",
                             style = TextStyle(
                                 fontSize = 13.sp,
                                 lineHeight = 20.sp,
@@ -281,10 +275,10 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun HomeScreenPreview() {
-    val navController = previewNavController()
+    val navController = PreviewNavController()
     HomeScreen(navController = navController)
 }
 
