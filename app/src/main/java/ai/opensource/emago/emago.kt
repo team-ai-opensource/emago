@@ -6,7 +6,7 @@ import ai.opensource.emago.screens.chat.ChatScreen
 import ai.opensource.emago.screens.home.HomeScreen
 import ai.opensource.emago.screens.home.ReviewContentScreen
 import ai.opensource.emago.screens.home.ReviewScreen
-import ai.opensource.emago.screens.profile.PasswordSettingScreen
+import ai.opensource.emago.screens.profile.NicknameSettingScreen
 import ai.opensource.emago.screens.profile.ProfileScreen
 import ai.opensource.emago.screens.profile.ProfileSettingScreen
 import ai.opensource.emago.screens.profile.StateMessageSettingScreen
@@ -36,7 +36,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -88,7 +87,7 @@ fun Emago() {
                     ProfileScreen(navController)
                 }
             }
-            composable("setPW"){ PasswordSettingScreen()}
+            composable("setNN"){ NicknameSettingScreen()}
 
             composable(
                 route = "review/{selectedDate}",
