@@ -30,13 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import ai.opensource.emago.R
-import ai.opensource.emago.util.CommonImage
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -194,7 +188,10 @@ fun ChatCreateScreen(navController: NavController, vm: EMAGOViewModel = hiltView
                     color = Color(0xFF000000),
                     textAlign = TextAlign.Center,
                     letterSpacing = 0.12.sp,
-                    modifier = Modifier
+                    modifier = Modifier.clickable {
+                        vm.onAddChat(chatRoomName, chatRoomDescription, chatImageUrl)
+                        navController.navigate("chatList")
+                    }
                 )
 
 
