@@ -6,6 +6,7 @@ import ai.opensource.emago.screens.chat.ChatScreen
 import ai.opensource.emago.screens.home.HomeScreen
 import ai.opensource.emago.screens.home.ReviewContentScreen
 import ai.opensource.emago.screens.home.ReviewScreen
+import ai.opensource.emago.screens.profile.PasswordSettingScreen
 import ai.opensource.emago.screens.profile.ProfileScreen
 import ai.opensource.emago.screens.profile.ProfileSettingScreen
 import ai.opensource.emago.screens.profile.StateMessageSettingScreen
@@ -35,6 +36,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,7 +61,10 @@ fun Emago() {
     val navController = rememberNavController()
     val vm = hiltViewModel<EMAGOViewModel>()
     Scaffold(
-        topBar = { MainTopBar(navController) },
+        topBar = {
+            if (navController.currentBackStackEntryAsState().value?.destination?.route?.startsWith("chat/") != true) {
+                MainTopBar(navController)
+            } },
     ) {innerPadding ->
         NavHost(
             navController = navController,
@@ -83,6 +88,7 @@ fun Emago() {
                     ProfileScreen(navController)
                 }
             }
+            composable("setPW"){ PasswordSettingScreen()}
 
             composable(
                 route = "review/{selectedDate}",
@@ -198,7 +204,9 @@ fun MainTopBar(navController: NavController) {
         },
         actions = {
             if(canAddChatroom) {
-            IconButton(onClick = {/*TODO : Go to Create Chat*/}){
+            IconButton(onClick = {
+                navController.navigate("chatCreate")
+            }){
                 Icon(imageVector = Icons.Default.Add,
                     contentDescription = "Add Chatroom"
                 )

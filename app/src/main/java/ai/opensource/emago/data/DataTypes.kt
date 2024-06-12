@@ -1,5 +1,7 @@
 package ai.opensource.emago.data
 
+import com.google.firebase.Timestamp
+
 data class UserData(
 
     var userId: String?="",
@@ -20,7 +22,8 @@ data class ChatData(
     var id: String = "", // 문서 ID를 저장할 필드
     val userId: String?="",
     val title: String?="Null채팅방",
-    val description: String?="설명없음"
+    val description: String?="설명없음",
+    val imageUrl: String?="",
 )
 
 data class ChatUser(
@@ -40,7 +43,7 @@ data class Feedback(
 data class Message(
     val chatId: String?="",
     val user: ChatUser=ChatUser(),
-    val timestamp: String?="",
+    val timestamp: Timestamp?=null,
     val message: String?="",
     var feedback: Feedback? = null,
 )

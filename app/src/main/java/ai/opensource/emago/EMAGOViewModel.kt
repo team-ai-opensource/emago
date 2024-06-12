@@ -17,13 +17,18 @@ import ai.opensource.emago.data.UserData
 import ai.opensource.emago.util.sendPostRequest
 import android.icu.util.Calendar
 import android.net.Uri
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.lang.Exception
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 
@@ -45,6 +50,8 @@ class EMAGOViewModel @Inject constructor(
     val chatMessages = mutableStateOf<List<Message>?>(listOf())
     val inProgressChatMessage = mutableStateOf(false)
     var currentChatMessageListner: ListenerRegistration? = null
+
+    val myChatMessages = mutableStateOf<List<Message>?>(listOf())
 
     init {
         val currentUser = auth.currentUser
@@ -136,8 +143,6 @@ class EMAGOViewModel @Inject constructor(
         uploadImage(uri) {
             createOrUpdateProfile(imageurl = it.toString())
         }
-
-
     }
 
     fun uploadImage(uri: Uri, onSuccess: (Uri) -> Unit) {
@@ -238,6 +243,86 @@ class EMAGOViewModel @Inject constructor(
         eventMutableState.value = Event("Logged Out")
     }
 
+    fun sendResetPassword() {
+        // 현재 로그인된 사용자의 이메일 주소 가져오기
+        val user = auth.currentUser
+        user?.let {
+            val emailAddress = user.email
+
+            // 이메일 주소가 null이 아닌 경우 비밀번호 재설정 이메일 보내기
+            if (emailAddress != null) {
+                auth.sendPasswordResetEmail(emailAddress)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // 이메일 전송 성공
+                            println("Reset password email sent to $emailAddress")
+                        } else {
+                            // 이메일 전송 실패
+                            println("Failed to send reset password email: ${task.exception?.message}")
+                        }
+                    }
+            } else {
+                // 이메일 주소가 없는 경우 처리
+                println("No email address associated with this account.")
+            }
+        } ?: run {
+            // 로그인된 사용자가 없는 경우 처리
+            println("No user is currently logged in.")
+        }
+    }
+
+    fun onReviewComplete() {
+
+    }
+
+    fun countReview() {}
+
+    fun updateChatRoom() {
+
+    }
+
+    fun getAllUserMessagesForDate(selectedDate: LocalDate) {
+        val currentUserId = auth.currentUser?.uid
+        if (currentUserId != null) {
+            // 선택한 날짜를 Date 객체로 변환
+            val startOfDay = Date.from(selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+            val endOfDay = Date.from(selectedDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).minusSeconds(1).toInstant())
+
+            Log.d("test", "Start of Day Timestamp: ${Timestamp(startOfDay)}")
+            Log.d("test", "End of Day Timestamp: ${Timestamp(endOfDay)}")
+
+            // Firestore에서 쿼리 수행
+            db.collection(MESSAGES)
+                .whereEqualTo("user.userId", currentUserId)
+                .whereGreaterThanOrEqualTo("timestamp", Timestamp(startOfDay))
+                .whereLessThanOrEqualTo("timestamp", Timestamp(endOfDay))
+                .get()
+                .addOnSuccessListener { result ->
+                    if (result.isEmpty) {
+                        Log.d("test", "No messages found for the specified date range.")
+                    } else {
+                        for (document in result) {
+                            Log.d("test", "Message Document: ${document.id} => ${document.data}")
+                        }
+                    }
+
+                    val userMessages = result.documents.mapNotNull { document ->
+                        document.toObject<Message>()
+                    }
+                    myChatMessages.value = userMessages
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("test", "Error getting documents: ", exception)
+                    handleException(exception)
+                }
+        } else {
+            handleException(customMessage = "User not signed in")
+        }
+    }
+
+
+
+
     fun getAllChatData() {
         db.collection(CHATS).get()
             .addOnSuccessListener { result ->
@@ -256,13 +341,13 @@ class EMAGOViewModel @Inject constructor(
             }
     }
 
-    fun onAddChat(title: String, description: String) {
+    fun onAddChat(title: String, description: String, imageUrl: String? = "") {
         if (title.isEmpty()) {
             handleException(customMessage = "Number must be contain digits only!")
         } else {
             var uid = auth.currentUser?.uid
             db.collection(CHATS).document()
-                .set(ChatData(userId = uid, title = title, description = description))
+                .set(ChatData(userId = uid, title = title, description = description, imageUrl = imageUrl))
                 .addOnSuccessListener {
 
                     // 채팅방 목록 불러오기
@@ -274,7 +359,7 @@ class EMAGOViewModel @Inject constructor(
     }
 
     fun onSendReply(chatId: String, message: String) {
-        val time = Calendar.getInstance().time.toString()
+        val time = Timestamp.now()
         val chatUser: ChatUser = ChatUser(
             userData.value?.userId,
             userData.value?.name,

@@ -50,12 +50,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 
 
 @Composable
 
 fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()) {
-
 
     LaunchedEffect(key1 = Unit) {
         vm.getAllChatData()
@@ -81,11 +81,13 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewMo
 
             content = {
                 Column (
+                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(it)
+                        .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp)
                 ) {
-                    TitleText(text = "Chats")
 
                     if (chats!!.isEmpty()) {
                         Column(modifier = Modifier
@@ -116,8 +118,7 @@ fun ChatListBox(navController: NavController, modifier: Modifier, chatList: List
                     horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
                     verticalAlignment = Alignment.Top,
                     modifier = Modifier
-                        .width(355.dp)
-                        .height(52.dp)
+                        .height(62.dp)
                         .clickable {
                             val route = item.id
                             navController.navigate("chat/$route")
@@ -125,7 +126,7 @@ fun ChatListBox(navController: NavController, modifier: Modifier, chatList: List
                 ) {
                     // Child views.
                     Image(
-                        painter = painterResource(id = R.drawable.dog),
+                        painter = rememberImagePainter(data = item.imageUrl),
                         contentDescription = "image description",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
