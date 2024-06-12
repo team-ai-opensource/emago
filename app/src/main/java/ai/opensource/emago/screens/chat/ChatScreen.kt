@@ -4,13 +4,13 @@ import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
 import ai.opensource.emago.data.ChatUser
 import ai.opensource.emago.data.Message
-import ai.opensource.emago.util.extractTimeFromTimestampString
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,9 +19,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
@@ -30,12 +32,13 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -47,12 +50,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import java.text.SimpleDateFormat
@@ -60,17 +67,17 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun ChatScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel(), chatID : String) {
+fun ChatScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel(), chatID: String) {
 
-    var inputChat by rememberSaveable{ mutableStateOf("") }
+    var inputChat by rememberSaveable { mutableStateOf("") }
     val onSendChat = {
         vm.onSendReply(chatID, inputChat)
         inputChat = ""
     }
     val myUser = vm.userData.value
     val chatMessages = vm.chatMessages
-    val showDialog = remember{ mutableStateOf(false) }
-    val chatText = rememberSaveable{ mutableStateOf("") }
+    val showDialog = remember { mutableStateOf(false) }
+    val chatText = rememberSaveable { mutableStateOf("") }
     val advancedSentence = rememberSaveable { mutableStateOf("") }
     val errorSentence = rememberSaveable { mutableStateOf("") }
     val correctSentence = rememberSaveable { mutableStateOf("") }
@@ -81,10 +88,10 @@ fun ChatScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel(
         messageErrorSentence: String?,
         messageCorrectSentence: String?
     ) {
-        chatText.value = messageComment?:""
-        advancedSentence.value = messageAdvancedSentence?:""
-        errorSentence.value = messageErrorSentence?:""
-        correctSentence.value = messageCorrectSentence?:""
+        chatText.value = messageComment ?: ""
+        advancedSentence.value = messageAdvancedSentence ?: ""
+        errorSentence.value = messageErrorSentence ?: ""
+        correctSentence.value = messageCorrectSentence ?: ""
 
         showDialog.value = true
     }
@@ -96,11 +103,18 @@ fun ChatScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel(
     BackHandler {
         vm.depopulateMessage()
     }
-    FeedbackChatDialog(showDialog.value, onDismiss, chatText.value, advancedSentence.value, errorSentence.value, correctSentence.value)
+    EmagoDialog(
+        showDialog.value,
+        onDismiss,
+        chatText.value,
+        advancedSentence.value,
+        errorSentence.value,
+        correctSentence.value
+    )
 
     Scaffold(
         topBar = { ChatTopBar(navController) },
-        bottomBar = { ChatBottomBar(inputChat, {inputChat = it}, onSendChat ) }
+        bottomBar = { ChatBottomBar(inputChat, { inputChat = it }, onSendChat) }
     ) { innerPadding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(7.dp, Alignment.Top),
@@ -116,7 +130,7 @@ fun ChatScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel(
                 onMessageClick,
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 8.dp)
+                    .padding(12.dp),
             )
         }
     }
@@ -154,24 +168,6 @@ fun ChatTopBar(navController: NavController) {
                             color = Color(0xFF000E08),
                         )
                     )
-                    Row {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Chatroom Member",
-                            tint = Color(0xFF797C7B),
-                            modifier = Modifier.size(12.dp)
-                        )
-                        Text(
-                            text = "20",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 12.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                                color = Color(0xFF797C7B),
-                            )
-                        )
-
-                    }
                 }
 
             }
@@ -189,22 +185,43 @@ fun ChatTopBar(navController: NavController) {
 }
 
 @Composable
-fun ChatBottomBar(input : String, onInputChange : (String) -> Unit, onSendInput: () -> Unit) {
+fun ChatBottomBar(input: String, onInputChange: (String) -> Unit, onSendInput: () -> Unit) {
     BottomAppBar(
+        modifier = Modifier
+            .fillMaxWidth(),
         actions = {
-            TextField(
+            BasicTextField(
                 value = input,
                 onValueChange = onInputChange,
-                placeholder = {
-                    Text(text = "메시지를 입력하세요")
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                    color = Color(0xFF000000),
+                ),
+                decorationBox = { innerTextField ->
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color(0xFFF3F6F6),
+                                shape = RoundedCornerShape(size = 12.dp)
+                            )
+                            .padding(start = 12.dp)
+                    ){
+                        innerTextField()
+                        IconButton(onClick = onSendInput) {
+                            Icon(imageVector = Icons.Default.Send, contentDescription = "Send", tint = Color(0xFF79A3B1))
+                        }
+                    }
+
                 },
-                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp)
             )
-            IconButton(onClick = onSendInput) {
-                Icon(imageVector = Icons.Default.Send, contentDescription = "Send")
-            }
-        },
-        modifier = Modifier.fillMaxWidth()
+        }
     )
 }
 
@@ -222,7 +239,7 @@ fun ChatMessage(
     isAIReady: Boolean
 ) {
     Row(
-        horizontalArrangement = if(isSYS) {
+        horizontalArrangement = if (isSYS) {
             Arrangement.Center
         } else {
             if (isUser) {
@@ -235,58 +252,58 @@ fun ChatMessage(
         modifier = modifier
     ) {
         if (isSYS) {
-                // Child views.
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
-                    verticalAlignment = Alignment.Top,
-                    modifier = Modifier
-                        .background(
-                            color = Color(0x26000000),
-                            shape = RoundedCornerShape(size = 34.dp)
-                        )
-                        .padding(start = 10.dp, top = 4.dp, end = 9.dp, bottom = 4.dp)
-                ) {
-                    // Child views.
-                    Text(
-                        text = "0000년 0월 0일 월요일",
-                        style = TextStyle(
-                            fontSize = 8.sp,
-                            fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                            color = Color(0xFFF8F8F9),
-                        )
+            // Child views.
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier
+                    .background(
+                        color = Color(0x26000000),
+                        shape = RoundedCornerShape(size = 34.dp)
                     )
-                }
+                    .padding(start = 10.dp, top = 4.dp, end = 9.dp, bottom = 4.dp)
+            ) {
+                // Child views.
+                Text(
+                    text = "0000년 0월 0일 월요일",
+                    style = TextStyle(
+                        fontSize = 8.sp,
+                        fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                        color = Color(0xFFF8F8F9),
+                    )
+                )
+            }
 
         } else {
 
-                // Profile image
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        0.dp,
-                        Alignment.CenterHorizontally
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.size(27.dp)
-                ) {
-                    // TEMP
-                    if (!isUser && isFirst) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Profile Image",
-                            tint = Color(0xFF000000),
-                            modifier = Modifier.size(27.dp)
-                        )
-                    } else{
-                        Spacer(modifier = Modifier.size(27.dp))
-                    }
+            // Profile image
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    0.dp,
+                    Alignment.CenterHorizontally
+                ),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.size(27.dp)
+            ) {
+                // TEMP
+                if (!isUser && isFirst) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Profile Image",
+                        tint = Color(0xFF000000),
+                        modifier = Modifier.size(27.dp)
+                    )
+                } else {
+                    Spacer(modifier = Modifier.size(27.dp))
                 }
+            }
 
             // Chat Container
             Column(
                 verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                 horizontalAlignment = Alignment.Start,
             ) {
-                if(!isUser && isFirst) {
+                if (!isUser && isFirst) {
                     // Name
                     Text(
                         text = "이름",
@@ -303,7 +320,7 @@ fun ChatMessage(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     // Child views.
-                    if(!isUser) {
+                    if (!isUser) {
                         ChatBox(isUser, isAIReady, isTimeChange, message)
                         ChatInfoBox(isUser, isAIReady, isTimeChange, timestamp)
                     } else {
@@ -321,7 +338,7 @@ fun ChatBox(
     isUser: Boolean = false,
     isFirst: Boolean = true,
     isTimeChange: Boolean = true,
-    message : String? = "메시지"
+    message: String? = "메시지"
 ) {
     // Chat Box
     Column(
@@ -341,13 +358,13 @@ fun ChatBox(
                     bottomEnd = 10.dp
                 )
             )
-            .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp)
+            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp)
     ) {
         // Child views.
         Text(
-            text = message?:"",
+            text = message ?: "",
             style = TextStyle(
-                fontSize = 12.sp,
+                fontSize = 15.sp,
                 fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
                 color = Color(0xFF000000),
             )
@@ -372,7 +389,7 @@ fun ChatInfoBox(
     ) {
         // Child views.
         Row(
-            horizontalArrangement = if(isUser) {
+            horizontalArrangement = if (isUser) {
                 Arrangement.spacedBy(10.dp, Alignment.End)
             } else {
                 Arrangement.spacedBy(10.dp, Alignment.Start)
@@ -380,29 +397,29 @@ fun ChatInfoBox(
             verticalAlignment = Alignment.Top,
             modifier = Modifier.fillMaxWidth()
 
-        ){
-            if(isAIReady){
+        ) {
+            if (isAIReady) {
                 Icon(
                     imageVector = Icons.Default.Done,
                     contentDescription = "Profile Image",
                     tint = Color(0xFFFF7100),
                     modifier = Modifier.size(10.dp)
                 )
-            }else{
+            } else {
                 Spacer(modifier = Modifier.size(10.dp))
             }
         }
 
-        if(isTimeChange){
+        if (isTimeChange) {
             Text(
-                text = timestamp?:"",
+                text = timestamp ?: "",
                 style = TextStyle(
                     fontSize = 8.sp,
                     fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
                     color = Color(0xFF000000),
                 )
             )
-        }else {
+        } else {
             Spacer(modifier = Modifier.size(8.dp))
         }
     }
@@ -414,14 +431,14 @@ fun ChatBox(
     onMessageClick: (String?, String?, String?, String?) -> Unit,
     modifier: Modifier,
     vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()
-){
+) {
     LazyColumn(modifier = modifier) {
-        items(chatMessages){ msg->
+        items(chatMessages) { msg ->
             // Timestamp를 Date로 변환
             val date: Date = msg.timestamp!!.toDate()
 
             // 날짜 형식화 예시
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREAN)
+            val sdf = SimpleDateFormat("HH:mm", Locale.KOREAN)
             val formattedDate: String = sdf.format(date)
 
             ChatMessage(
@@ -441,6 +458,7 @@ fun ChatBox(
                     },
                 isAIReady = !msg.feedback?.comment.isNullOrEmpty()
             )
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
@@ -478,11 +496,16 @@ fun FeedbackChatDialog(
                 Text(text = "AI피드백")
             },
             text = {
-                Box(modifier = Modifier
-                    .width(283.dp)
-                    .height(280.dp)
-                    .background(color = Color(0xFFFCF8EC), shape = RoundedCornerShape(size = 8.dp))
-                    .padding(top = 16.dp, bottom = 16.dp))
+                Box(
+                    modifier = Modifier
+                        .width(283.dp)
+                        .height(280.dp)
+                        .background(
+                            color = Color(0xFFFCF8EC),
+                            shape = RoundedCornerShape(size = 8.dp)
+                        )
+                        .padding(top = 16.dp, bottom = 16.dp)
+                )
                 {
                     Column {
                         Row {
@@ -505,5 +528,202 @@ fun FeedbackChatDialog(
 
             }
         )
+    }
+}
+
+@Composable
+fun EmagoDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    comment: String,
+    advancedSentence: String,
+    errorSentence: String,
+    correctSentence: String
+) {
+
+    val addChatTitle = remember {
+        mutableStateOf("")
+    }
+    val addChatDescription = remember {
+        mutableStateOf("")
+    }
+    if (showDialog) {
+        Dialog(onDismissRequest = {
+            onDismiss.invoke()
+            addChatTitle.value = ""
+            addChatDescription.value = ""
+        }) {
+            Surface(
+                modifier = Modifier
+                    .width(300.dp)
+                    .wrapContentHeight(),
+                shape = RoundedCornerShape(8.dp),
+                color = Color(0xFF79A3B1)
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(12.dp)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 8.dp)
+                    ) {
+                        // Child views.
+                        Text(
+                            text = "Emago Feedback",
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                lineHeight = 30.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                color = Color(0xFF000000),
+                            )
+                        )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color(0xFFFCF8EC),
+                                    shape = RoundedCornerShape(size = 4.dp)
+                                )
+                                .padding(start = 7.dp, top = 4.dp, end = 7.dp, bottom = 4.dp)
+                        ) {
+                            // Child views.
+                            Text(
+                                text = comment,
+                                style = TextStyle(
+                                    fontSize = 15.sp,
+                                    lineHeight = 20.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                    color = Color(0xFF000000),
+                                )
+                            )
+                        }
+
+                        Text(
+                            text = "더 좋은 문장",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                color = Color(0xFF000000),
+                            ),
+                            modifier = Modifier.drawBehind {
+                                val strokeWidth = 1.dp.toPx()
+                                val y = size.height - strokeWidth / 2
+                                drawLine(
+                                    color = Color.Black,
+                                    start = Offset(0f, y),
+                                    end = Offset(size.width, y),
+                                    strokeWidth = strokeWidth
+                                )
+                            }
+                        )
+
+                        Text(
+                            text = advancedSentence,
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF000000),
+                            )
+                        )
+
+                        Text(
+                            text = "오류가 있는 문장",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                color = Color(0xFF000000),
+                            ),
+                            modifier = Modifier.drawBehind {
+                                val strokeWidth = 1.dp.toPx()
+                                val y = size.height - strokeWidth / 2
+                                drawLine(
+                                    color = Color.Black,
+                                    start = Offset(0f, y),
+                                    end = Offset(size.width, y),
+                                    strokeWidth = strokeWidth
+                                )
+                            }
+                        )
+
+                        Text(
+                            text = errorSentence,
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF000000),
+                            )
+                        )
+
+                        Text(
+                            text = "올바른 문장",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                color = Color(0xFF000000),
+                            ),
+                            modifier = Modifier.drawBehind {
+                                val strokeWidth = 1.dp.toPx()
+                                val y = size.height - strokeWidth / 2
+                                drawLine(
+                                    color = Color.Black,
+                                    start = Offset(0f, y),
+                                    end = Offset(size.width, y),
+                                    strokeWidth = strokeWidth
+                                )
+                            }
+                        )
+
+                        Text(
+                            text = correctSentence,
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF000000),
+                            )
+                        )
+                    }
+                    Button(
+                        onClick = { onDismiss() },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(
+                                0xFFFCF8EC
+                            )
+                        ),
+                        shape = RoundedCornerShape(size = 10.dp),
+                        contentPadding = PaddingValues(
+                            horizontal = 10.dp,
+                            vertical = 8.dp
+                        ),
+                        modifier = Modifier
+                            .width(90.dp)
+                            .height(30.dp)
+                    ) {
+                        Text(
+                            text = "닫기",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                lineHeight = 12.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center,
+                            )
+                        )
+                    }
+                }
+            }
+        }
     }
 }

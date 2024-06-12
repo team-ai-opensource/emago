@@ -52,13 +52,11 @@ import java.time.LocalDate
 fun HomeScreen(navController: NavController) {
     val currentDate = remember { LocalDate.now() }
     var selectedDate by remember { mutableStateOf(currentDate) }
-    val remainReview by remember { mutableIntStateOf(0) }
-
     var showExtraItems by remember { mutableStateOf(false) } // 빌드 할때는 false로 바꾸기
-    val goalOfToday by remember{ mutableFloatStateOf(50f)}
-    val progress1 by remember{ mutableFloatStateOf(50f)}
-    val progress2 by remember{ mutableFloatStateOf(50f)}
-    val progress3 by remember{ mutableFloatStateOf(50f)}
+    val goalOfToday by remember { mutableFloatStateOf(20f) }
+    val progress1 by remember { mutableFloatStateOf(10f) }
+    val progress2 by remember { mutableFloatStateOf(20f) }
+    val progress3 by remember { mutableFloatStateOf(30f) }
 
     // User views
     Column(
@@ -133,34 +131,7 @@ fun HomeScreen(navController: NavController) {
                                     verticalAlignment = Alignment.Top,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    // Child views.
-                                    Button(
-                                        onClick = { /*TODO : Go to Statistc Screen*/ },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color(
-                                                0xFFFCF8EC
-                                            )
-                                        ),
-                                        shape = RoundedCornerShape(size = 10.dp),
-                                        contentPadding = PaddingValues(
-                                            horizontal = 10.dp,
-                                            vertical = 8.dp
-                                        ),
-                                        modifier = Modifier
-                                            .width(90.dp)
-                                            .height(30.dp)
-                                    ) {
-                                        Text(
-                                            text = "일자별 통계",
-                                            style = TextStyle(
-                                                fontSize = 12.sp,
-                                                lineHeight = 12.sp,
-                                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                                color = Color(0xFF000000),
-                                                textAlign = TextAlign.Center,
-                                            )
-                                        )
-                                    }
+                                    // 일자별 통
                                 }
                             }
                         }
@@ -208,7 +179,7 @@ fun HomeScreen(navController: NavController) {
                     // Todo : Calendar
                     Calendar(
                         selectedDate = selectedDate,
-                        onDateSelected = {newDate ->
+                        onDateSelected = { newDate ->
                             selectedDate = newDate
                         }
                     )
@@ -260,15 +231,6 @@ fun HomeScreen(navController: NavController) {
                             text = "복습 시작",
                             style = TextStyle(
                                 fontSize = 20.sp,
-                                lineHeight = 20.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                                color = Color(0xFF000000),
-                            )
-                        )
-                        Text(
-                            text = "남은 복습 : $remainReview",
-                            style = TextStyle(
-                                fontSize = 13.sp,
                                 lineHeight = 20.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF000000),
