@@ -69,8 +69,7 @@ fun PasswordSettingScreen() {
                     style = TextStyle(
                         fontSize = 20.sp,
                         lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                        fontWeight = FontWeight(700),
+                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                         color = Color(0xFF000000),
                         textAlign = TextAlign.Center,
                     )
@@ -116,14 +115,14 @@ fun PasswordSettingScreen() {
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 lineHeight = 20.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                                fontWeight = FontWeight(700),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF000000),
                                 textAlign = TextAlign.Center,
                             )
                         )
                     }
                 }
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
                     verticalAlignment = Alignment.CenterVertically,
@@ -142,8 +141,7 @@ fun PasswordSettingScreen() {
                         style = TextStyle(
                             fontSize = 14.sp,
                             lineHeight = 15.sp,
-                            //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                            fontWeight = FontWeight(700),
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                             color = Color(0x4D000000),
                             textAlign = TextAlign.Center,
                         )
@@ -167,8 +165,7 @@ fun PasswordSettingScreen() {
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 lineHeight = 20.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                                fontWeight = FontWeight(700),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF000000),
                                 textAlign = TextAlign.Center,
                             )
@@ -193,8 +190,7 @@ fun PasswordSettingScreen() {
                         style = TextStyle(
                             fontSize = 14.sp,
                             lineHeight = 15.sp,
-                            //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                            fontWeight = FontWeight(700),
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                             color = Color(0x4D000000),
                             textAlign = TextAlign.Center,
                         )
@@ -218,8 +214,7 @@ fun PasswordSettingScreen() {
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 lineHeight = 20.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                                fontWeight = FontWeight(700),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF000000),
                                 textAlign = TextAlign.Center,
                             )
@@ -244,8 +239,7 @@ fun PasswordSettingScreen() {
                         style = TextStyle(
                             fontSize = 14.sp,
                             lineHeight = 15.sp,
-                            //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                            fontWeight = FontWeight(700),
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                             color = Color(0x4D000000),
                             textAlign = TextAlign.Center,
                         )
@@ -278,8 +272,7 @@ fun PasswordSettingScreen() {
                         text = "변경 완료",
                         style = TextStyle(
                             fontSize = 13.sp,
-                            //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                            fontWeight = FontWeight(700),
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                             color = Color(0xFFFFFFFF),
                         )
                     )
