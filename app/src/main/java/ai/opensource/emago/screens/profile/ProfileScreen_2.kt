@@ -2,20 +2,28 @@
 
 package ai.opensource.emago.screens.profile
 
+import ai.opensource.emago.EMAGOViewModel
+import ai.opensource.emago.R
+import ai.opensource.emago.util.CommonImage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,14 +32,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(navController: NavController,
+                  vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()
+) {
+    val userData = vm.userData.value
+    val userName = userData?.name?:""
     Column(
         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,7 +72,22 @@ fun ProfileScreen(navController: NavController) {
                     .fillMaxWidth()
                     .height(80.dp)
             ) {
-                // Child views.
+                // 프로필 이미지
+                val imageUrl = vm.userData.value?.imageUrl
+                @Composable
+                fun ProfileImage(imageUrl: String?, vm: EMAGOViewModel) {
+                    Box(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min))
+                    {
+                        Card(
+                            shape = CircleShape,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(80.dp)
+                        ) {
+                            CommonImage(data = imageUrl)
+                        }
+                    }
+                }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(
                         0.dp,
@@ -68,15 +98,7 @@ fun ProfileScreen(navController: NavController) {
                         .width(80.dp)
                         .height(80.dp)
                 ) {
-                    // Child views.
-//                        Image(
-//                            painter = painterResource(id = R.drawable.dog_square),
-//                            contentDescription = "image description",
-//                            contentScale = ContentScale.FillBounds,
-//                            modifier = Modifier
-//                                .width(80.dp)
-//                                .height(80.dp))
-
+                    ProfileImage(imageUrl = imageUrl, vm = vm)
                 }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(3.dp, Alignment.Top),
@@ -85,33 +107,6 @@ fun ProfileScreen(navController: NavController) {
                         .fillMaxSize()
                 ) {
                     // Child views.
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(
-                            10.dp,
-                            Alignment.CenterHorizontally
-                        ),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .width(89.dp)
-                            .height(15.dp)
-                            .background(
-                                color = Color(0xB2456268),
-                                shape = RoundedCornerShape(size = 3.dp)
-                            )
-
-                    ) {
-                        // Child views.
-                        Text(
-                            text = "초대코드 : 010101010",
-                            style = TextStyle(
-                                fontSize = 8.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFFFFFFFF),
-
-                                )
-                        )
-                    }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(
                             7.dp,
@@ -124,11 +119,10 @@ fun ProfileScreen(navController: NavController) {
                     ) {
                         // 프로필 표시
                         Text(
-                            text = "동에번쩍서에번쩍레드로드라이트",
+                            text = userName,
                             style = TextStyle(
                                 fontSize = 15.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                                fontWeight = FontWeight(700),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF000000),
                             )
                         )
@@ -136,7 +130,7 @@ fun ProfileScreen(navController: NavController) {
                             text = "RRR@chungbuk.ac.kr",
                             style = TextStyle(
                                 fontSize = 8.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 fontWeight = FontWeight(400),
                                 color = Color(0x8A000000),
                             )
@@ -145,7 +139,7 @@ fun ProfileScreen(navController: NavController) {
                             text = "어디든지나타난다동에번쩍서에번쩍",
                             style = TextStyle(
                                 fontSize = 10.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 fontWeight = FontWeight(400),
                                 color = Color(0xFF000000),
                             )
@@ -171,7 +165,7 @@ fun ProfileScreen(navController: NavController) {
                     text = "계정 설정 / 프로필 편집",
                     style = TextStyle(
                         fontSize = 10.sp,
-                        //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                         fontWeight = FontWeight(400),
                         color = Color(0xFFFFFFFF),
                     )
@@ -199,7 +193,7 @@ fun ProfileScreen(navController: NavController) {
                 text = "간략한 통계",
                 style = TextStyle(
                     fontSize = 15.sp,
-                    //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFF000000),
                 )
