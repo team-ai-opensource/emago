@@ -21,18 +21,23 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -194,6 +199,46 @@ fun ProfileSettingScreen(
                 ) {
                     // Child views.
                     Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .width(308.dp)
+                            .height(17.dp)
+                            .padding(start = 8.dp, end = 8.dp)
+                            .clickable { navController.navigate("ProfileSet") }
+                    ) {
+                        // Child views.
+                        Text(
+                            text = "상태메시지",
+                            style = TextStyle(
+                                fontSize = 13.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                color = Color(0xFF000000),
+                            )
+                        )
+                        Text(
+                            text = "",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                color = Color(0xFF999999),
+                            )
+                        )
+                    }
+                }
+                Divider(
+                    color = Color(0x4D000000)
+                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .width(343.dp)
+                        .height(51.dp)
+                        .padding(start = 10.dp, top = 17.dp, end = 10.dp, bottom = 17.dp)
+                ) {
+                    // Child views.
+                    Row(
                         horizontalArrangement = Arrangement.spacedBy(
                             139.dp,
                             Alignment.Start
@@ -258,6 +303,41 @@ fun ProfileSettingScreen(
                 }
             }
         }
+        OutlinedButton(
+            onClick = { navController.navigate("profileSet") },
+            shape = RoundedCornerShape(5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "로그 아웃",
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                    fontWeight = FontWeight(400),
+                )
+            )
+        }
+        //회원 탈퇴
+        TextButton(onClick = { /*회원 탈퇴*/ }) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .width(91.dp)
+                    .height(33.dp)
+                    .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+            ) {
+                Text(
+                    text = "회원 탈퇴",
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                        color = Color(0xFF999999),
+                    )
+                )
+            }
+        }
         Column(
             verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -281,26 +361,6 @@ fun ProfileSettingScreen(
                     color = Color(0xFF000000),
                 )
             )
-        }
-        //회원 탈퇴
-        TextButton(onClick = { /*회원 탈퇴*/ }) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .width(91.dp)
-                .height(33.dp)
-                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
-        ) {
-                Text(
-                    text = "회원 탈퇴",
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                        color = Color(0xFF999999),
-                    )
-                )
-            }
         }
     }
 }
