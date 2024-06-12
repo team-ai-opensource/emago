@@ -3,7 +3,7 @@
 package ai.opensource.emago.screens.profile
 
 import ai.opensource.emago.EMAGOViewModel
-import ai.opensource.emago.screens.chat.ProfileImage
+import ai.opensource.emago.R
 import ai.opensource.emago.util.CommonImage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -105,33 +107,6 @@ fun ProfileScreen(navController: NavController,
                         .fillMaxSize()
                 ) {
                     // Child views.
-//                    Row(
-//                        horizontalArrangement = Arrangement.spacedBy(
-//                            10.dp,
-//                            Alignment.CenterHorizontally
-//                        ),
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        modifier = Modifier
-//                            .width(89.dp)
-//                            .height(15.dp)
-//                            .background(
-//                                color = Color(0xB2456268),
-//                                shape = RoundedCornerShape(size = 3.dp)
-//                            )
-//
-//                    ) {
-//                        // Child views.
-//                        Text(
-//                            text = "초대코드 : 010101010",
-//                            style = TextStyle(
-//                                fontSize = 8.sp,
-//                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-//                                fontWeight = FontWeight(400),
-//                                color = Color(0xFFFFFFFF),
-//
-//                                )
-//                        )
-//                    }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(
                             7.dp,
@@ -147,8 +122,7 @@ fun ProfileScreen(navController: NavController,
                             text = userName,
                             style = TextStyle(
                                 fontSize = 15.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                                fontWeight = FontWeight(700),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF000000),
                             )
                         )
@@ -156,7 +130,7 @@ fun ProfileScreen(navController: NavController,
                             text = "RRR@chungbuk.ac.kr",
                             style = TextStyle(
                                 fontSize = 8.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 fontWeight = FontWeight(400),
                                 color = Color(0x8A000000),
                             )
@@ -165,7 +139,7 @@ fun ProfileScreen(navController: NavController,
                             text = "어디든지나타난다동에번쩍서에번쩍",
                             style = TextStyle(
                                 fontSize = 10.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 fontWeight = FontWeight(400),
                                 color = Color(0xFF000000),
                             )
@@ -191,7 +165,7 @@ fun ProfileScreen(navController: NavController,
                     text = "계정 설정 / 프로필 편집",
                     style = TextStyle(
                         fontSize = 10.sp,
-                        //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                         fontWeight = FontWeight(400),
                         color = Color(0xFFFFFFFF),
                     )
@@ -219,7 +193,7 @@ fun ProfileScreen(navController: NavController,
                 text = "간략한 통계",
                 style = TextStyle(
                     fontSize = 15.sp,
-                    //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
+                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFF000000),
                 )
