@@ -5,6 +5,7 @@ import ai.opensource.emago.R
 import ai.opensource.emago.data.ChatUser
 import ai.opensource.emago.data.Message
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,8 +21,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -50,6 +53,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -62,6 +66,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -99,6 +104,7 @@ fun ChatScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel(
 
     LaunchedEffect(key1 = Unit) {
         vm.populateMessages(chatID)
+        vm.getChatRoomById(chatID)
     }
     BackHandler {
         vm.depopulateMessage()
@@ -138,7 +144,9 @@ fun ChatScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatTopBar(navController: NavController) {
+fun ChatTopBar(navController: NavController, vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()) {
+    val chat = vm.singleChatRoom.value
+
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color(0xFF79A3B1),
@@ -160,7 +168,7 @@ fun ChatTopBar(navController: NavController) {
                 ) {
                     // Child views.
                     Text(
-                        text = "CBNU_CS(채팅방 제목)",
+                        text = chat.title ?: "",
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,
@@ -287,11 +295,11 @@ fun ChatMessage(
             ) {
                 // TEMP
                 if (!isUser && isFirst) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
+                    val painter = rememberImagePainter(data = user.imageUrl)
+                    Image(
+                        painter = painter,
                         contentDescription = "Profile Image",
-                        tint = Color(0xFF000000),
-                        modifier = Modifier.size(27.dp)
+                        modifier = Modifier.wrapContentSize().size(27.dp).clip(CircleShape),
                     )
                 } else {
                     Spacer(modifier = Modifier.size(27.dp))
@@ -306,7 +314,7 @@ fun ChatMessage(
                 if (!isUser && isFirst) {
                     // Name
                     Text(
-                        text = "이름",
+                        text = user.name ?: "",
                         style = TextStyle(
                             fontSize = 12.sp,
                             fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),

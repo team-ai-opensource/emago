@@ -54,6 +54,8 @@ class EMAGOViewModel @Inject constructor(
     val myChatMessages = mutableStateOf<List<Message>?>(listOf())
     val reviewMessage = mutableStateOf<Message>(Message(timestamp = Timestamp.now()))
 
+    val singleChatRoom = mutableStateOf<ChatData>(ChatData())
+
     init {
         val currentUser = auth.currentUser
         signIn.value = currentUser != null
@@ -407,6 +409,25 @@ class EMAGOViewModel @Inject constructor(
                     Log.d("test", "Message Document: ${document.id} => ${document.data}")
                     // 원하는 작업 수행
                     reviewMessage.value = message!!
+                } else {
+                    Log.d("test", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("test", "Error getting document: ", exception)
+                handleException(exception)
+            }
+    }
+
+    fun getChatRoomById(chatId: String) {
+        db.collection(CHATS).document(chatId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val chatRoom = document.toObject<ChatData>()
+                    chatRoom?.id = document.id
+                    Log.d("test", "Message Document: ${document.id} => ${document.data}")
+                    // 원하는 작업 수행
+                    singleChatRoom.value = chatRoom!!
                 } else {
                     Log.d("test", "No such document")
                 }
