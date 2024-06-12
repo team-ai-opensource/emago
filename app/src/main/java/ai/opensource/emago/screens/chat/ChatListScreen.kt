@@ -81,9 +81,12 @@ fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewMo
 
             content = {
                 Column (
+                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(it)
+                        .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp)
                 ) {
 
                     if (chats!!.isEmpty()) {
@@ -115,8 +118,7 @@ fun ChatListBox(navController: NavController, modifier: Modifier, chatList: List
                     horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
                     verticalAlignment = Alignment.Top,
                     modifier = Modifier
-                        .width(355.dp)
-                        .height(52.dp)
+                        .height(62.dp)
                         .clickable {
                             val route = item.id
                             navController.navigate("chat/$route")
