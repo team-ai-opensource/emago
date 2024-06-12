@@ -135,7 +135,10 @@ fun Layout(navController: NavController, screen: @Composable () -> Unit) {
 
 @Composable
 fun MainBottomBar(navController: NavController) {
-    NavigationBar {
+    NavigationBar(
+        containerColor = Color.White,
+        contentColor = Color(0xFF79A3B1)
+    ) {
         NavigationBarItem(
             icon = { Icon(Icons.Default.List, contentDescription = "Chat") },
             label = { Text("Chat") },

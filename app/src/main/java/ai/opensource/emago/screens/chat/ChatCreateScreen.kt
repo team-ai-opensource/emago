@@ -1,9 +1,11 @@
 package ai.opensource.emago.screens.chat
 
 import ai.opensource.emago.EMAGOViewModel
+import ai.opensource.emago.R
 import ai.opensource.emago.util.CommonImage
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,11 +36,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -46,7 +51,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @Composable
-fun ChatCreateScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()) {
+fun ChatCreateScreen(
+    navController: NavController,
+    vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()
+) {
     var chatRoomName by remember { mutableStateOf("") }
     var chatRoomDescription by remember { mutableStateOf("") }
     var chatImageUrl by remember {
@@ -64,7 +72,8 @@ fun ChatCreateScreen(navController: NavController, vm: EMAGOViewModel = hiltView
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(start = 30.dp, end = 30.dp)
     ) {
 
@@ -100,7 +109,10 @@ fun ChatCreateScreen(navController: NavController, vm: EMAGOViewModel = hiltView
                     )
                 )
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        Alignment.CenterHorizontally
+                    ),
                     verticalAlignment = Alignment.Top,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -113,9 +125,12 @@ fun ChatCreateScreen(navController: NavController, vm: EMAGOViewModel = hiltView
                             .size(100.dp)
                     ) {
                         // Child views.
-                        Box(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min).clickable {
-                            launcher.launch("image/*")
-                        })
+                        Box(
+                            modifier = Modifier
+                                .height(intrinsicSize = IntrinsicSize.Min)
+                                .clickable {
+                                    launcher.launch("image/*")
+                                })
                         {
                             Card(
                                 shape = CircleShape,
@@ -130,72 +145,48 @@ fun ChatCreateScreen(navController: NavController, vm: EMAGOViewModel = hiltView
                 }
             }
             Column(
-                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp, bottom = 4.dp)
-                ) {
-                    OutlinedTextField(
-                        value = chatRoomName,
-                        onValueChange = { chatRoomName = it },
-                        label = { Text("채팅방 이름") })
-                    OutlinedTextField(
-                        value = chatRoomDescription,
-                        onValueChange = { chatRoomDescription = it },
-                        label = { Text("채팅방 설명") })
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                    }
-                }
-
-
-            }
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.Top,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    // 코드
-                }
-        ) {
-            // Child views.
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
+                verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .shadow(
-                        elevation = 4.dp,
-                        spotColor = Color(0x40000000),
-                        ambientColor = Color(0x40000000)
-                    )
                     .fillMaxWidth()
-                    .background(color = Color(0xFF79A3B1), shape = RoundedCornerShape(size = 10.dp))
-                    .padding(start = 10.dp, top = 8.dp, end = 10.dp, bottom = 8.dp)
-
+                    .padding(top = 4.dp, bottom = 4.dp)
             ) {
-                // Child views.
-
-
-                Text(
-                    "생성하기", fontSize = 12.sp,
-                    lineHeight = 12.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF000000),
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.12.sp,
-                    modifier = Modifier.clickable {
-                        vm.onAddChat(chatRoomName, chatRoomDescription, chatImageUrl)
-                        navController.navigate("chatList")
-                    }
-                )
-
-
+                OutlinedTextField(
+                    value = chatRoomName,
+                    onValueChange = { chatRoomName = it },
+                    label = { Text("채팅방 이름") })
+                OutlinedTextField(
+                    value = chatRoomDescription,
+                    onValueChange = { chatRoomDescription = it },
+                    label = { Text("채팅방 설명") })
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                }
             }
+
+
         }
+        OutlinedButton(
+            onClick = {
+                vm.onAddChat(chatRoomName, chatRoomDescription, chatImageUrl)
+                navController.navigate("chatList")
+            },
+            shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(1.dp, Color(0x4D000000)),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "생성하기",
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                    color = Color(0xFF000000),
+                )
+            )
         }
     }
+}
