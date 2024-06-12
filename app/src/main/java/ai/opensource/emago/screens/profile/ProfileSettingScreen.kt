@@ -51,6 +51,7 @@ fun ProfileSettingScreen(
 ) {
     val userData = vm.userData.value
     val userName = userData?.name ?: ""
+    val stateMessage = userData?.stateMsg ?:""
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
@@ -189,7 +190,7 @@ fun ProfileSettingScreen(
                                 .width(308.dp)
                                 .height(17.dp)
                                 .padding(start = 8.dp, end = 8.dp)
-                                .clickable { navController.navigate("ProfileSet") }
+                                .clickable { navController.navigate("stateSet") }
                         ) {
                             // Child views.
                             Text(
@@ -201,7 +202,7 @@ fun ProfileSettingScreen(
                                 )
                             )
                             Text(
-                                text = "",
+                                text = stateMessage,
                                 style = TextStyle(
                                     fontSize = 12.sp,
                                     fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),

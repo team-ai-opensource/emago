@@ -6,6 +6,7 @@ data class UserData(
     var name: String?="",
     var number: String?="",
     var imageUrl: String?="",
+    var stateMsg: String?=""
 ) {
     fun toMap() = mapOf(
         "userId" to userId,
