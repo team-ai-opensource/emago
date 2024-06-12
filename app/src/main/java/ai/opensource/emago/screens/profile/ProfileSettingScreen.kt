@@ -5,6 +5,7 @@ import ai.opensource.emago.R
 import ai.opensource.emago.util.CommonImage
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,24 +23,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,12 +50,8 @@ fun ProfileSettingScreen(
     vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()
 ) {
     val userData = vm.userData.value
-    var name by rememberSaveable {
-            mutableStateOf(userData?.name?:"")
-        }
-    var number by rememberSaveable {
-            mutableStateOf(userData?.number?:"")
-        }
+    val userName = userData?.name ?: ""
+    val stateMessage = userData?.stateMsg ?:""
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
@@ -70,15 +64,14 @@ fun ProfileSettingScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFFFCF8EC))
     ) {
         // Body
         Column(
             verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp)
+                .fillMaxSize()
+                .padding(start = 32.dp, end = 32.dp)
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
@@ -89,20 +82,7 @@ fun ProfileSettingScreen(
                 // Profile Image
                 val imageUrl = vm.userData.value?.imageUrl
 
-                @Composable
-                fun ProfileImage(imageUrl: String?, vm: EMAGOViewModel) {
-                    Box(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min))
-                    {
-                        Card(
-                            shape = CircleShape,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .size(80.dp)
-                        ) {
-                            CommonImage(data = imageUrl)
-                        }
-                    }
-                }
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(
                         0.dp,
@@ -142,161 +122,221 @@ fun ProfileSettingScreen(
                     }
                 }
             }
-        }
-        Row {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color(0x4D000000),
-                        shape = RoundedCornerShape(size = 16.dp)
+            // 개인정보 박스
+            Row {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .border(
+                            width = 1.dp,
+                            color = Color(0x4D000000),
+                            shape = RoundedCornerShape(size = 16.dp)
+                        )
+                        .fillMaxWidth()
+                ) {
+                    // Child views.
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, top = 17.dp, end = 10.dp, bottom = 17.dp)
+                    ) {
+                        // Child views.
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .width(308.dp)
+                                .height(17.dp)
+                                .padding(start = 8.dp, end = 8.dp)
+                                .clickable { navController.navigate("ProfileSet") }
+                        ) {
+                            // Child views.
+                            Text(
+                                text = "닉네임",
+                                style = TextStyle(
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                    color = Color(0xFF000000),
+                                )
+                            )
+                            Text(
+                                text = userName,
+                                style = TextStyle(
+                                    fontSize = 12.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                    color = Color(0xFF999999),
+                                )
+                            )
+                        }
+                    }
+                    Divider(
+                        color = Color(0x4D000000)
                     )
-                    .width(343.dp)
-                    .height(206.dp)
-            ) {
-                // Child views.
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .width(343.dp)
-                        .height(51.dp)
-                        .padding(start = 10.dp, top = 17.dp, end = 10.dp, bottom = 17.dp)
-                ) {
-                    // Child views.
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(
-                            120.dp,
-                            Alignment.Start
-                        ),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .width(308.dp)
-                            .height(17.dp)
-                            .padding(start = 8.dp, end = 8.dp)
-                            .clickable { navController.navigate("ProfileSet") }
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, top = 17.dp, end = 10.dp, bottom = 17.dp)
                     ) {
                         // Child views.
-                        Text(
-                            text = "닉네임",
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                                color = Color(0xFF000000),
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .width(308.dp)
+                                .height(17.dp)
+                                .padding(start = 8.dp, end = 8.dp)
+                                .clickable { navController.navigate("stateSet") }
+                        ) {
+                            // Child views.
+                            Text(
+                                text = "상태메시지",
+                                style = TextStyle(
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                    color = Color(0xFF000000),
+                                )
                             )
-                        )
-                        OutlinedTextField(
-                            value = "",
-                            onValueChange = { },
-                        )
+                            Text(
+                                text = stateMessage,
+                                style = TextStyle(
+                                    fontSize = 12.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                    color = Color(0xFF999999),
+                                )
+                            )
+                        }
                     }
-                }
-                Divider(
-                    color = Color(0x4D000000)
-                )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .width(343.dp)
-                        .height(51.dp)
-                        .padding(start = 10.dp, top = 17.dp, end = 10.dp, bottom = 17.dp)
-                ) {
-                    // Child views.
+                    Divider(
+                        color = Color(0x4D000000)
+                    )
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(
-                            109.dp,
-                            Alignment.Start
-                        ),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .width(308.dp)
-                            .height(56.dp)
-                            .padding(start = 8.dp, end = 8.dp)
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, top = 17.dp, end = 10.dp, bottom = 17.dp)
                     ) {
                         // Child views.
-                        Text(
-                            text = "전화번호",
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                                color = Color(0xFF000000),
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(
+                                139.dp,
+                                Alignment.Start
+                            ),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .width(308.dp)
+                                .height(17.dp)
+                                .padding(start = 8.dp, end = 8.dp)
+                        ) {
+                            // Child views.
+                            Text(
+                                text = "이메일",
+                                style = TextStyle(
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                    color = Color(0xFF000000),
+                                )
                             )
-                        )
-                        OutlinedTextField(
-                            value = "",
-                            onValueChange = { },
-                        )
+                            Text(
+                                text = "RRR@chungbuk.ac.kr",
+                                fontSize = 12.sp,
+                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                color = Color(0xFF999999),
+                            )
+                        }
                     }
-                }
-                Divider(
-                    color = Color(0x4D000000)
-                )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .width(343.dp)
-                        .height(51.dp)
-                        .padding(start = 10.dp, top = 17.dp, end = 10.dp, bottom = 17.dp)
-                ) {
-                    // Child views.
+                    Divider(
+                        color = Color(0x4D000000)
+                    )
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(
-                            185.dp,
-                            Alignment.Start
-                        ),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .width(308.dp)
-                            .height(17.dp)
-                            .padding(start = 8.dp, end = 8.dp)
-                            .clickable { navController.navigate("setPW") }
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, top = 17.dp, end = 10.dp, bottom = 17.dp)
                     ) {
                         // Child views.
-                        Text(
-                            text = "비밀번호 변경",
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                                color = Color(0xFF000000),
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(
+                                185.dp,
+                                Alignment.Start
+                            ),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .width(308.dp)
+                                .height(17.dp)
+                                .padding(start = 8.dp, end = 8.dp)
+                                .clickable { navController.navigate("") }
+                        ) {
+                            // Child views.
+                            Text(
+                                text = "비밀번호 변경",
+                                style = TextStyle(
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                    color = Color(0xFF000000),
+                                )
                             )
-                        )
-                        Button(onClick = { /*TODO*/ }) {
-                            Text(text = "메일 보내기")
                         }
                     }
                 }
             }
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .border(
-                    width = 1.dp,
-                    color = Color(0x4D000000),
-                    shape = RoundedCornerShape(size = 16.dp)
+            OutlinedButton(
+                onClick = { vm.logout() },
+                shape = RoundedCornerShape(16.dp),
+                border =  BorderStroke(1.dp, Color(0x4D000000)),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "로그아웃",
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                        color = Color(0xFF000000),
+                    )
                 )
-                .width(343.dp)
-                .height(49.dp)
-                .padding(top = 16.dp, bottom = 16.dp)
-                .clickable {
-                    vm.logout()
-                    navController.navigate("login")
+            }
+            //회원 탈퇴
+            TextButton(onClick = { /*회원 탈퇴*/ }) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .width(91.dp)
+                        .height(33.dp)
+                        .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                ) {
+                    Text(
+                        text = "회원 탈퇴",
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                            color = Color(0xFF999999),
+                        )
+                    )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun ProfileImage(imageUrl: String?, vm: EMAGOViewModel) {
+    Box(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min))
+    {
+        Card(
+            shape = CircleShape,
+            modifier = Modifier
+                .padding(8.dp)
+                .size(80.dp)
         ) {
-            // Child views.
-            Text(
-                text = "로그아웃",
-                style = TextStyle(
-                    fontSize = 13.sp,
-                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                    color = Color(0xFF000000),
-                )
-            )
+            CommonImage(data = imageUrl)
         }
     }
 }

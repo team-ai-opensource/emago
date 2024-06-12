@@ -9,6 +9,7 @@ import ai.opensource.emago.screens.home.ReviewScreen
 import ai.opensource.emago.screens.profile.PasswordSettingScreen
 import ai.opensource.emago.screens.profile.ProfileScreen
 import ai.opensource.emago.screens.profile.ProfileSettingScreen
+import ai.opensource.emago.screens.profile.StateMessageSettingScreen
 import ai.opensource.emago.screens.sign.FirstScreen
 import ai.opensource.emago.screens.sign.SignUpScreen
 import ai.opensource.emago.util.toLocalDate
@@ -98,6 +99,7 @@ fun Emago() {
                 val selectedDate = selectedDateString?.toLocalDate()
                 ReviewScreen(selectedDate, navController)
             }
+            composable("stateSet") { StateMessageSettingScreen(navController)}
             composable("profileSet") { ProfileSettingScreen(navController) }
             composable("chatCreate") { ChatCreateScreen(navController) }
             composable("reviewContentCard"){ ReviewContentScreen()}
