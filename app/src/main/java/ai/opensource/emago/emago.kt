@@ -6,6 +6,7 @@ import ai.opensource.emago.screens.chat.ChatScreen
 import ai.opensource.emago.screens.home.HomeScreen
 import ai.opensource.emago.screens.home.ReviewContentScreen
 import ai.opensource.emago.screens.home.ReviewScreen
+import ai.opensource.emago.screens.profile.PasswordSettingScreen
 import ai.opensource.emago.screens.profile.ProfileScreen
 import ai.opensource.emago.screens.profile.ProfileSettingScreen
 import ai.opensource.emago.screens.sign.FirstScreen
@@ -82,6 +83,7 @@ fun Emago() {
                     ProfileScreen(navController)
                 }
             }
+            composable("setPW"){ PasswordSettingScreen()}
 
             composable(
                 route = "review/{selectedDate}",
