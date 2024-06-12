@@ -196,7 +196,9 @@ fun MainTopBar(navController: NavController) {
         },
         actions = {
             if(canAddChatroom) {
-            IconButton(onClick = {/*TODO : Go to Create Chat*/}){
+            IconButton(onClick = {
+                navController.navigate("chatCreate")
+            }){
                 Icon(imageVector = Icons.Default.Add,
                     contentDescription = "Add Chatroom"
                 )
