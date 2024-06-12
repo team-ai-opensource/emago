@@ -284,7 +284,9 @@ fun ProfileSettingScreen(
                 }
             }
             OutlinedButton(
-                onClick = { vm.logout() },
+                onClick = { vm.logout()
+                          navController.navigate("login")
+                          },
                 shape = RoundedCornerShape(16.dp),
                 border =  BorderStroke(1.dp, Color(0x4D000000)),
                 modifier = Modifier
