@@ -20,10 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.testing.TestNavHostController
 import coil.compose.rememberImagePainter
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -32,13 +35,8 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
-
-fun navigateTo(navController: NavController, route: String) {
-    navController.navigate(route) {
-        popUpTo(route)
-        launchSingleTop = true
-    }
-}
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun CommonProgressBar() {
@@ -51,7 +49,6 @@ fun CommonProgressBar() {
         horizontalArrangement = Arrangement.Center
     ) {
         CircularProgressIndicator()
-
     }
 }
 
@@ -80,17 +77,15 @@ fun CheckSignedIn(vm: EMAGOViewModel, navController: NavController) {
 @Composable
 fun CommonImage(
     data: String?,
-    modifier: Modifier = Modifier.wrapContentSize(),
     contentScale: ContentScale = ContentScale.Crop
 ) {
     val painter = rememberImagePainter(data = data)
     Image(
         painter = painter,
         contentDescription = null,
-        modifier = modifier,
+        modifier = Modifier.wrapContentSize(),
         contentScale = contentScale
     )
-
 }
 
 @Composable
@@ -123,4 +118,18 @@ fun sendPostRequest(url: String, jsonBody: String): String? {
         e.printStackTrace()
         null
     }
+}
+
+@Composable
+fun previewNavController(): NavController {
+    val context = LocalContext.current
+    return TestNavHostController(context)
+}
+
+fun LocalDate.toFormattedString():String{
+    return this.format(DateTimeFormatter.ISO_LOCAL_DATE)
+}
+
+fun String.toLocalDate():LocalDate{
+    return LocalDate.parse(this, DateTimeFormatter.ISO_LOCAL_DATE)
 }

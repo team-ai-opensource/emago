@@ -56,6 +56,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.navigation.testing)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -94,7 +95,7 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    implementation("com.kizitonwose.calendar:compose:2.5.1") // Compose
+    implementation("com.kizitonwose.calendar:compose:2.5.1") // Compose Calendar
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
@@ -103,4 +104,5 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
+
 }
