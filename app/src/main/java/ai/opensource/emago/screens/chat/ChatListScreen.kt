@@ -57,7 +57,6 @@ import coil.compose.rememberImagePainter
 
 fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()) {
 
-
     LaunchedEffect(key1 = Unit) {
         vm.getAllChatData()
     }
