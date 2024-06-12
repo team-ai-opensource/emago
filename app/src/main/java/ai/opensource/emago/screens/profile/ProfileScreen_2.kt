@@ -121,7 +121,7 @@ fun ProfileScreen(navController: NavController,
                         Text(
                             text = userName,
                             style = TextStyle(
-                                fontSize = 15.sp,
+                                fontSize = 16.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF000000),
                             )
@@ -129,7 +129,7 @@ fun ProfileScreen(navController: NavController,
                         Text(
                             text = "RRR@chungbuk.ac.kr",
                             style = TextStyle(
-                                fontSize = 8.sp,
+                                fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 fontWeight = FontWeight(400),
                                 color = Color(0x8A000000),
@@ -138,7 +138,7 @@ fun ProfileScreen(navController: NavController,
                         Text(
                             text = "어디든지나타난다동에번쩍서에번쩍",
                             style = TextStyle(
-                                fontSize = 10.sp,
+                                fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 fontWeight = FontWeight(400),
                                 color = Color(0xFF000000),
@@ -172,13 +172,13 @@ fun ProfileScreen(navController: NavController,
                 )
             }
         }
-        Divider(
-            color = Color(0xFF000000),
-            thickness = 1.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-        )
+//        Divider(
+//            color = Color(0xFF000000),
+//            thickness = 1.dp,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(1.dp)
+//        )
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
