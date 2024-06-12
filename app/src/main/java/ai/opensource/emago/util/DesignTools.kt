@@ -1,13 +1,25 @@
 package ai.opensource.emago.util
 
+import ai.opensource.emago.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun OutlinedTextFieldBackground(
@@ -31,3 +43,43 @@ fun OutlinedTextFieldBackground(
         content()
     }
 }
+
+
+@Composable
+fun EmagoInputTextField(
+    input: String, placeholder: String = "input", onInputChange: (String) -> Unit, singleLine : Boolean = true
+){
+    BasicTextField(
+        value = input,
+        onValueChange = onInputChange,
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+            color = Color(0xFF000000),
+        ),
+        singleLine = singleLine,
+        decorationBox = { innerTextField ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color(0x33000000), shape = RoundedCornerShape(size = 5.dp))
+                    .padding(start = 15.dp, top = 13.dp, end = 15.dp, bottom = 13.dp)
+            ) {
+                if(input.isEmpty()){
+                    Text(
+                        text = placeholder,
+                        color = Color.Gray,
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                    )
+                }
+                innerTextField()
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+    )
+}
+
