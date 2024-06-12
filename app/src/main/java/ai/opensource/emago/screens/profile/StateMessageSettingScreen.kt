@@ -86,7 +86,6 @@ fun StateMessageSettingScreen(
                     )
                 }
             }
-
         }
     ) {innerPadding ->
         Column(

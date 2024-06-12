@@ -266,7 +266,7 @@ fun ProfileSettingScreen(
                                 .width(308.dp)
                                 .height(17.dp)
                                 .padding(start = 8.dp, end = 8.dp)
-                                .clickable { navController.navigate("") }
+                                .clickable { }
                         ) {
                             // Child views.
                             Text(
