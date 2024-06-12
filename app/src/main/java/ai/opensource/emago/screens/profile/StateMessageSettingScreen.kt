@@ -2,6 +2,7 @@ package ai.opensource.emago.screens.profile
 
 import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
+import ai.opensource.emago.util.EmagoInputTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -76,7 +77,7 @@ fun StateMessageSettingScreen(
                             color = Color(0xFF79A3B1),
                             shape = RoundedCornerShape(size = 8.dp)
                         )
-                        .padding( top = 4.dp, bottom = 4.dp)
+                        .padding(top = 4.dp, bottom = 4.dp)
                 ) {
                     Text(
                         text = "변경사항 저장",
@@ -127,45 +128,10 @@ fun StateMessageSettingScreen(
                     )
                 }
                 // Child views.
-                TextField(
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    value = state,
-                    onValueChange = { state = it },
-                    singleLine = true,
-                    label = { Text("상태 메시지") },
-                    modifier = Modifier
-                        .fillMaxWidth()
+                EmagoInputTextField(
+                    input = state,
+                    onInputChange = { state = it },
+                    placeholder = "상태 메시지",
                 )
             }
         }

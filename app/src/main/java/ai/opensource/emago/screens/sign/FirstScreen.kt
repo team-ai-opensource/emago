@@ -4,6 +4,7 @@ import ai.opensource.emago.util.CheckSignedIn
 import ai.opensource.emago.util.CommonProgressBar
 import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
+import ai.opensource.emago.util.EmagoInputTextField
 import ai.opensource.emago.util.OutlinedTextFieldBackground
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -124,39 +126,19 @@ fun FirstScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
-                            OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                                OutlinedTextField(
-                                    label = { Text("Email") },
-                                    value = inEm,
-                                    onValueChange = { inEm = it },
-                                    singleLine = true,
-                                    textStyle = TextStyle(
-                                        fontSize = 15.sp,
-                                        fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                        color = Color(0xFF456268),
-                                    ),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                )
-                            }
-                            OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                                OutlinedTextField(
-                                    label = { Text("Password") },
-                                    value = inPW,
-                                    onValueChange = { inPW = it },
-                                    singleLine = true,
-                                    textStyle = TextStyle(
-                                        fontSize = 15.sp,
-                                        fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                        color = Color(0xFF456268),
-                                    ),
-                                    visualTransformation = PasswordVisualTransformation(),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                )
-                            }
+                            EmagoInputTextField(
+                                input = inEm,
+                                onInputChange = { inEm = it },
+                                placeholder = "Email",
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                            )
+                            EmagoInputTextField(
+                                input = inPW,
+                                onInputChange = { inPW = it },
+                                placeholder = "비밀번호",
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                visualTransformation = PasswordVisualTransformation(),
+                            )
                         }
                     }
                     // Sign in

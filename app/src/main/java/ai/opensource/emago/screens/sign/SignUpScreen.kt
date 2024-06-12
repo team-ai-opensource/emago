@@ -27,6 +27,7 @@ import ai.opensource.emago.util.CommonProgressBar
 import ai.opensource.emago.EMAGOViewModel
 
 import ai.opensource.emago.R
+import ai.opensource.emago.util.EmagoInputTextField
 import ai.opensource.emago.util.OutlinedTextFieldBackground
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -127,87 +128,35 @@ fun SignUpScreen(navController: NavController, vm : EMAGOViewModel = hiltViewMod
                             )
                         )
                     }
-                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                        OutlinedTextField(
-                            label = { Text("Email") },
-                            value = emailState,
-                            onValueChange = { emailState = it },
-                            singleLine = true,
-                            textStyle = TextStyle(
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFF456268),
-                            ),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
-                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                        OutlinedTextField(
-                            label = { Text("이름") },
-                            value = nameState,
-                            onValueChange = { nameState = it },
-                            singleLine = true,
-                            textStyle = TextStyle(
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFF456268),
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
-                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                        OutlinedTextField(
-                            label = { Text("전화번호") },
-                            value = phoneState,
-                            onValueChange = { phoneState = it },
-                            singleLine = true,
-                            textStyle = TextStyle(
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFF456268),
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
+                    EmagoInputTextField(
+                        input = emailState,
+                        onInputChange ={emailState = it},
+                        placeholder = "Email",
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                    )
 
-                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                        OutlinedTextField(
-                            label = { Text("Password") },
-                            value = pwState,
-                            onValueChange = { pwState = it },
-                            singleLine = true,
-                            textStyle = TextStyle(
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFF456268),
-                            ),
-                            visualTransformation = PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
-                    OutlinedTextFieldBackground(color = Color(0x33000000)) {
-                        OutlinedTextField(
-                            label = { Text("Password") },
-                            value = pwckState,
-                            onValueChange = { pwckState = it },
-                            singleLine = true,
-                            textStyle = TextStyle(
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFF456268),
-                            ),
-                            visualTransformation = PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        )
-                    }
+                    EmagoInputTextField(
+                        input = nameState,
+                        onInputChange ={nameState = it},
+                        placeholder = "닉네임",
+                    )
+
+
+                    EmagoInputTextField(
+                        input = phoneState,
+                        onInputChange ={phoneState = it},
+                        placeholder = "전화번호",
+                    )
+
+                    EmagoInputTextField(
+                        input = pwState,
+                        onInputChange ={pwState = it},
+                        placeholder = "비밀번호",
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        visualTransformation = PasswordVisualTransformation()
+
+                    )
+
                     // Sign Up Button
                     Button(
                         modifier = Modifier
