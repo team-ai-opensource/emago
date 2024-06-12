@@ -2,6 +2,7 @@ package ai.opensource.emago.screens.profile
 
 import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
+import ai.opensource.emago.util.EmagoInputTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -127,13 +128,10 @@ fun NicknameSettingScreen(
                         )
                     )
                 }
-                TextField(
-                    value = nick,
-                    onValueChange = { nick = it },
-                    singleLine = true,
-                    label = { Text("닉네임") },
-                    modifier = Modifier
-                        .fillMaxWidth()
+                EmagoInputTextField(
+                    input = nick,
+                    onInputChange = {nick = it},
+                    placeholder = "닉네임"
                 )
             }
         }
