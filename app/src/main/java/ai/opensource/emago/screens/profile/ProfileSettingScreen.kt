@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,12 +22,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,7 +52,12 @@ fun ProfileSettingScreen(
     vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()
 ) {
     val userData = vm.userData.value
-    val userName = userData?.name?:""
+    var name by rememberSaveable {
+            mutableStateOf(userData?.name?:"")
+        }
+    var number by rememberSaveable {
+            mutableStateOf(userData?.number?:"")
+        }
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
@@ -154,7 +167,10 @@ fun ProfileSettingScreen(
                 ) {
                     // Child views.
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.spacedBy(
+                            120.dp,
+                            Alignment.Start
+                        ),
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .width(308.dp)
@@ -171,13 +187,9 @@ fun ProfileSettingScreen(
                                 color = Color(0xFF000000),
                             )
                         )
-                        Text(
-                            text = userName,
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                                color = Color(0xFF999999),
-                            )
+                        OutlinedTextField(
+                            value = "",
+                            onValueChange = { },
                         )
                     }
                 }
@@ -195,29 +207,27 @@ fun ProfileSettingScreen(
                     // Child views.
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(
-                            139.dp,
+                            109.dp,
                             Alignment.Start
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .width(308.dp)
-                            .height(17.dp)
+                            .height(56.dp)
                             .padding(start = 8.dp, end = 8.dp)
                     ) {
                         // Child views.
                         Text(
-                            text = "이메일",
+                            text = "전화번호",
                             style = TextStyle(
                                 fontSize = 13.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF000000),
                             )
                         )
-                        Text(
-                            text = "RRR@chungbuk.ac.kr",
-                            fontSize = 12.sp,
-                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                            color = Color(0xFF999999),
+                        OutlinedTextField(
+                            value = "",
+                            onValueChange = { },
                         )
                     }
                 }
@@ -254,6 +264,9 @@ fun ProfileSettingScreen(
                                 color = Color(0xFF000000),
                             )
                         )
+                        Button(onClick = { /*TODO*/ }) {
+                            Text(text = "메일 보내기")
+                        }
                     }
                 }
             }
@@ -270,7 +283,10 @@ fun ProfileSettingScreen(
                 .width(343.dp)
                 .height(49.dp)
                 .padding(top = 16.dp, bottom = 16.dp)
-                .clickable { vm.logout() }
+                .clickable {
+                    vm.logout()
+                    navController.navigate("login")
+                }
         ) {
             // Child views.
             Text(
@@ -281,26 +297,6 @@ fun ProfileSettingScreen(
                     color = Color(0xFF000000),
                 )
             )
-        }
-        //회원 탈퇴
-        TextButton(onClick = { /*회원 탈퇴*/ }) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .width(91.dp)
-                .height(33.dp)
-                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
-        ) {
-                Text(
-                    text = "회원 탈퇴",
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                        color = Color(0xFF999999),
-                    )
-                )
-            }
         }
     }
 }

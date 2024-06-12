@@ -50,12 +50,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 
 
 @Composable
 
 fun ChatListScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()) {
-
 
     LaunchedEffect(key1 = Unit) {
         vm.getAllChatData()
@@ -126,7 +126,7 @@ fun ChatListBox(navController: NavController, modifier: Modifier, chatList: List
                 ) {
                     // Child views.
                     Image(
-                        painter = painterResource(id = R.drawable.dog),
+                        painter = rememberImagePainter(data = item.imageUrl),
                         contentDescription = "image description",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

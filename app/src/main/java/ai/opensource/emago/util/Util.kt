@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.testing.TestNavHostController
 import coil.compose.rememberImagePainter
+import com.google.firebase.Timestamp
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -35,8 +36,11 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun CommonProgressBar() {
@@ -70,7 +74,11 @@ fun CheckSignedIn(vm: EMAGOViewModel, navController: NavController) {
     val signIn = vm.signIn.value
     if (signIn && !alreadySignIn.value) {
         alreadySignIn.value = true
-        navController.navigate("home")
+        navController.navigate("home") {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true
+            }
+        }
     }
 }
 
@@ -132,4 +140,11 @@ fun LocalDate.toFormattedString():String{
 
 fun String.toLocalDate():LocalDate{
     return LocalDate.parse(this, DateTimeFormatter.ISO_LOCAL_DATE)
+}
+
+fun extractTimeFromTimestampString(timestampString: String): String {
+    // "Sat Jun 01 21:27:27 GMT+09:00 2024" 형식의 문자열에서 시간 부분을 슬라이싱
+    val timeStartIndex = 11
+    val timeEndIndex = 19
+    return timestampString.substring(timeStartIndex, timeEndIndex)
 }

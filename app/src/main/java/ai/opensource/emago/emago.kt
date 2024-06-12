@@ -35,6 +35,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,7 +60,10 @@ fun Emago() {
     val navController = rememberNavController()
     val vm = hiltViewModel<EMAGOViewModel>()
     Scaffold(
-        topBar = { MainTopBar(navController) },
+        topBar = {
+            if (navController.currentBackStackEntryAsState().value?.destination?.route?.startsWith("chat/") != true) {
+                MainTopBar(navController)
+            } },
     ) {innerPadding ->
         NavHost(
             navController = navController,
