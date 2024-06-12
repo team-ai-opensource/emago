@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -440,7 +441,20 @@ fun ChatBox(
     modifier: Modifier,
     vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()
 ) {
-    LazyColumn(modifier = modifier) {
+
+    val listState = rememberLazyListState()
+
+    // 새로운 메시지가 추가될 때마다 맨 아래로 스크롤
+    LaunchedEffect(chatMessages.size) {
+        if (chatMessages.isNotEmpty()) {
+            listState.animateScrollToItem(chatMessages.size - 1)
+        }
+    }
+
+
+    LazyColumn(
+        state = listState,
+        modifier = modifier) {
         items(chatMessages) { msg ->
             // Timestamp를 Date로 변환
             val date: Date = msg.timestamp!!.toDate()
