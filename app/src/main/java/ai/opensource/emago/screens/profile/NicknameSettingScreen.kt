@@ -48,6 +48,8 @@ fun NicknameSettingScreen(
     var userName = userData?.name ?: ""
     var nick by remember { mutableStateOf("") }
 
+    // View
+
     Scaffold(
         bottomBar = {
             Box(
@@ -85,60 +87,51 @@ fun NicknameSettingScreen(
             }
 
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(812.dp)
-                .padding(innerPadding)
+            modifier = Modifier.padding(innerPadding)
         ) {
-            // Child views.
-            Row {
+            // Body
+            Column(
+                verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
+            ) {
+                // Child views.
+
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        Alignment.CenterVertically
+                    ),
+                    horizontalAlignment = Alignment.Start,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(663.dp)
-                        .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
+                        .padding(start = 10.dp)
                 ) {
                     // Child views.
-                    Row {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(
-                                10.dp,
-                                Alignment.CenterVertically
-                            ),
-                            horizontalAlignment = Alignment.Start,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(20.dp)
-                                .padding(start = 10.dp)
-                        ) {
-                            // Child views.
-                            Text(
-                                text = "새로운 닉네임을 입력해주세요",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    lineHeight = 20.sp,
-                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                                    color = Color(0xFF000000),
-                                    textAlign = TextAlign.Center,
-                                )
-                            )
-                        }
-                    }
-                    TextField(
-                        value = nick,
-                        onValueChange = { nick = it },
-                        singleLine = true,
-                        label = { Text("닉네임") },
-                        modifier = Modifier
-                            .fillMaxWidth()
+                    Text(
+                        text = "새로운 닉네임을 입력해주세요",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            lineHeight = 20.sp,
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center,
+                        )
                     )
                 }
+                TextField(
+                    value = nick,
+                    onValueChange = { nick = it },
+                    singleLine = true,
+                    label = { Text("닉네임") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
             }
         }
     }

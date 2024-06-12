@@ -99,7 +99,6 @@ fun StateMessageSettingScreen(
                 verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    //.fillMaxSize()
                     .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
                 // Child views.
