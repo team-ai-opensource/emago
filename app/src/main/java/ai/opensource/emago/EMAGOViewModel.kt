@@ -437,5 +437,10 @@ class EMAGOViewModel @Inject constructor(
                 handleException(exception)
             }
     }
+
+    fun getCurrentUserEmail(): String? {
+        val user = auth.currentUser
+        return user?.email
+    }
 }
 

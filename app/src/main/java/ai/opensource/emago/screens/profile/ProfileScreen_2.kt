@@ -129,7 +129,7 @@ fun ProfileScreen(navController: NavController,
                             )
                         )
                         Text(
-                            text = "RRR@chungbuk.ac.kr",
+                            text = vm.getCurrentUserEmail() ?: "",
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
