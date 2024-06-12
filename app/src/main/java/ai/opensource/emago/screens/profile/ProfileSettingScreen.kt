@@ -305,7 +305,7 @@ fun ProfileSettingScreen(
                     modifier = Modifier
                         .width(91.dp)
                         .height(33.dp)
-                        .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                        .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
                 ) {
                     Text(
                         text = "회원 탈퇴",
