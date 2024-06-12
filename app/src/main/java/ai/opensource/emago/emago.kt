@@ -61,7 +61,7 @@ fun Emago() {
     val vm = hiltViewModel<EMAGOViewModel>()
     Scaffold(
         topBar = {
-            if (navController.currentBackStackEntryAsState().value?.destination?.route?.startsWith("chat/") != true) {
+            if (navController.currentBackStackEntryAsState().value?.destination?.route?.startsWith("chat/") != true){
                 MainTopBar(navController)
             } },
     ) {innerPadding ->

@@ -9,7 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation.Companion.None
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -47,7 +51,13 @@ fun OutlinedTextFieldBackground(
 
 @Composable
 fun EmagoInputTextField(
-    input: String, placeholder: String = "input", onInputChange: (String) -> Unit, singleLine : Boolean = true
+    input: String,
+    placeholder: String = "input",
+    onInputChange: (String) -> Unit,
+    singleLine : Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    visualTransformation: VisualTransformation = None
 ){
     BasicTextField(
         value = input,
@@ -58,6 +68,9 @@ fun EmagoInputTextField(
             color = Color(0xFF000000),
         ),
         singleLine = singleLine,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        visualTransformation = visualTransformation,
         decorationBox = { innerTextField ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
