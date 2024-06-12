@@ -1,6 +1,8 @@
 package ai.opensource.emago.screens.home
 
+import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
+import ai.opensource.emago.util.extractTimeFromTimestampString
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -12,11 +14,15 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,12 +36,23 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.Date
+import java.util.Locale
 
 @Composable
-fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
+fun ReviewScreen(selectedDate: LocalDate?, navController: NavController, vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()) {
     var currentDate by remember { mutableStateOf<LocalDate>(selectedDate ?: LocalDate.now()) }
+
+    LaunchedEffect(key1 = Unit) {
+        vm.getAllUserMessagesForDate(currentDate)
+    }
+
+
+
     // Review Column
     Column(
         horizontalAlignment = Alignment.Start,
@@ -72,6 +89,7 @@ fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
                         currentDate,
                         onDateSelected = { newDate ->
                             currentDate = newDate
+                            vm.getAllUserMessagesForDate(currentDate)
                         }
                     )
                 }
@@ -113,7 +131,7 @@ fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
                                 end = 8.dp,
                                 bottom = 16.dp
                             )
-                            .verticalScroll(rememberScrollState())
+
                     ) {
                         Text(
                             text = "Review",
@@ -123,16 +141,28 @@ fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
                                 color = Color(0xFF79A3B1)
                             )
                         )
+                        val messages = vm.myChatMessages.value
+
+
                         // Review List
-                        Column(
+                        LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .defaultMinSize(minHeight = 400.dp)
                         ) {
-                            ReviewContent()
-                            Column(
+                            itemsIndexed(messages!!) {
+                                index, item ->
+
+                                // Timestamp를 Date로 변환
+                                val date: Date = item.timestamp!!.toDate()
+
+                                // 날짜 형식화 예시
+                                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREAN)
+                                val formattedDate: String = sdf.format(date)
+
+                                Column(
                                 verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
                                 horizontalAlignment = Alignment.Start,
                                 modifier = Modifier
@@ -154,16 +184,7 @@ fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
                                     ) {
                                         // Child views.
                                         Text(
-                                            text = "#index",
-                                            style = TextStyle(
-                                                fontSize = 13.sp,
-                                                lineHeight = 20.sp,
-                                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                                color = Color(0xFF707070),
-                                            )
-                                        )
-                                        Text(
-                                            text = "#채팅방 이름",
+                                            text = "#" + (index + 1),
                                             style = TextStyle(
                                                 fontSize = 13.sp,
                                                 lineHeight = 20.sp,
@@ -173,7 +194,7 @@ fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
                                         )
                                     }
                                     Text(
-                                        text = "#시간 정보",
+                                        text = "#" + formattedDate,
                                         style = TextStyle(
                                             fontSize = 13.sp,
                                             lineHeight = 20.sp,
@@ -190,7 +211,7 @@ fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
                                     // Child views.
 
                                     Text(
-                                        text = "원문 내용",
+                                        text = item.message!!,
                                         style = TextStyle(
                                             fontSize = 15.sp,
                                             lineHeight = 20.sp,
@@ -201,7 +222,10 @@ fun ReviewScreen(selectedDate: LocalDate?, navController: NavController) {
 
                                 }
                             }
+                            }
                         }
+
+
                     }
                 }
             }

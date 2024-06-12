@@ -4,14 +4,18 @@ import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
 import ai.opensource.emago.data.ChatUser
 import ai.opensource.emago.data.Message
+import ai.opensource.emago.util.extractTimeFromTimestampString
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -51,6 +55,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun ChatScreen(navController: NavController, vm: EMAGOViewModel = hiltViewModel(), chatID : String) {
@@ -210,9 +217,10 @@ fun ChatMessage(
     user: ChatUser = ChatUser(),
     message: String? = "메시지",
     timestamp: String? = "00:00 AM",
-    onMessageClick: () -> Unit = {}
+    onMessageClick: () -> Unit = {},
+    modifier: Modifier,
+    isAIReady: Boolean
 ) {
-    val isAIReady by remember { mutableStateOf(true) }
     Row(
         horizontalArrangement = if(isSYS) {
             Arrangement.Center
@@ -224,7 +232,7 @@ fun ChatMessage(
             }
         },
         verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         if (isSYS) {
                 // Child views.
@@ -350,7 +358,7 @@ fun ChatBox(
 @Composable
 fun ChatInfoBox(
     isUser: Boolean = false,
-    isAIReady: Boolean = true,
+    isAIReady: Boolean = false,
     isTimeChange: Boolean = true,
     timestamp: String? = "00:00 AM"
 ) {
@@ -404,22 +412,35 @@ fun ChatInfoBox(
 fun ChatBox(
     chatMessages: List<Message>,
     onMessageClick: (String?, String?, String?, String?) -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()
 ){
     LazyColumn(modifier = modifier) {
         items(chatMessages){ msg->
+            // Timestamp를 Date로 변환
+            val date: Date = msg.timestamp!!.toDate()
+
+            // 날짜 형식화 예시
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREAN)
+            val formattedDate: String = sdf.format(date)
+
             ChatMessage(
+                isUser = msg.user.userId == vm.userData.value?.userId,
                 user = msg.user,
                 message = msg.message,
-                timestamp = msg.timestamp
-            ){
-                onMessageClick(
-                    msg.feedback?.comment,
-                    msg.feedback?.advanced_sentence,
-                    msg.feedback?.error_sentence,
-                    msg.feedback?.correct_sentence
-                )
-            }
+                timestamp = formattedDate,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onMessageClick(
+                            msg.feedback?.comment,
+                            msg.feedback?.advanced_sentence,
+                            msg.feedback?.error_sentence,
+                            msg.feedback?.correct_sentence
+                        )
+                    },
+                isAIReady = !msg.feedback?.comment.isNullOrEmpty()
+            )
         }
     }
 }
@@ -454,27 +475,34 @@ fun FeedbackChatDialog(
                 }
 
             }, title = {
-                Text(text = "Add Chat")
+                Text(text = "AI피드백")
             },
             text = {
-                Column {
-                    Row {
-                        Text(text = comment)
+                Box(modifier = Modifier
+                    .width(283.dp)
+                    .height(280.dp)
+                    .background(color = Color(0xFFFCF8EC), shape = RoundedCornerShape(size = 8.dp))
+                    .padding(top = 16.dp, bottom = 16.dp))
+                {
+                    Column {
+                        Row {
+                            Text(text = comment)
+                        }
+                        Row {
+                            Text(text = advancedSentence)
 
-                    }
-                    Row {
-                        Text(text = advancedSentence)
+                        }
+                        Row {
+                            Text(text = errorSentence)
 
-                    }
-                    Row {
-                        Text(text = errorSentence)
+                        }
+                        Row {
+                            Text(text = correctSentence)
 
-                    }
-                    Row {
-                        Text(text = correctSentence)
-
+                        }
                     }
                 }
+
             }
         )
     }
