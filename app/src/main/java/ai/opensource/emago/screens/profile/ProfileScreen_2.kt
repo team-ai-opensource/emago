@@ -47,6 +47,8 @@ fun ProfileScreen(navController: NavController,
 ) {
     val userData = vm.userData.value
     val userName = userData?.name?:""
+    val stateMessage = userData?.stateMsg?:""
+
     Column(
         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,7 +138,7 @@ fun ProfileScreen(navController: NavController,
                             )
                         )
                         Text(
-                            text = "어디든지나타난다동에번쩍서에번쩍",
+                            text = stateMessage,
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
@@ -172,13 +174,8 @@ fun ProfileScreen(navController: NavController,
                 )
             }
         }
-//        Divider(
-//            color = Color(0xFF000000),
-//            thickness = 1.dp,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(1.dp)
-//        )
+
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
@@ -189,7 +186,6 @@ fun ProfileScreen(navController: NavController,
                 .padding(start = 43.dp, top = 42.dp, end = 102.dp, bottom = 31.dp)
         ) {
             // 통계 표시
-
         }
     }
 }
