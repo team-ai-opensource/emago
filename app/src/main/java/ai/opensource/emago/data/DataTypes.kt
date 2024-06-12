@@ -14,7 +14,8 @@ data class UserData(
         "userId" to userId,
         "name" to name,
         "number" to number,
-        "imageUrl" to imageUrl
+        "imageUrl" to imageUrl,
+        "stateMsg" to stateMsg,
     )
 }
 
@@ -41,6 +42,7 @@ data class Feedback(
 )
 
 data class Message(
+    var id: String? = "", // 문서 ID를 저장할 필드
     val chatId: String?="",
     val user: ChatUser=ChatUser(),
     val timestamp: Timestamp?=null,

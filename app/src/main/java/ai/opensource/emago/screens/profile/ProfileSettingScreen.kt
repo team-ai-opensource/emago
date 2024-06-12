@@ -219,7 +219,7 @@ fun ProfileSettingScreen(
                         // Child views.
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(
-                                139.dp,
+                                150.dp,
                                 Alignment.Start
                             ),
                             verticalAlignment = Alignment.CenterVertically,
@@ -230,7 +230,7 @@ fun ProfileSettingScreen(
                         ) {
                             // Child views.
                             Text(
-                                text = "이메일",
+                                text = "전화번호",
                                 style = TextStyle(
                                     fontSize = 13.sp,
                                     fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
@@ -238,7 +238,7 @@ fun ProfileSettingScreen(
                                 )
                             )
                             Text(
-                                text = "RRR@chungbuk.ac.kr",
+                                text = userData?.number ?: "",
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
                                 color = Color(0xFF999999),
@@ -266,11 +266,13 @@ fun ProfileSettingScreen(
                                 .width(308.dp)
                                 .height(17.dp)
                                 .padding(start = 8.dp, end = 8.dp)
-                                .clickable { }
+                                .clickable {
+                                    vm.sendResetPassword()
+                                }
                         ) {
                             // Child views.
                             Text(
-                                text = "비밀번호 변경",
+                                text = "비밀번호 변경 메일 보내기",
                                 style = TextStyle(
                                     fontSize = 13.sp,
                                     fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
@@ -296,26 +298,6 @@ fun ProfileSettingScreen(
                         color = Color(0xFF000000),
                     )
                 )
-            }
-            //회원 탈퇴
-            TextButton(onClick = { /*회원 탈퇴*/ }) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(91.dp)
-                        .height(33.dp)
-                        .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
-                ) {
-                    Text(
-                        text = "회원 탈퇴",
-                        style = TextStyle(
-                            fontSize = 15.sp,
-                            fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                            color = Color(0xFF999999),
-                        )
-                    )
-                }
             }
         }
     }

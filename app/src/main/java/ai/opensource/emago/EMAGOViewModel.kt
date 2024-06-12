@@ -52,6 +52,7 @@ class EMAGOViewModel @Inject constructor(
     var currentChatMessageListner: ListenerRegistration? = null
 
     val myChatMessages = mutableStateOf<List<Message>?>(listOf())
+    val reviewMessage = mutableStateOf<Message>(Message(timestamp = Timestamp.now()))
 
     init {
         val currentUser = auth.currentUser
@@ -169,14 +170,16 @@ class EMAGOViewModel @Inject constructor(
     fun createOrUpdateProfile(
         name: String? = null,
         number: String? = null,
-        imageurl: String? = null
+        imageurl: String? = null,
+        stateMsg: String? = null
     ) {
         var uid = auth.currentUser?.uid
         val userData = UserData(
             userId = uid,
             name = name ?: userData.value?.name, // 이름이 없을 때는 기존이름으로 같은 느낌?
             number = number ?: userData.value?.number,
-            imageUrl = imageurl ?: userData.value?.imageUrl
+            imageUrl = imageurl ?: userData.value?.imageUrl,
+            stateMsg = stateMsg ?: userData.value?.stateMsg,
         )
 
         uid?.let {
@@ -189,6 +192,7 @@ class EMAGOViewModel @Inject constructor(
                     if (name != null) updates["name"] = name
                     if (number != null) updates["number"] = number
                     if (imageurl != null) updates["imageUrl"] = imageurl
+                    if (stateMsg != null) updates["stateMsg"] = stateMsg
 
                     db.collection(USER_NODE).document(uid).update(updates)
                         .addOnSuccessListener {
@@ -307,7 +311,9 @@ class EMAGOViewModel @Inject constructor(
                     }
 
                     val userMessages = result.documents.mapNotNull { document ->
-                        document.toObject<Message>()
+                        document.toObject<Message>()?.apply {
+                            id = document.id // 문서 ID를 Message 객체에 설정
+                        }
                     }
                     myChatMessages.value = userMessages
                 }
@@ -319,6 +325,7 @@ class EMAGOViewModel @Inject constructor(
             handleException(customMessage = "User not signed in")
         }
     }
+
 
 
 
@@ -366,7 +373,7 @@ class EMAGOViewModel @Inject constructor(
             userData.value?.imageUrl,
             userData.value?.number
         )
-        val msg: Message = Message(chatId, chatUser, time, message)
+        val msg: Message = Message("", chatId, chatUser, time, message)
 
         // Firestore에 문서를 추가하고 문서 ID를 가져옴
         db.collection(MESSAGES).add(msg).addOnSuccessListener { documentReference ->
@@ -391,6 +398,23 @@ class EMAGOViewModel @Inject constructor(
         }
     }
 
-
+    fun getMessageById(messageId: String) {
+        db.collection(MESSAGES).document(messageId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val message = document.toObject<Message>()
+                    message?.id = document.id
+                    Log.d("test", "Message Document: ${document.id} => ${document.data}")
+                    // 원하는 작업 수행
+                    reviewMessage.value = message!!
+                } else {
+                    Log.d("test", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("test", "Error getting document: ", exception)
+                handleException(exception)
+            }
+    }
 }
 

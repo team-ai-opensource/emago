@@ -167,7 +167,7 @@ fun ReviewScreen(selectedDate: LocalDate?, navController: NavController, vm: EMA
                                 horizontalAlignment = Alignment.Start,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable { navController.navigate("reviewContentCard") }
+                                    .clickable { navController.navigate("reviewContentCard/" + item.id) }
                             ) {
                                 Row(
                                     horizontalArrangement = Arrangement.SpaceBetween,

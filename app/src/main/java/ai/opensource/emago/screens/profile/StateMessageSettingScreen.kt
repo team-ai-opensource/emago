@@ -60,7 +60,9 @@ fun StateMessageSettingScreen(
                     .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
             ){
                 Button(
-                    onClick = { navController.navigate("profileSet") },
+                    onClick = {
+                        vm.createOrUpdateProfile(stateMsg = state)
+                        navController.navigate("profileSet") },
                     shape = RoundedCornerShape(5.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF79A3B1)),
                     modifier = Modifier
@@ -126,6 +128,38 @@ fun StateMessageSettingScreen(
                 }
                 // Child views.
                 TextField(
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     value = state,
                     onValueChange = { state = it },
                     singleLine = true,

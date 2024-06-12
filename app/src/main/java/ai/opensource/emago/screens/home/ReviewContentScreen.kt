@@ -1,6 +1,8 @@
 package ai.opensource.emago.screens.home
 
+import ai.opensource.emago.EMAGOViewModel
 import ai.opensource.emago.R
+import ai.opensource.emago.data.Message
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -16,15 +18,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -35,10 +31,28 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.time.LocalDate
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
-fun ReviewContentScreen() {
+fun ReviewContentScreen(messageId: String, vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()) {
+    LaunchedEffect(key1 = Unit) {
+        vm.getMessageById(messageId)
+    }
+
+    val message = vm.reviewMessage.value
+
+    // Timestamp를 Date로 변환
+    val date: Date = message.timestamp!!.toDate()
+
+    // 날짜 형식화 예시
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREAN)
+    val formattedDate: String? = sdf.format(date)
+    
+
     // Review Column
     Column(
         horizontalAlignment = Alignment.Start,
@@ -74,7 +88,7 @@ fun ReviewContentScreen() {
                 ) {
                     // Review Title
                     Text(
-                        text = "날짠데 만들기 귀찮아",
+                        text = formattedDate ?: "",
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
                             fontSize = 24.sp,
@@ -113,7 +127,9 @@ fun ReviewContentScreen() {
 }
 
 @Composable
-fun ReviewCard(){
+fun ReviewCard(vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()){
+    val message = vm.reviewMessage.value
+
     // Review Card
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
@@ -137,7 +153,6 @@ fun ReviewCard(){
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
                 .padding(top = 16.dp, bottom = 16.dp)
         ){
             Column(
@@ -154,99 +169,35 @@ fun ReviewCard(){
                         color = Color(0xFF79A3B1)
                     )
                 )
+                Text(text=message.message ?: "")
                 Text(
-                    text = "수정된 내용",
+                    text = "잘못된 문장 일 시 수정된 문장",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
                         fontSize = 18.sp,
                         color = Color(0xFF79A3B1)
                     )
                 )
+                Text(text=message.feedback?.correct_sentence ?: "")
                 Text(
-                    text = "comment",
+                    text = "고급 문장",
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
                         fontSize = 18.sp,
                         color = Color(0xFF79A3B1)
                     )
                 )
-            }
-            Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ){
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                ){
-                    Button(
-                        onClick = { /*Todo : 이전 카드*/},
-                        shape = RoundedCornerShape(size = 5.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF79A3B1),
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "복습 완료",
-                            style = TextStyle(
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFFFFFFFF),
-                            ),
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(21.dp, Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.Top,
-                    modifier = Modifier.fillMaxWidth()
-                ){
-                    Button(
-                        onClick = { /*Todo : 이전 카드*/},
-                        shape = RoundedCornerShape(size = 5.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF79A3B1),
-                        ),
-                    ) {
-                        Text(
-                            text = "이전으로",
-                            style = TextStyle(
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFFFFFFFF),
-                            ),
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
-                    Button(
-                        onClick = { /*Todo : 다음 카드*/},
-                        shape = RoundedCornerShape(size = 5.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF79A3B1),
-                        ),
-
-                    ) {
-                        Text(
-                            text = "다음으로",
-                            style = TextStyle(
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
-                                color = Color(0xFFFFFFFF),
-                            ),
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
-                }
+                Text(text=message.feedback?.advanced_sentence ?: "")
+                Text(
+                    text = "코멘트",
+                    style = TextStyle(
+                        fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
+                        fontSize = 18.sp,
+                        color = Color(0xFF79A3B1)
+                    )
+                )
+                Text(text=message.feedback?.comment ?: "")
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ReviewScreenPreview() {
-    ReviewContentScreen()
 }

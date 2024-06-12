@@ -100,7 +100,13 @@ fun Emago() {
             composable("stateSet") { StateMessageSettingScreen(navController)}
             composable("profileSet") { ProfileSettingScreen(navController) }
             composable("chatCreate") { ChatCreateScreen(navController) }
-            composable("reviewContentCard"){ ReviewContentScreen()}
+            composable("reviewContentCard/{messageId}",
+                arguments = listOf(navArgument("messageId") { type = NavType.StringType })
+            ){
+                val messageId = it.arguments?.getString("messageId")
+
+                ReviewContentScreen(messageId = messageId!!)
+            }
             composable(
                 route = "chat/{chatID}",
                 arguments = listOf(navArgument("chatID") { type = NavType.StringType })
