@@ -189,15 +189,7 @@ fun ProfileScreen(navController: NavController,
                 .padding(start = 43.dp, top = 42.dp, end = 102.dp, bottom = 31.dp)
         ) {
             // 통계 표시
-            Text(
-                text = "간략한 통계",
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF000000),
-                )
-            )
+
         }
     }
 }
