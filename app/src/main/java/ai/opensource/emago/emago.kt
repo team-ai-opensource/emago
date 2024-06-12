@@ -87,9 +87,6 @@ fun Emago() {
                     ProfileScreen(navController)
                 }
             }
-            composable("setNN"){ NicknameSettingScreen() }
-
-
             composable(
                 route = "review/{selectedDate}",
                 arguments = listOf(navArgument("selectedDate") { type = NavType.StringType })
@@ -99,6 +96,7 @@ fun Emago() {
                 val selectedDate = selectedDateString?.toLocalDate()
                 ReviewScreen(selectedDate, navController)
             }
+            composable("nickSet") { NicknameSettingScreen(navController)}
             composable("stateSet") { StateMessageSettingScreen(navController)}
             composable("profileSet") { ProfileSettingScreen(navController) }
             composable("chatCreate") { ChatCreateScreen(navController) }

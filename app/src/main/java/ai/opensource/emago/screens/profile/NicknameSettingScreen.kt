@@ -1,7 +1,11 @@
 package ai.opensource.emago.screens.profile
 
+import ai.opensource.emago.EMAGOViewModel
+import ai.opensource.emago.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,189 +14,132 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 
 @Composable
-fun NicknameSettingScreen() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(812.dp)
-            .background(color = Color(0xFFFCF8EC))
-    ) {
-        // Child views.
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .width(375.dp)
-                .height(25.dp)
-                .padding(start = 10.dp, end = 10.dp)
-        ) {
-            // Child views.
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
+fun NicknameSettingScreen(
+    navController: NavController,
+    vm: EMAGOViewModel = hiltViewModel<EMAGOViewModel>()
+) {
+    val userData = vm.userData.value
+    var userName = userData?.name ?: ""
+    var nick by remember { mutableStateOf("") }
+
+    Scaffold(
+        bottomBar = {
+            Box(
                 modifier = Modifier
-                    .width(24.dp)
-                    .height(24.dp)
-                    .padding(start = 0.dp, end = 0.dp, bottom = 0.dp)
-            ) {
-                // Child views.
-            }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .width(293.dp)
-                    .fillMaxHeight()
-            ) {
-                // Child views.
-                Text(
-                    text = "닉네임 변경",
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        lineHeight = 20.sp,
-                        //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
-                    )
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .width(24.dp)
-                    .height(24.dp)
-                    .padding(start = 0.dp, end = 0.dp, bottom = 0.dp)
-            ) {
-                // Child views.
-            }
-        }
-        Row {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
+                    .border(width = 1.dp, color = Color(0x4D000000))
                     .fillMaxWidth()
-                    .height(663.dp)
-                    .background(color = Color(0xFFFCF8EC))
-                    .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
-            ) {
-                // Child views.
-                Row {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(
-                            10.dp,
-                            Alignment.CenterVertically
-                        ),
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(20.dp)
-                            .padding(start = 10.dp)
-                    ) {
-                        // Child views.
-                        Text(
-                            text = "새로운 닉네임을 입력해주세요",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                lineHeight = 20.sp,
-                                //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                                fontWeight = FontWeight(700),
-                                color = Color(0xFF000000),
-                                textAlign = TextAlign.Center,
-                            )
-                        )
-                    }
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .width(343.dp)
-                        .height(41.dp)
-                        .background(
-                            color = Color(0x33000000),
-                            shape = RoundedCornerShape(size = 5.dp)
-                        )
-                        .padding(start = 15.dp, top = 10.dp, end = 15.dp, bottom = 13.dp)
-                ) {
-                    // Child views.
-                    Text(
-                        text = "레드로드라이트",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 15.sp,
-                            //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                            fontWeight = FontWeight(700),
-                            color = Color(0x4D000000),
-                            textAlign = TextAlign.Center,
-                        )
-                    )
-                }
-            }
-        }
-        Row {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .width(375.dp)
-                    .height(59.dp)
                     .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
             ) {
-                // Child views.
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Button(
+                    onClick = { navController.navigate("profileSet") },
+                    shape = RoundedCornerShape(5.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF79A3B1)),
                     modifier = Modifier
                         .shadow(
                             elevation = 4.dp,
                             spotColor = Color(0x40000000),
                             ambientColor = Color(0x40000000)
                         )
-                        .width(359.dp)
-                        .height(43.dp)
+                        .fillMaxWidth()
                         .background(
                             color = Color(0xFF79A3B1),
-                            shape = RoundedCornerShape(size = 5.dp)
+                            shape = RoundedCornerShape(size = 8.dp)
                         )
-                        .padding(start = 80.dp, top = 13.dp, end = 80.dp, bottom = 13.dp)
+                        .padding(top = 4.dp, bottom = 4.dp)
                 ) {
-                    // Child views.
                     Text(
-                        text = "변경 완료",
+                        text = "변경사항 저장",
                         style = TextStyle(
-                            fontSize = 13.sp,
-                            //fontFamily = FontFamily(Font(R.font.nanumsquareround)),
-                            fontWeight = FontWeight(700),
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.nanumsquareroundr)),
                             color = Color(0xFFFFFFFF),
                         )
                     )
                 }
             }
+
+        }
+    ) {innerPadding ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(812.dp)
+                .padding(innerPadding)
+        ) {
+            // Child views.
+            Row {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(13.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(663.dp)
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
+                ) {
+                    // Child views.
+                    Row {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(
+                                10.dp,
+                                Alignment.CenterVertically
+                            ),
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(20.dp)
+                                .padding(start = 10.dp)
+                        ) {
+                            // Child views.
+                            Text(
+                                text = "새로운 닉네임을 입력해주세요",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    lineHeight = 20.sp,
+                                    fontFamily = FontFamily(Font(R.font.nanumsquareroundb)),
+                                    color = Color(0xFF000000),
+                                    textAlign = TextAlign.Center,
+                                )
+                            )
+                        }
+                    }
+                    TextField(
+                        value = nick,
+                        onValueChange = { nick = it },
+                        singleLine = true,
+                        label = { Text("닉네임") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+            }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NicknameSettingScreenPreview() {
-    NicknameSettingScreen()
 }
